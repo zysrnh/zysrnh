@@ -1,75 +1,114 @@
-<p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=28&pause=1000&color=FFFFFF&center=true&vCenter=true&width=700&lines=Yusron;Laravel+Backend+Developer;Building+Real+Systems;PHP+Keeps+Me+Alive" />
-</p>
+<div align="center">
 
-<h1 align="center">Yusron</h1>
-<p align="center">Laravel Backend Developer</p>
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d1117,50:1a1a2e,100:16213e&height=200&section=header&text=Yusron&fontSize=60&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Laravel%20Backend%20Developer&descAlignY=58&descSize=20&descColor=8b949e" width="100%"/>
+
+<br/>
+
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&duration=3000&pause=1000&color=58A6FF&center=true&vCenter=true&multiline=true&width=600&height=100&lines=Building+Real+Systems;Clean+Code+%7C+Scalable+Architecture;PHP+Keeps+Me+Alive" />
+
+</div>
 
 ---
+
+<div align="center">
 
 ## About Me
-Focused on backend development using Laravel and PHP.  
-I enjoy building real systems, structured applications, and automation.  
-Currently improving architecture, clean code, and scalability.
+
+</div>
+```php
+<?php
+
+class Yusron extends Developer {
+
+    public string $focus    = "Backend Development";
+    public string $stack    = "Laravel & PHP";
+    public array  $passion  = ["Real Systems", "Structured Apps", "Automation"];
+    public string $goal     = "Clean Architecture & Scalability";
+
+    public function currentlyLearning(): array {
+        return ["Design Patterns", "Clean Code", "System Scalability"];
+    }
+}
+` ` `
 
 ---
 
-## Tech Stack
-Laravel  
-PHP  
-MySQL  
-JavaScript  
+<div align="center">
+
+## Tech Stack & Tools
+
+<br/>
+
+**Core**
+
+![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)
+![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+
+<br/>
+
+**Frontend & Styling**
+
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
+
+<br/>
+
+**Tools**
+
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
+![VSCode](https://img.shields.io/badge/VSCode-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white)
+![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
+
+<br/>
+
+**AI Tools**
+
+![ChatGPT](https://img.shields.io/badge/ChatGPT-10a37f?style=for-the-badge&logo=openai&logoColor=white)
+![Claude](https://img.shields.io/badge/Claude-CC785C?style=for-the-badge&logo=anthropic&logoColor=white)
+
+</div>
 
 ---
 
-## Tools & Languages
-
-<p align="center">
-  <img src="https://skillicons.dev/icons?i=php,laravel,mysql,js,html,css,tailwind,bootstrap,git,github,vscode,postman" />
-</p>
-
----
-
-## AI Tools
-
-<p align="center">
-  <img src="https://img.shields.io/badge/ChatGPT-000000?style=for-the-badge&logo=openai&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Claude-000000?style=for-the-badge"/>
-</p>
-
----
-
-## Featured Projects
-
-### Restaurant Ordering System
-Online food ordering system with admin dashboard, CRUD menu, and authentication.
-
-### Beyblade Leaderboard System
-Tournament leaderboard with ranking logic, statistics, and editable match data.
-
-### CV Generator
-Dynamic CV generator with structured form builder and export feature.
-
----
+<div align="center">
 
 ## GitHub Stats
 
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=zysrnh&show_icons=true&theme=dark&hide_border=true" />
-</p>
+<br/>
 
-<p align="center">
-  <img src="https://streak-stats.demolab.com?user=zysrnh&theme=dark&hide_border=true" />
-</p>
+<img src="https://github-readme-stats.vercel.app/api?username=zysrnh&show_icons=true&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=58a6ff&icon_color=58a6ff&text_color=c9d1d9&ring_color=58a6ff" height="165"/>
+<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=zysrnh&layout=compact&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=58a6ff&text_color=c9d1d9" height="165"/>
 
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=zysrnh&layout=compact&theme=dark&hide_border=true" />
-</p>
+<br/><br/>
+
+<img src="https://streak-stats.demolab.com?user=zysrnh&theme=tokyonight&hide_border=true&background=0d1117&stroke=58a6ff&ring=58a6ff&fire=ff6b6b&currStreakLabel=58a6ff" />
+
+</div>
 
 ---
 
-## Activity Animation
+<div align="center">
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/zysrnh/zysrnh/output/snake.svg" />
-</p>
+## Contribution Graph
+
+<img src="https://github-readme-activity-graph.vercel.app/graph?username=zysrnh&theme=tokyo-night&bg_color=0d1117&color=58a6ff&line=58a6ff&point=ffffff&area=true&hide_border=true" width="100%"/>
+
+</div>
+
+---
+
+<div align="center">
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:16213e,50:1a1a2e,100:0d1117&height=120&section=footer" width="100%"/>
+
+![Profile Views](https://komarev.com/ghpvc/?username=zysrnh&color=58a6ff&style=for-the-badge&label=Profile+Views)
+
+</div>
+```
+
+Catatan penting: pada bagian code block PHP, pastiin tiga backtick pembuka dan penutupnya tidak ada spasi (di sini aku kasih spasi biar tidak di-render). Salin langsung dari file yang didownload tadi karena di sana sudah benar formatnya.
