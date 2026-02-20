@@ -12,28 +12,6 @@
 
 <div align="center">
 
-## About Me
-
-</div>
-
-```php
-<?php
-
-class Yusron extends Developer {
-
-    public string $focus    = "Backend Development";
-    public string $stack    = "Laravel & PHP";
-    public array  $passion  = ["Real Systems", "Structured Apps", "Automation"];
-    public string $goal     = "Clean Architecture & Scalability";
-
-    public function currentlyLearning(): array {
-        return ["Design Patterns", "Clean Code", "System Scalability"];
-    }
-}
-```
-
----
-
 <div align="center">
 
 ## Tech Stack & Tools
@@ -94,22 +72,5 @@ class Yusron extends Developer {
 
 </div>
 
----
-
 <div align="center">
 
-## Contribution Graph
-
-<img src="https://github-readme-activity-graph.vercel.app/graph?username=zysrnh&theme=tokyo-night&bg_color=0d1117&color=58a6ff&line=58a6ff&point=ffffff&area=true&hide_border=true" width="100%"/>
-
-</div>
-
----
-
-<div align="center">
-
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:16213e,50:1a1a2e,100:0d1117&height=120&section=footer" width="100%"/>
-
-![Profile Views](https://komarev.com/ghpvc/?username=zysrnh&color=58a6ff&style=for-the-badge&label=Profile+Views)
-
-</div>
