@@ -8,32 +8,6 @@
 
 </div>
 
----
-
-<div align="center">
-
-## About Me
-
-</div>
-
-```php
-<?php
-
-class Yusron extends Developer {
-
-    public string $focus    = "Backend Development";
-    public string $stack    = "Laravel & PHP";
-    public array  $passion  = ["Real Systems", "Structured Apps", "Automation"];
-    public string $goal     = "Clean Architecture & Scalability";
-
-    public function currentlyLearning(): array {
-        return ["Design Patterns", "Clean Code", "System Scalability"];
-    }
-}
-```
-
----
-
 <div align="center">
 
 ## Tech Stack & Tools
@@ -93,18 +67,6 @@ class Yusron extends Developer {
 <img src="https://streak-stats.demolab.com?user=zysrnh&theme=tokyonight&hide_border=true&background=0d1117&stroke=58a6ff&ring=58a6ff&fire=ff6b6b&currStreakLabel=58a6ff" />
 
 </div>
-
----
-
-<div align="center">
-
-## Contribution Graph
-
-<img src="https://github-readme-activity-graph.vercel.app/graph?username=zysrnh&theme=tokyo-night&bg_color=0d1117&color=58a6ff&line=58a6ff&point=ffffff&area=true&hide_border=true" width="100%"/>
-
-</div>
-
----
 
 <div align="center">
 
