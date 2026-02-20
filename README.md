@@ -4,7 +4,7 @@
 
 <br/>
 
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&duration=3000&pause=1000&color=58A6FF&center=true&vCenter=true&multiline=true&width=600&height=100&lines=Building+Real+Systems;Clean+Code+%7C+Scalable+Architecture;PHP+Keeps+Me+Alive" />
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&duration=3000&pause=1000&color=58A6FF&center=true&vCenter=true&multiline=true&width=600&height=100&lines=Building+Real+Systems+%F0%9F%9A%80;Clean+Code+%7C+Scalable+Architecture+%F0%9F%94%A7;PHP+Keeps+Me+Alive+%F0%9F%90%98" />
 
 </div>
 
@@ -12,9 +12,10 @@
 
 <div align="center">
 
-## About Me
+## 🧠 About Me
 
 </div>
+
 ```php
 <?php
 
@@ -29,13 +30,13 @@ class Yusron extends Developer {
         return ["Design Patterns", "Clean Code", "System Scalability"];
     }
 }
-` ` `
+```
 
 ---
 
 <div align="center">
 
-## Tech Stack & Tools
+## ⚙️ Tech Stack & Tools
 
 <br/>
 
@@ -77,7 +78,7 @@ class Yusron extends Developer {
 
 <div align="center">
 
-## GitHub Stats
+## 📊 GitHub Stats
 
 <br/>
 
@@ -94,7 +95,7 @@ class Yusron extends Developer {
 
 <div align="center">
 
-## Contribution Graph
+## 📈 Contribution Graph
 
 <img src="https://github-readme-activity-graph.vercel.app/graph?username=zysrnh&theme=tokyo-night&bg_color=0d1117&color=58a6ff&line=58a6ff&point=ffffff&area=true&hide_border=true" width="100%"/>
 
@@ -109,6 +110,3 @@ class Yusron extends Developer {
 ![Profile Views](https://komarev.com/ghpvc/?username=zysrnh&color=58a6ff&style=for-the-badge&label=Profile+Views)
 
 </div>
-```
-
-Catatan penting: pada bagian code block PHP, pastiin tiga backtick pembuka dan penutupnya tidak ada spasi (di sini aku kasih spasi biar tidak di-render). Salin langsung dari file yang didownload tadi karena di sana sudah benar formatnya.
