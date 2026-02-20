@@ -68,14 +68,6 @@
 
 </div>
 
-<div align="center">
-
-## Activity Animation
-
-[<img src="https://github.com/zysrnh/zysrnh/blob/output/github-contribution-grid-snake2.svg" width="100%"/>](https://raw.githubusercontent.com/zysrnh/zysrnh/output/github-contribution-grid-snake2.svg)
-
-</div>
-
 ---
 
 <div align="center">
