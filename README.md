@@ -4,7 +4,7 @@
 
 <br/>
 
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&duration=3000&pause=1000&color=58A6FF&center=true&vCenter=true&multiline=true&width=600&height=100&lines=Building+Real+Systems+%F0%9F%9A%80;Clean+Code+%7C+Scalable+Architecture+%F0%9F%94%A7;PHP+Keeps+Me+Alive+%F0%9F%90%98" />
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&duration=3000&pause=1000&color=58A6FF&center=true&vCenter=true&multiline=true&width=600&height=100&lines=Building+Real+Systems;Clean+Code+%7C+Scalable+Architecture;PHP+Keeps+Me+Alive" />
 
 </div>
 
@@ -12,7 +12,7 @@
 
 <div align="center">
 
-## 🧠 About Me
+## About Me
 
 </div>
 
@@ -36,7 +36,7 @@ class Yusron extends Developer {
 
 <div align="center">
 
-## ⚙️ Tech Stack & Tools
+## Tech Stack & Tools
 
 <br/>
 
@@ -51,6 +51,7 @@ class Yusron extends Developer {
 
 **Frontend & Styling**
 
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
@@ -64,6 +65,8 @@ class Yusron extends Developer {
 ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
 ![VSCode](https://img.shields.io/badge/VSCode-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white)
 ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
+![Composer](https://img.shields.io/badge/Composer-885630?style=for-the-badge&logo=composer&logoColor=white)
+![NPM](https://img.shields.io/badge/NPM-CB3837?style=for-the-badge&logo=npm&logoColor=white)
 
 <br/>
 
@@ -78,7 +81,7 @@ class Yusron extends Developer {
 
 <div align="center">
 
-## 📊 GitHub Stats
+## GitHub Stats
 
 <br/>
 
@@ -95,7 +98,7 @@ class Yusron extends Developer {
 
 <div align="center">
 
-## 📈 Contribution Graph
+## Contribution Graph
 
 <img src="https://github-readme-activity-graph.vercel.app/graph?username=zysrnh&theme=tokyo-night&bg_color=0d1117&color=58a6ff&line=58a6ff&point=ffffff&area=true&hide_border=true" width="100%"/>
 
