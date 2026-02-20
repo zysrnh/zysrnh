@@ -1,13 +1,16 @@
-## GitHub Stats
+## Tools & Languages
 
 <p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=zysrnh&show_icons=true&theme=dark" />
+
+<img src="https://skillicons.dev/icons?i=php,laravel,mysql,js,html,css,tailwind,bootstrap,git,github,vscode" />
+
 </p>
 
-<p align="center">
-  <img src="https://streak-stats.demolab.com?user=zysrnh&theme=dark&hide_border=true&locale=id" />
-</p>
+## AI Tools
 
 <p align="center">
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=zysrnh&layout=compact&theme=dark" />
+
+<img src="https://img.shields.io/badge/ChatGPT-000000?style=for-the-badge&logo=openai&logoColor=white"/>
+<img src="https://img.shields.io/badge/Claude-000000?style=for-the-badge"/>
+
 </p>
