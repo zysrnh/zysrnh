@@ -124,16 +124,6 @@ Sistem ujian berbasis komputer dengan redesign login page, role management, dan 
 </td>
 <td width="50%">
 
-### 🗜️ Huffman Coding App
-**Data Structures Final Project**
-
-Implementasi algoritma kompresi teks Huffman Coding dalam Python dengan analisis perbandingan ukuran file sebelum & sesudah kompresi.
-
-![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
-
-</td>
-</tr>
-</table>
 
 ---
 
