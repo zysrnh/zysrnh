@@ -4,7 +4,7 @@
 
 <br/>
 
-<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=20&pause=800&color=00BFFF&center=true&vCenter=true&multiline=false&width=650&height=45&lines=🚀+Building+Government-Grade+Web+Apps;🔥+Laravel+%7C+Python+%7C+JavaScript+Specialist;🌍+Geospatial+%26+Enterprise+Systems+Dev;⚡+Informatics+Student+%40+IDE+LPKIA+Bandung;💡+From+Design+→+Development+→+Deployment" alt="Typing SVG" />
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=20&pause=900&color=00BFFF&center=true&vCenter=true&width=650&height=45&lines=🚀+Building+Government-Grade+Web+Apps;🔥+Laravel+%7C+Python+%7C+JavaScript+Specialist;🌍+Geospatial+%26+Enterprise+Systems+Dev;⚡+Informatics+Student+%40+IDE+LPKIA+Bandung;💡+From+Design+→+Development+→+Deployment" alt="Typing SVG" />
 
 <br/><br/>
 
@@ -226,10 +226,10 @@ Sistem ujian daring dengan:
 
 <div align="center">
 
-<img height="180em" src="https://github-readme-stats.vercel.app/api?username=zysrnh&show_icons=true&theme=tokyonight&hide_border=true&count_private=true&include_all_commits=true&bg_color=0d1117&title_color=0077B6&icon_color=00BFFF&text_color=c9d1d9" />
-<img height="180em" src="https://streak-stats.demolab.com?user=zysrnh&theme=tokyonight&hide_border=true&background=0d1117&stroke=0077B6&ring=00BFFF&fire=FF6B6B&currStreakLabel=c9d1d9&sideLabels=c9d1d9" />
+<img height="180em" src="https://github-readme-stats.vercel.app/api?username=zysrnh&show_icons=true&theme=tokyonight&hide_border=true&count_private=true&include_all_commits=true" />
+<img height="180em" src="https://streak-stats.demolab.com?user=zysrnh&theme=tokyonight&hide_border=true" />
 
-<img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=zysrnh&layout=compact&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=0077B6&text_color=c9d1d9&langs_count=8" />
+<img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=zysrnh&layout=compact&theme=tokyonight&hide_border=true&langs_count=8" />
 
 </div>
 
@@ -253,7 +253,7 @@ Sistem ujian daring dengan:
 
 <div align="center">
 
-[![Activity Graph](https://github-readme-activity-graph.vercel.app/graph?username=zysrnh&theme=tokyo-night&hide_border=true&area=true&bg_color=0d1117&color=0077B6&line=00BFFF&point=FFFFFF&area_color=003B64)](https://github.com/zysrnh)
+[![Activity Graph](https://github-readme-activity-graph.vercel.app/graph?username=zysrnh&theme=tokyo-night&hide_border=true&area=true)](https://github.com/zysrnh)
 
 </div>
 
@@ -286,7 +286,7 @@ Sistem ujian daring dengan:
 
 **Institut Digital Ekonomi (IDE) LPKIA — Bandung**
 📚 Program Studi: **Teknik Informatika**
-🎯 Jenjang: Tingkat 2, Semester 3
+🎯 Jenjang: Tingkat 1, Semester 2
 🤝 Aktif di **HMIF** (Himpunan Mahasiswa Informatika)
 🏆 Fokus: OOP, Data Structures, Web Development, System Design
 
