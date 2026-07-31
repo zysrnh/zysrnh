@@ -36,7 +36,6 @@ const developer = {
   location  : "📍 Bandung, West Java, Indonesia 🇮🇩",
   contact   : "naooolaf@gmail.com",
   instagram : "@z.dysron",
-  available : true, // Open for freelance projects!
 };
 ```
 
