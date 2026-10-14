@@ -1,10 +1,8 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=venom&color=0:0a0a0a,30:003B64,70:005F9E,100:0077B6&height=280&section=header&text=Zaki%20Yusron%20Hasyimmi&fontSize=48&fontColor=ffffff&fontAlignY=40&desc=⚡%20Fullstack%20Developer%20%7C%20Freelancer%20%40%20Cyberlabs%20⚡&descAlignY=60&descSize=18&animation=twinkling&stroke=0077B6&strokeWidth=2&fontFamily=Plus%20Jakarta%20Sans" />
+<img src="https://raw.githubusercontent.com/zysrnh/zysrnh/main/assets/header.svg" width="700" alt="Zaki Yusron Hasyimmi - Header" />
 
-</div>
-
-<div align="center">
+<br/>
 
 <img src="https://raw.githubusercontent.com/zysrnh/zysrnh/main/assets/banner.gif" width="680" alt="8-bit Developer Banner" />
 
@@ -104,6 +102,6 @@ const developer = {
 
 <br/><br/>
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:003B64,40:005F9E,100:0077B6&height=120&section=footer&text=Thanks%20for%20visiting!&fontSize=22&fontColor=ffffff&fontAlignY=65&animation=fadeIn&fontFamily=Plus%20Jakarta%20Sans" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:003B64,40:005F9E,100:0077B6&height=120&section=footer&text=Thanks%20for%20visiting!&fontSize=22&fontColor=ffffff&fontAlignY=65&animation=fadeIn" />
 
 </div>
