@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=venom&color=0:0a0a0a,30:003B64,70:005F9E,100:0077B6&height=280&section=header&text=Zaki%20Yusron%20Hasyimmi&fontSize=48&fontColor=ffffff&fontAlignY=40&desc=⚡%20Fullstack%20Developer%20%7C%20Freelancer%20%40%20Cyberlabs%20⚡&descAlignY=60&descSize=18&animation=twinkling&stroke=0077B6&strokeWidth=2" />
+<img src="https://capsule-render.vercel.app/api?type=venom&color=0:0a0a0a,30:003B64,70:005F9E,100:0077B6&height=280&section=header&text=Zaki%20Yusron%20Hasyimmi&fontSize=48&fontColor=ffffff&fontAlignY=40&desc=⚡%20Fullstack%20Developer%20%7C%20Freelancer%20%40%20Cyberlabs%20⚡&descAlignY=60&descSize=18&animation=twinkling&stroke=0077B6&strokeWidth=2&fontFamily=Plus%20Jakarta%20Sans" />
 
 </div>
 
@@ -10,10 +10,6 @@
 
 <br/><br/>
 
-<a href="https://github.com/zysrnh">
-  <img src="https://komarev.com/ghpvc/?username=zysrnh&color=0077B6&style=for-the-badge&label=PROFILE+VIEWS" />
-</a>
-&nbsp;
 <a href="https://github.com/zysrnh?tab=followers">
   <img src="https://img.shields.io/github/followers/zysrnh?style=for-the-badge&color=005F9E&labelColor=0a0a0a&label=FOLLOWERS&logo=github" />
 </a>
@@ -108,6 +104,6 @@ const developer = {
 
 <br/><br/>
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:003B64,40:005F9E,100:0077B6&height=120&section=footer&text=Thanks%20for%20visiting!&fontSize=22&fontColor=ffffff&fontAlignY=65&animation=fadeIn" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:003B64,40:005F9E,100:0077B6&height=120&section=footer&text=Thanks%20for%20visiting!&fontSize=22&fontColor=ffffff&fontAlignY=65&animation=fadeIn&fontFamily=Plus%20Jakarta%20Sans" />
 
 </div>
