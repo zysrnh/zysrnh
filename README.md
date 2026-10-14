@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=venom&color=0:0a0a0a,30:003B64,70:005F9E,100:0077B6&height=280&section=header&text=Zaki%20Yusron%20Hasyimmi&fontSize=48&fontColor=ffffff&fontAlignY=40&desc=⚡%20Fullstack%20Developer%20%7C%20Freelancer%20%40%20Cyberlabs%20⚡&descAlignY=60&descSize=18&animation=twinkling&stroke=0077B6&strokeWidth=2" />
+<img src="assets/banner.gif" width="100%" alt="8-bit Banner" />
 
 <br/><br/>
 
@@ -34,8 +34,9 @@ const developer = {
   role      : ["Fullstack Developer", "Freelancer"],
   company   : "Cyberlabs · Bandung, Indonesia 🏢",
   location  : "📍 Bandung, West Java, Indonesia 🇮🇩",
+  website   : "https://zysrnh.my.id",
   contact   : "naooolaf@gmail.com",
-  instagram : "@z.dysron",
+  instagram : "@yrsnhh_",
 };
 ```
 
@@ -45,14 +46,39 @@ const developer = {
 
 <div align="center">
 
+## 🛠️ &nbsp;Tech Stack & Tools
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" />
+  <img src="https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white" />
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
+  <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" />
+  <img src="https://img.shields.io/badge/Inertia.js-9553E9?style=for-the-badge&logo=inertia&logoColor=white" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" />
+  <img src="https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white" />
+  <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" />
+</p>
+
+</div>
+
+<br/>
+
+---
+
+<div align="center">
+
 ## 📬 &nbsp;Let's Connect
 
-<a href="mailto:naooolaf@gmail.com">
-  <img src="https://img.shields.io/badge/Gmail-naooolaf%40gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white" />
+<a href="https://zysrnh.my.id/" target="_blank">
+  <img src="https://img.shields.io/badge/Website-zysrnh.my.id-0077B6?style=for-the-badge&logo=google-chrome&logoColor=white" />
 </a>
 &nbsp;
-<a href="https://instagram.com/z.dysron">
-  <img src="https://img.shields.io/badge/Instagram-%40z.dysron-E4405F?style=for-the-badge&logo=instagram&logoColor=white" />
+<a href="https://instagram.com/yrsnhh_?vrfl=MWlnZGRrOWpvcnQ5Yw%3D%3D" target="_blank">
+  <img src="https://img.shields.io/badge/Instagram-%40yrsnhh__-E4405F?style=for-the-badge&logo=instagram&logoColor=white" />
+</a>
+&nbsp;
+<a href="mailto:naooolaf@gmail.com">
+  <img src="https://img.shields.io/badge/Gmail-naooolaf%40gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white" />
 </a>
 &nbsp;
 <a href="https://github.com/zysrnh">
@@ -61,6 +87,6 @@ const developer = {
 
 <br/><br/>
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:003B64,40:005F9E,100:0077B6&height=150&section=footer&text=Thanks%20for%20visiting!&fontSize=24&fontColor=ffffff&fontAlignY=65&animation=fadeIn" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:003B64,40:005F9E,100:0077B6&height=120&section=footer&text=Thanks%20for%20visiting!&fontSize=22&fontColor=ffffff&fontAlignY=65&animation=fadeIn" />
 
 </div>
