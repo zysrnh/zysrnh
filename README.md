@@ -88,7 +88,7 @@ const developer = {
 
 <div align="center">
 
-<img height="155" src="https://github-readme-stats.vercel.app/api?username=zysrnh&show_icons=true&hide_border=true&bg_color=0d1117&title_color=0077B6&icon_color=0077B6&text_color=c9d1d9" alt="GitHub stats" />
+<img height="155" src="https://github-readme-streak-stats.herokuapp.com/?user=zysrnh&theme=dark&hide_border=true&background=0D1117&ring=0077B6&fire=0077B6&currStreakNum=0077B6&sideNums=FFFFFF&sideLabels=c9d1d9&dates=8b949e" alt="GitHub Streak" />
 &nbsp;
 <img height="155" src="https://github-readme-stats.vercel.app/api/top-langs/?username=zysrnh&layout=compact&hide_border=true&bg_color=0d1117&title_color=0077B6&text_color=c9d1d9" alt="Top languages" />
 
