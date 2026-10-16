@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2IF01</title>
+</head>
+<style>
+    .nama{
+        color: rgb(239, 27, 27);
+        padding: 10px;
+    }
+    .nama1{
+        color: red;
+    }
+</style>
+<body>
+   <form name="form1">
+<div class="nama">
+    Nama Depan : <input type="text"><br>
+    Nama Belakang :<input type="text"><br>
+    Password : <input type="password" name="" id=""><br>
+</div>
+    <h4>Status Mahasiswa :</h4> 
+    <input type="radio" name="Status" value="ya"><label for="ya">ya</label>
+    <input type="radio" name="Status" value="tidak"><label for="tidak">tidak</label><br>
+
+    <h4>Jadwal Kuliah : Checkbox</h4>
+    <input type="checkbox" name="jadwal" value="Senin"><label for="Senin">Senin</label><br>
+    <input type="checkbox" name="jadwal" value="Selasa"><label for="Selasa">Selasa</label><br>
+    <input type="checkbox" name="jadwal" value="Rabu"><label for="Rabu">Rabu</label><br>
+    <input type="checkbox" name="jadwal" value="Kamis"><label for="Kamis">Kamis</label><br>
+    <input type="checkbox" name="jadwal" value="Jumat"><label for="Jumat">Jumat</label><br>
+    <input type="checkbox" name="jadwal" value="Sabtu"><label for="Sabtu">Sabtu</label><br>
+
+    <h4>Program Studi : Dropdown</h4>
+    <select name="prodi" id="">
+        <option value="IF">Informatika</option>
+        <option value="TK">Teknik Komputer</option>
+        <option value="TE">Teknik Telekomunikasi</option>
+    </select>
+    <br>
+
+    <h4>Upload File</h4>
+    <input type="file" name="foto" id="Upload Foto">
+    <p>Gambar yang diupload hanya boleh berekstensi .jpg, .png, .bmp, dan .gif</p>
+    <br>
+    <input type="submit" value="Simpan">
+    </form>
+</body>
+</html>
