@@ -1,0 +1,5 @@
+# Abaikan file video/media besar yang melebihi batas 100MB GitHub
+*.mp4
+*.mkv
+*.avi
+*.mov
