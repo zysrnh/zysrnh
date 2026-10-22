@@ -3,36 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tic-Tac-Toe AI Engine - Praktikum Sesi 4</title>
+  <title>Tic-Tac-Toe AI Engine - Sesi 4</title>
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
+
     body {
-      background: #020617;
-      color: #f8fafc;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: #09090b;
+      color: #fafafa;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 24px 16px;
     }
+
+    /* Container Card Utama: Hitam-Putih, Flat, Proporsional */
     #tictactoe-root {
-      background: #0f172a;
-      border: 1px solid #334155;
+      background: #121215;
+      border: 1px solid #27272a;
       border-radius: 4px;
       padding: 24px;
       width: 100%;
-      max-width: 540px;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+      max-width: 460px;
     }
+
+    /* Header Minimalis */
     .header {
-      border-bottom: 1px solid #334155;
-      padding-bottom: 14px;
-      margin-bottom: 18px;
+      border-bottom: 1px solid #27272a;
+      padding-bottom: 16px;
+      margin-bottom: 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -41,158 +45,229 @@
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 1.5px;
-      color: #94a3b8;
+      color: #71717a;
       font-weight: 700;
     }
     .title {
       font-size: 20px;
-      font-weight: 700;
-      color: #f8fafc;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #fafafa;
       margin-top: 2px;
     }
     .status-pill {
       font-size: 11px;
       font-weight: 700;
-      padding: 4px 10px;
-      background: #1e293b;
-      border: 1px solid #475569;
+      padding: 5px 12px;
+      background: #18181b;
+      border: 1px solid #3f3f46;
       border-radius: 2px;
-      color: #38bdf8;
+      color: #fafafa;
       text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.2s ease;
     }
+
+    /* Form Kontrol Dropdown */
     .controls {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
-      margin-bottom: 18px;
+      margin-bottom: 20px;
     }
     label {
       font-size: 11px;
-      font-weight: 600;
+      font-weight: 700;
       text-transform: uppercase;
-      color: #94a3b8;
+      letter-spacing: 0.5px;
+      color: #a1a1aa;
       display: block;
       margin-bottom: 6px;
     }
     select {
       width: 100%;
-      background: #1e293b;
-      color: #f8fafc;
-      border: 1px solid #475569;
-      padding: 9px 10px;
+      background: #18181b;
+      color: #fafafa;
+      border: 1px solid #27272a;
+      padding: 9px 12px;
       border-radius: 2px;
       font-size: 13px;
+      font-weight: 500;
       outline: none;
       cursor: pointer;
+      transition: border-color 0.15s ease;
     }
-    .board-container {
-      display: flex;
-      justify-content: center;
-      margin: 18px 0;
+    select:focus {
+      border-color: #71717a;
+    }
+
+    /* Papan Permainan Proporsional & Solid */
+    .board-wrapper {
+      width: 100%;
+      margin: 16px 0 20px 0;
     }
     .grid {
       display: grid;
-      grid-template-columns: repeat(3, 90px);
-      grid-template-rows: repeat(3, 90px);
+      grid-template-columns: repeat(3, 1fr);
       gap: 8px;
-      background: #1e293b;
+      background: #18181b;
       padding: 8px;
-      border: 1px solid #334155;
+      border: 1px solid #27272a;
       border-radius: 4px;
+      aspect-ratio: 1 / 1;
+      width: 100%;
     }
     .cell-btn {
-      width: 90px;
-      height: 90px;
-      background: #0f172a;
-      border: 1px solid #334155;
+      background: #09090b;
+      border: 1px solid #27272a;
       border-radius: 2px;
-      font-size: 34px;
-      font-weight: 700;
-      color: #f8fafc;
+      font-size: clamp(38px, 10vw, 56px);
+      font-weight: 800;
+      color: #fafafa;
       cursor: pointer;
-      transition: background 0.15s ease, border-color 0.15s ease;
       display: flex;
       align-items: center;
       justify-content: center;
+      user-select: none;
+      transition: background 0.15s ease, border-color 0.15s ease;
+      line-height: 1;
     }
     .cell-btn:hover:not(:disabled) {
-      background: #1e293b;
-      border-color: #64748b;
+      background: #1c1c20;
+      border-color: #52525b;
     }
     .cell-btn:disabled {
       cursor: default;
     }
-    .cell-btn.mark-o { color: #38bdf8; }
-    .cell-btn.mark-x { color: #f43f5e; }
+
+    /* Animasi Pop-in Halus Saat Langkah Ditaruh */
+    @keyframes popIn {
+      0% {
+        transform: scale(0.65);
+        opacity: 0;
+      }
+      70% {
+        transform: scale(1.05);
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    .mark-anim {
+      display: inline-block;
+      animation: popIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Simbol Monokrom: Putih Bersih (O) & Abu-abu Terang (X) */
+    .mark-o { color: #ffffff; }
+    .mark-x { color: #d4d4d8; }
+
+    /* Highlight Petak Pemenang */
+    .cell-win {
+      background: #27272a !important;
+      border-color: #ffffff !important;
+    }
+
+    /* Status Text */
     .message {
       text-align: center;
       font-size: 13px;
       font-weight: 600;
-      min-height: 22px;
-      color: #cbd5e1;
-      margin-bottom: 16px;
+      min-height: 24px;
+      color: #d4d4d8;
+      margin-bottom: 20px;
+      letter-spacing: -0.2px;
     }
+
+    /* Tombol Aksi */
     .actions {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 8px;
-      margin-bottom: 20px;
+      gap: 10px;
+      margin-bottom: 22px;
     }
     .action-btn {
-      padding: 10px;
+      padding: 11px 8px;
       font-size: 12px;
       font-weight: 700;
+      letter-spacing: 0.8px;
       border-radius: 2px;
       cursor: pointer;
       text-transform: uppercase;
       outline: none;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+    .action-btn:active {
+      transform: scale(0.98);
     }
     .btn-undo {
-      background: #334155;
-      color: #f8fafc;
-      border: 1px solid #475569;
+      background: #18181b;
+      color: #e4e4e7;
+      border: 1px solid #27272a;
+    }
+    .btn-undo:hover {
+      background: #27272a;
+      border-color: #3f3f46;
     }
     .btn-restart {
-      background: #2563eb;
-      color: #ffffff;
-      border: 1px solid #1d4ed8;
+      background: #ffffff;
+      color: #09090b;
+      border: 1px solid #ffffff;
+    }
+    .btn-restart:hover {
+      background: #e4e4e7;
     }
     .btn-reset {
-      background: #1e293b;
-      color: #94a3b8;
-      border: 1px solid #334155;
+      background: #18181b;
+      color: #71717a;
+      border: 1px solid #27272a;
     }
+    .btn-reset:hover {
+      color: #a1a1aa;
+      border-color: #3f3f46;
+    }
+
+    /* Statistik Pertandingan Monokrom */
     .stats-box {
-      background: #1e293b;
-      border: 1px solid #334155;
+      background: #18181b;
+      border: 1px solid #27272a;
       border-radius: 2px;
-      padding: 12px;
-      margin-bottom: 16px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
     }
     .stats-title {
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 1px;
-      color: #94a3b8;
+      color: #71717a;
       font-weight: 700;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       text-align: center;
-      font-size: 12px;
+      font-size: 11px;
+    }
+    .stats-grid span {
+      color: #71717a;
+      font-weight: 600;
+      text-transform: uppercase;
     }
     .score-val {
-      font-size: 18px;
-      font-weight: 700;
-      margin-top: 2px;
+      font-size: 20px;
+      font-weight: 800;
+      color: #fafafa;
+      margin-top: 4px;
     }
+
+    /* Tabel Riwayat Match */
     .history-box {
-      background: #1e293b;
-      border: 1px solid #334155;
+      background: #18181b;
+      border: 1px solid #27272a;
       border-radius: 2px;
-      padding: 12px;
+      padding: 14px 16px;
     }
     table {
       width: 100%;
@@ -201,21 +276,27 @@
       text-align: left;
     }
     th {
-      padding: 6px;
-      border-bottom: 1px solid #334155;
-      color: #94a3b8;
-      font-weight: 600;
+      padding: 8px 6px;
+      border-bottom: 1px solid #27272a;
+      color: #71717a;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 11px;
     }
     td {
-      padding: 6px;
-      border-bottom: 1px solid #243248;
-      color: #e2e8f0;
+      padding: 8px 6px;
+      border-bottom: 1px solid #202024;
+      color: #e4e4e7;
     }
+    .tag-win { color: #ffffff; font-weight: 700; }
+    .tag-loss { color: #a1a1aa; font-weight: 500; }
+    .tag-draw { color: #71717a; font-weight: 600; }
   </style>
 </head>
 <body>
 
 <div id="tictactoe-root">
+  <!-- Header -->
   <div class="header">
     <div>
       <div class="subtitle">Praktikum Kecerdasan Buatan - Sesi 4</div>
@@ -224,10 +305,11 @@
     <div id="status-pill" class="status-pill">READY</div>
   </div>
 
+  <!-- Pengaturan Mode & Giliran -->
   <div class="controls">
     <div>
       <label>Tingkat Kesulitan</label>
-      <select id="diff-select">
+      <select id="diff-select" onchange="restartRound()">
         <option value="easy">Easy (Langkah Acak)</option>
         <option value="medium">Medium (Kedalaman Max 2)</option>
         <option value="hard" selected>Hard (Alpha-Beta / Unbeatable)</option>
@@ -235,7 +317,7 @@
     </div>
     <div>
       <label>Giliran Pertama</label>
-      <select id="turn-select">
+      <select id="turn-select" onchange="restartRound()">
         <option value="human">Manusia (O)</option>
         <option value="bot">Bot (X)</option>
         <option value="random">Acak / Random (50:50)</option>
@@ -243,7 +325,8 @@
     </div>
   </div>
 
-  <div class="board-container">
+  <!-- Papan Permainan Proporsional 1:1 -->
+  <div class="board-wrapper">
     <div class="grid">
       <button class="cell-btn" data-idx="0" onclick="userMove(0)"></button>
       <button class="cell-btn" data-idx="1" onclick="userMove(1)"></button>
@@ -257,24 +340,28 @@
     </div>
   </div>
 
+  <!-- Pesan Giliran / Hasil -->
   <div id="game-message" class="message">Giliran Pemain: Klik salah satu kotak kosong</div>
 
+  <!-- Tombol Aksi -->
   <div class="actions">
     <button class="action-btn btn-undo" onclick="undoMove()">UNDO</button>
     <button class="action-btn btn-restart" onclick="restartRound()">RESTART</button>
     <button class="action-btn btn-reset" onclick="resetStats()">RESET SKOR</button>
   </div>
 
+  <!-- Statistik Rekap -->
   <div class="stats-box">
     <div class="stats-title">Statistik Pertandingan</div>
     <div class="stats-grid">
-      <div><span style="color: #94a3b8;">Menang</span><div id="score-win" class="score-val" style="color: #22c55e;">0</div></div>
-      <div><span style="color: #94a3b8;">Kalah</span><div id="score-loss" class="score-val" style="color: #ef4444;">0</div></div>
-      <div><span style="color: #94a3b8;">Seri</span><div id="score-draw" class="score-val" style="color: #f59e0b;">0</div></div>
-      <div><span style="color: #94a3b8;">Total</span><div id="score-total" class="score-val" style="color: #f8fafc;">0</div></div>
+      <div><span>Menang</span><div id="score-win" class="score-val">0</div></div>
+      <div><span>Kalah</span><div id="score-loss" class="score-val">0</div></div>
+      <div><span>Seri</span><div id="score-draw" class="score-val">0</div></div>
+      <div><span>Total</span><div id="score-total" class="score-val">0</div></div>
     </div>
   </div>
 
+  <!-- Tabel Riwayat Match -->
   <div class="history-box">
     <div class="stats-title">Riwayat Pertandingan Terakhir</div>
     <div style="max-height: 140px; overflow-y: auto;">
@@ -289,7 +376,7 @@
           </tr>
         </thead>
         <tbody id="history-body">
-          <tr><td colspan="5" style="text-align: center; color: #64748b; padding: 10px;">Belum ada riwayat permainan</td></tr>
+          <tr><td colspan="5" style="text-align: center; color: #52525b; padding: 12px 6px;">Belum ada riwayat permainan</td></tr>
         </tbody>
       </table>
     </div>
@@ -314,11 +401,12 @@
   function checkWinnerState(b) {
     for (let c of winConditions) {
       if (b[c[0]] !== ' ' && b[c[0]] === b[c[1]] && b[c[1]] === b[c[2]]) {
-        return b[c[0]];
+        return { winner: b[c[0]], line: c };
       }
     }
-    if (!b.includes(' ')) return 'DRAW';
+    if (!b.includes(' ')) return { winner: 'DRAW', line: null };
 
+    // Smart Early Draw Detection: Semua 8 garis sudah terblokir oleh X dan O
     let allBlocked = true;
     for (let c of winConditions) {
       let set = new Set([b[c[0]], b[c[1]], b[c[2]]]);
@@ -327,15 +415,18 @@
         break;
       }
     }
-    if (allBlocked) return 'DRAW';
+    if (allBlocked) return { winner: 'DRAW', line: null };
+
     return null;
   }
 
   function minimaxAB(b, depth, alpha, beta, isMax) {
-    let w = checkWinnerState(b);
-    if (w === 'X') return 10 - depth;
-    if (w === 'O') return depth - 10;
-    if (w === 'DRAW') return 0;
+    let res = checkWinnerState(b);
+    if (res) {
+      if (res.winner === 'X') return 10 - depth;
+      if (res.winner === 'O') return depth - 10;
+      if (res.winner === 'DRAW') return 0;
+    }
 
     let empty = [];
     for (let i = 0; i < 9; i++) if (b[i] === ' ') empty.push(i);
@@ -393,42 +484,48 @@
     }
   }
 
-  function updateDOM() {
+  function updateDOM(winLine = null) {
     for (let i = 0; i < 9; i++) {
       let btn = document.querySelector(`.cell-btn[data-idx="${i}"]`);
       if (btn) {
-        btn.textContent = board[i] === ' ' ? '' : board[i];
-        btn.className = 'cell-btn ' + (board[i] === 'O' ? 'mark-o' : (board[i] === 'X' ? 'mark-x' : ''));
+        if (board[i] !== ' ') {
+          btn.innerHTML = `<span class="mark-anim ${board[i] === 'O' ? 'mark-o' : 'mark-x'}">${board[i]}</span>`;
+        } else {
+          btn.innerHTML = '';
+        }
         btn.disabled = board[i] !== ' ' || isGameOver;
+        if (winLine && winLine.includes(i)) {
+          btn.classList.add('cell-win');
+        } else {
+          btn.classList.remove('cell-win');
+        }
       }
     }
   }
 
-  function finalizeGame(winner) {
+  function finalizeGame(resultObj) {
     isGameOver = true;
-    updateDOM();
+    updateDOM(resultObj.line);
+
     let resText = '';
     let pill = document.getElementById('status-pill');
     let msg = document.getElementById('game-message');
 
-    if (winner === 'DRAW') {
+    if (resultObj.winner === 'DRAW') {
       stats.draw++;
       resText = 'Seri (Draw)';
       pill.textContent = 'DRAW';
-      pill.style.color = '#f59e0b';
       msg.textContent = 'Hasil Akhir: Seri (Semua garis kemenangan terblokir)';
-    } else if (winner === 'X') {
+    } else if (resultObj.winner === 'X') {
       stats.loss++;
       resText = 'Bot Menang';
       pill.textContent = 'DEFEAT';
-      pill.style.color = '#ef4444';
       msg.textContent = 'Hasil Akhir: Bot Menang!';
     } else {
       stats.win++;
       resText = 'Kamu Menang';
       pill.textContent = 'VICTORY';
-      pill.style.color = '#22c55e';
-      msg.textContent = 'Hasil Akhir: Kamu Menang!';
+      msg.textContent = 'Hasil Akhir: Selamat, Kamu Menang!';
     }
     stats.total++;
 
@@ -440,6 +537,7 @@
     let diff = document.getElementById('diff-select').value.toUpperCase();
     let turnChoice = document.getElementById('turn-select').value;
     let first = turnChoice === 'bot' ? 'Bot' : 'Manusia';
+
     matchHistory.unshift({
       gameNo: stats.total,
       diff: diff,
@@ -455,16 +553,16 @@
     let tbody = document.getElementById('history-body');
     if (!tbody) return;
     if (matchHistory.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #64748b; padding: 10px;">Belum ada riwayat permainan</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #52525b; padding: 12px 6px;">Belum ada riwayat permainan</td></tr>';
       return;
     }
     tbody.innerHTML = matchHistory.slice(0, 5).map(m => `
       <tr>
-        <td style="font-weight: 600;">#${m.gameNo}</td>
-        <td style="color: #94a3b8;">${m.diff}</td>
-        <td style="color: #94a3b8;">${m.first}</td>
-        <td style="font-weight: 600; color: ${m.res.includes('Kamu') ? '#22c55e' : (m.res.includes('Bot') ? '#ef4444' : '#f59e0b')};">${m.res}</td>
-        <td style="color: #94a3b8;">${m.moves}</td>
+        <td style="font-weight: 700;">#${m.gameNo}</td>
+        <td style="color: #a1a1aa;">${m.diff}</td>
+        <td style="color: #a1a1aa;">${m.first}</td>
+        <td class="${m.res.includes('Kamu') ? 'tag-win' : (m.res.includes('Bot') ? 'tag-loss' : 'tag-draw')}">${m.res}</td>
+        <td style="color: #71717a;">${m.moves}</td>
       </tr>
     `).join('');
   }
@@ -477,12 +575,11 @@
     moveCount++;
     updateDOM();
 
-    let w = checkWinnerState(board);
-    if (w) { finalizeGame(w); return; }
+    let res = checkWinnerState(board);
+    if (res) { finalizeGame(res); return; }
 
     document.getElementById('game-message').textContent = 'Bot sedang berpikir...';
     document.getElementById('status-pill').textContent = 'BOT TURN';
-    document.getElementById('status-pill').style.color = '#f43f5e';
 
     setTimeout(() => {
       let diff = document.getElementById('diff-select').value;
@@ -493,15 +590,14 @@
         updateDOM();
       }
 
-      let w2 = checkWinnerState(board);
-      if (w2) {
-        finalizeGame(w2);
+      let res2 = checkWinnerState(board);
+      if (res2) {
+        finalizeGame(res2);
       } else {
         document.getElementById('game-message').textContent = 'Giliranmu: Pilih kotak kosong (O)';
         document.getElementById('status-pill').textContent = 'YOUR TURN';
-        document.getElementById('status-pill').style.color = '#38bdf8';
       }
-    }, 120);
+    }, 140);
   };
 
   window.undoMove = function() {
@@ -510,7 +606,6 @@
     moveCount = Math.max(0, moveCount - 2);
     isGameOver = false;
     document.getElementById('status-pill').textContent = 'YOUR TURN';
-    document.getElementById('status-pill').style.color = '#38bdf8';
     document.getElementById('game-message').textContent = 'Langkah terakhir dibatalkan (Undo)';
     updateDOM();
   };
@@ -530,7 +625,6 @@
 
     if (starter === 'X') {
       document.getElementById('status-pill').textContent = 'BOT FIRST';
-      document.getElementById('status-pill').style.color = '#f43f5e';
       document.getElementById('game-message').textContent = 'Bot melangkah pertama...';
       setTimeout(() => {
         let diff = document.getElementById('diff-select').value;
@@ -541,12 +635,10 @@
           updateDOM();
         }
         document.getElementById('status-pill').textContent = 'YOUR TURN';
-        document.getElementById('status-pill').style.color = '#38bdf8';
         document.getElementById('game-message').textContent = 'Giliranmu: Pilih kotak kosong (O)';
-      }, 150);
+      }, 160);
     } else {
       document.getElementById('status-pill').textContent = 'YOUR TURN';
-      document.getElementById('status-pill').style.color = '#38bdf8';
       document.getElementById('game-message').textContent = 'Giliranmu jalan pertama: Pilih kotak (O)';
     }
   };
