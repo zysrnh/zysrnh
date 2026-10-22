@@ -18,7 +18,54 @@ def check_winner(board):
         return 'DRAW'
     return None
 
-# Test Papan Sederhana
-board_sample = ['X', 'O', 'X', ' ', 'O', ' ', ' ', ' ', 'X']
-print_board(board_sample)
-print("Status Game:", check_winner(board_sample))
+# Langkah 2: Fungsi Rekursif Minimax
+def minimax(board, is_maximizing):
+    winner = check_winner(board)
+    if winner == 'X':
+        return 10  # Bot (MAX) Menang
+    if winner == 'O':
+        return -10 # Manusia (MIN) Menang
+    if winner == 'DRAW':
+        return 0
+
+    if is_maximizing:
+        best_score = -math.inf
+        for i in range(9):
+            if board[i] == ' ':
+                board[i] = 'X'
+                score = minimax(board, False)
+                board[i] = ' '
+                best_score = max(score, best_score)
+        return best_score
+    else:
+        best_score = math.inf
+        for i in range(9):
+            if board[i] == ' ':
+                board[i] = 'O'
+                score = minimax(board, True)
+                board[i] = ' '
+                best_score = min(score, best_score)
+        return best_score
+
+def find_best_move(board):
+    best_score = -math.inf
+    best_move = -1
+    for i in range(9):
+        if board[i] == ' ':
+            board[i] = 'X'
+            score = minimax(board, False)
+            board[i] = ' '
+            if score > best_score:
+                best_score = score
+                best_move = i
+    return best_move
+
+# Test Papan Sederhana & Rekomendasi Langkah Terbaik Bot
+if __name__ == "__main__":
+    board_sample = ['X', 'O', 'X', ' ', 'O', ' ', ' ', ' ', 'X']
+    print("--- Kondisi Papan Saat Ini ---")
+    print_board(board_sample)
+    print("Status Game:", check_winner(board_sample))
+
+    best_step = find_best_move(board_sample)
+    print(f"Langkah Terbaik untuk Bot (X) berikutnya di indeks: {best_step}")
