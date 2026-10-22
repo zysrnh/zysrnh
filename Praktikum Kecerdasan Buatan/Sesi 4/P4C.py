@@ -1,8 +1,12 @@
 # ==============================================================================
 # PRAKTIKUM KECERDASAN BUATAN - SESI 4 (CHALLENGE / POST-TEST)
 # FILE: P4C.py
-# TOPIK: Bot Tic-Tac-Toe 3 Tingkat Kesulitan (Easy, Medium, Hard/Unbeatable)
-#        Langsung Muncul & Bisa Dimainkan di Terminal Maupun Google Colab!
+# FITUR LENGKAP:
+# 1. Tiga Tingkat Kesulitan: Easy (Acak), Medium (Depth-Limited), Hard (Alpha-Beta)
+# 2. Pemilihan Siapa Jalan Duluan: Manusia ('O') atau Bot ('X')
+# 3. Fitur In-Game: UNDO ('u') & RESTART ('r')
+# 4. Analisis & Perbandingan Node (Minimax vs Alpha-Beta)
+# 5. Benchmark Otomatis 5x Pertandingan per Level
 # ==============================================================================
 
 import sys
@@ -10,20 +14,20 @@ import time
 import math
 import random
 
-# Menjaga kompatibilitas output terminal Windows dan Google Colab
+# Menjaga kompatibilitas output encoding di Windows Terminal & Google Colab
 if hasattr(sys.stdout, 'reconfigure'):
     try:
         sys.stdout.reconfigure(encoding='utf-8', errors='replace')
     except Exception:
         pass
 
-# Variabel global untuk menghitung jumlah node yang dievaluasi
+# Variabel global untuk penghitungan node evaluasi
 nodes_minimax_count = 0
 nodes_alphabeta_count = 0
 
 
 # ------------------------------------------------------------------------------
-# 1. REPRESENTASI PAPAN & FUNGSI WASIT (TERMINAL STATE)
+# 1. INISIALISASI PAPAN & CEK KEMENANGAN
 # ------------------------------------------------------------------------------
 def print_board(board):
     print("\n  Papan Tic-Tac-Toe         Panduan Nomor Petak")
@@ -37,9 +41,9 @@ def print_board(board):
 
 def check_winner(board):
     win_conditions = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8], # 3 Baris
-        [0, 3, 6], [1, 4, 7], [2, 5, 8], # 3 Kolom
-        [0, 4, 8], [2, 4, 6]             # 2 Diagonal
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], # Baris
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], # Kolom
+        [0, 4, 8], [2, 4, 6]             # Diagonal
     ]
     for cond in win_conditions:
         if board[cond[0]] == board[cond[1]] == board[cond[2]] != ' ':
@@ -53,7 +57,7 @@ def get_empty_cells(board):
 
 
 # ------------------------------------------------------------------------------
-# 2. ALGORITMA 1: MINIMAX MURNI (DENGAN HITUNGAN JUMLAH NODE)
+# 2. ALGORITMA MINIMAX MURNI (DENGAN HITUNGAN NODE)
 # ------------------------------------------------------------------------------
 def minimax_counter(board, is_maximizing):
     global nodes_minimax_count
@@ -86,7 +90,7 @@ def minimax_counter(board, is_maximizing):
 
 
 # ------------------------------------------------------------------------------
-# 3. ALGORITMA 2: MINIMAX DENGAN PEMBATASAN KEDALAMAN (MEDIUM LEVEL: MAX DEPTH = 2)
+# 3. ALGORITMA MINIMAX DEPTH-LIMITED (MEDIUM LEVEL: MAX DEPTH = 2)
 # ------------------------------------------------------------------------------
 def evaluate_board_heuristic(board):
     lines = [
@@ -134,7 +138,7 @@ def minimax_depth_limited(board, depth, max_depth, is_maximizing):
 
 
 # ------------------------------------------------------------------------------
-# 4. ALGORITMA 3: ALPHA-BETA PRUNING PENUH (HARD LEVEL: UNBEATABLE CEPAT)
+# 4. ALGORITMA ALPHA-BETA PRUNING (HARD LEVEL: UNBEATABLE CEPAT)
 # ------------------------------------------------------------------------------
 def alphabeta_counter(board, depth, alpha, beta, is_maximizing):
     global nodes_alphabeta_count
@@ -173,16 +177,18 @@ def alphabeta_counter(board, depth, alpha, beta, is_maximizing):
 
 
 # ------------------------------------------------------------------------------
-# 5. PEMILIHAN LANGKAH BOT (OPTIMAL & CEPAT)
+# 5. PEMILIHAN LANGKAH BOT BERDASARKAN LEVEL
 # ------------------------------------------------------------------------------
 def get_bot_move(board, difficulty):
     empty_cells = get_empty_cells(board)
     if not empty_cells:
         return -1, 0
 
+    # 1. Easy: Acak Murni
     if difficulty.lower() == 'easy':
         return random.choice(empty_cells), 1
 
+    # 2. Medium: Minimax Kedalaman Max 2
     elif difficulty.lower() == 'medium':
         best_score = -math.inf
         best_move = empty_cells[0]
@@ -195,13 +201,13 @@ def get_bot_move(board, difficulty):
                 best_move = move
         return best_move, 0
 
-    else: # HARD
+    # 3. Hard: Alpha-Beta Pruning (Unbeatable)
+    else:
         global nodes_alphabeta_count
         nodes_alphabeta_count = 0
 
         best_score = -math.inf
         best_move = empty_cells[0]
-
         for move in empty_cells:
             board[move] = 'X'
             score = alphabeta_counter(board, depth=0, alpha=-math.inf, beta=math.inf, is_maximizing=False)
@@ -214,97 +220,134 @@ def get_bot_move(board, difficulty):
 
 
 # ------------------------------------------------------------------------------
-# 6. FUNGSI UTAMA: play_game(difficulty) LANGSUNG MUNCUL & BISA DIMAINKAN
+# 6. FUNGSI UTAMA: play_game() INTERAKTIF (PILIH MODE, GILIRAN, UNDO, RESTART)
 # ------------------------------------------------------------------------------
-def play_game(difficulty='hard'):
-    """
-    Fungsi interaksi manusia (pemain 'O') vs Bot (pemain 'X').
-    Default langsung membuka level 'hard' agar papan LANGSUNG MUNCUL di layar tanpa tertahan menu!
-    """
+def play_game(difficulty=None, first_player=None):
     valid_levels = {'1': 'easy', '2': 'medium', '3': 'hard', 'easy': 'easy', 'medium': 'medium', 'hard': 'hard'}
-    curr_diff = valid_levels.get(str(difficulty).lower(), 'hard')
+    
+    # 1. Pilih Tingkat Kesulitan jika belum diset
+    if not difficulty or str(difficulty).lower() not in valid_levels:
+        print("\n" + "=" * 55)
+        print("[PILIHAN] TINGKAT KESULITAN BOT TIC-TAC-TOE:")
+        print("  [1] Easy   : Langkah Acak (Random Move)")
+        print("  [2] Medium : Minimax Terbatas (Depth-Limited, Max Depth = 2)")
+        print("  [3] Hard   : Alpha-Beta Pruning Penuh (Unbeatable AI)")
+        print("=" * 55)
+        diff_choice = input("Pilih level (1/2/3) [default: 3]: ").strip().lower()
+        difficulty = valid_levels.get(diff_choice, 'hard')
+    else:
+        difficulty = valid_levels[str(difficulty).lower()]
+
+    # 2. Pilih Siapa yang Jalan Duluan jika belum diset
+    if not first_player:
+        print("\n[PILIHAN] SIAPA YANG JALAN DULUAN:")
+        print("  [1] Manusia duluan ('O')")
+        print("  [2] Bot duluan ('X')")
+        fp_choice = input("Pilih giliran pertama (1/2) [default: 1]: ").strip()
+        first_player = 'X' if fp_choice == '2' else 'O'
 
     while True:
         board = [' '] * 9
-        print("\n" + "=" * 55)
-        print(f"🎮 PERMAINAN DIMULAI! LEVEL BOT: [{curr_diff.upper()}] 🎮")
-        print("Kamu = 'O' (Manusia) | Bot = 'X' (AI)")
-        print("Ketik nomor (0-8) untuk melangkah, atau ketik 'r' untuk Ulangi")
-        print("=" * 55)
+        history = []  # Menyimpan snapshot board untuk fitur UNDO ('u')
+        current_player = first_player
 
-        current_player = 'O'
-        ingame_restart = False
+        print("\n" + "=" * 60)
+        print(f"🎮 MULAI PERMAINAN - LEVEL: [{difficulty.upper()}] 🎮")
+        print(f"Pemain Pertama : {'BOT (X)' if first_player == 'X' else 'KAMU (O)'}")
+        print("Petunjuk Kontrol:")
+        print("  • Masukkan 0-8 : Memilih kotak langkah")
+        print("  • Ketik 'u'    : UNDO (Batalkan langkah terakhir)")
+        print("  • Ketik 'r'    : RESTART (Ulangi game dari awal)")
+        print("=" * 60)
 
+        # Loop Ronde Permainan
         while True:
-            # Papan langsung tercetak di layar
-            print_board(board)
-            winner = check_winner(board)
-            if winner:
-                print("=" * 45)
-                if winner == 'DRAW':
-                    print("🤝 HASIL PERMAINAN: SERI (DRAW)!")
-                elif winner == 'X':
-                    print(f"🤖 HASIL PERMAINAN: BOT [{curr_diff.upper()}] MENANG!")
-                else:
-                    print(f"🎉 HASIL PERMAINAN: HEBAT, KAMU MENGALAHKAN BOT [{curr_diff.upper()}]!")
-                print("=" * 45)
-                break
-
             # --- GILIRAN MANUSIA ('O') ---
             if current_player == 'O':
-                user_input = input("👉 Giliranmu (O)! Masukkan petak (0-8) [r = Ulangi]: ").strip().lower()
-                
-                # Fitur In-Game Restart
+                print_board(board)
+                winner = check_winner(board)
+                if winner:
+                    print("=" * 45)
+                    if winner == 'DRAW':
+                        print("🤝 HASIL AKHIR: GAME SERI (DRAW)!")
+                    elif winner == 'X':
+                        print(f"🤖 HASIL AKHIR: BOT [{difficulty.upper()}] MENANG!")
+                    else:
+                        print("🎉 HASIL AKHIR: SELAMAT, KAMU (O) MENANG!")
+                    print("=" * 45)
+                    break
+
+                user_input = input("👉 Giliranmu (O)! Masukkan petak (0-8) [u = Undo, r = Ulangi]: ").strip().lower()
+
+                # --- FITUR UNDO ---
+                if user_input in ['u', 'undo']:
+                    if len(history) > 0:
+                        board = history.pop()
+                        print("\n[⏪ UNDO BERHASIL] Langkah terakhir dibatalkan!")
+                        continue
+                    else:
+                        print("\n⚠️ Belum ada langkah yang bisa di-undo!")
+                        continue
+
+                # --- FITUR RESTART IN-GAME ---
                 if user_input in ['r', 'reset', 'ulang']:
-                    print("\n[🔄 RESTART] Permainan diulang dari awal oleh pemain!\n")
-                    ingame_restart = True
+                    print("\n[🔄 RESTART] Game diulang dari awal oleh pemain!\n")
                     break
 
                 try:
                     move = int(user_input)
                     if move not in range(9):
-                        print("⚠️ Masukkan angka antara 0 sampai 8!")
+                        print("⚠️ Pilihan harus angka 0 sampai 8!")
                         continue
                     if board[move] != ' ':
                         print("⚠️ Petak tersebut sudah terisi, pilih petak kosong!")
                         continue
+
+                    # Simpan snapshot sebelum melangkah
+                    history.append(list(board))
                     board[move] = 'O'
                     current_player = 'X'
+
                 except ValueError:
-                    print("⚠️ Input tidak valid! Ketik angka 0-8 atau 'r'.")
+                    print("⚠️ Harap masukkan angka 0-8, 'u' untuk undo, atau 'r' untuk ulangi!")
 
             # --- GILIRAN BOT ('X') ---
             else:
-                print(f"🤖 Bot [{curr_diff.upper()}] berpikir...")
-                bot_move, nodes_ab = get_bot_move(board, curr_diff)
-                board[bot_move] = 'X'
-                print(f"✅ Bot meletakkan 'X' di petak: {bot_move}")
-                if curr_diff == 'hard':
-                    print(f"   (Alpha-Beta mengevaluasi {nodes_ab} nodes)")
+                winner = check_winner(board)
+                if winner:
+                    print_board(board)
+                    print("=" * 45)
+                    if winner == 'DRAW':
+                        print("🤝 HASIL AKHIR: GAME SERI (DRAW)!")
+                    elif winner == 'X':
+                        print(f"🤖 HASIL AKHIR: BOT [{difficulty.upper()}] MENANG!")
+                    else:
+                        print("🎉 HASIL AKHIR: SELAMAT, KAMU (O) MENANG!")
+                    print("=" * 45)
+                    break
+
+                print(f"🤖 Bot [{difficulty.upper()}] sedang berpikir...")
+                bot_move, nodes_count = get_bot_move(board, difficulty)
+                if bot_move != -1:
+                    board[bot_move] = 'X'
+                    print(f"✅ Bot meletakkan 'X' di petak nomor: {bot_move}")
+                    if difficulty == 'hard':
+                        print(f"   (Alpha-Beta mengevaluasi {nodes_count} nodes)")
 
                 current_player = 'O'
 
-        if ingame_restart:
-            continue
-
-        # Tanya ulangi game atau ganti level
-        tanya = input("\n🔄 Mau main lagi? (y = main lagi / n = keluar / 1 = Easy / 2 = Medium / 3 = Hard): ").strip().lower()
-        if tanya in ['1', 'easy']:
-            curr_diff = 'easy'
-            continue
-        elif tanya in ['2', 'medium']:
-            curr_diff = 'medium'
-            continue
-        elif tanya in ['3', 'hard']:
-            curr_diff = 'hard'
-            continue
+        # Opsi setelah game usai
+        tanya = input("\n🔄 Mau main lagi? (y = Ya / n = Keluar / g = Ganti Pengaturan Level): ").strip().lower()
+        if tanya == 'g':
+            play_game()
+            break
         elif tanya != 'y':
-            print("\n👋 Terima kasih sudah bermain! Sampai jumpa.\n")
+            print("\n👋 Terima kasih sudah bermain! Sampai jumpa lagi.\n")
             break
 
 
 # ------------------------------------------------------------------------------
-# 7. FITUR BENCHMARK & KOMPARASI
+# 7. FITUR KOMPARASI & BENCHMARK OTOMATIS (POST-TEST)
 # ------------------------------------------------------------------------------
 def compare_minimax_vs_alphabeta():
     global nodes_minimax_count, nodes_alphabeta_count
@@ -333,6 +376,7 @@ def compare_minimax_vs_alphabeta():
     hemat_node = nodes_minimax_count - nodes_alphabeta_count
     persen_hemat = (hemat_node / nodes_minimax_count) * 100 if nodes_minimax_count > 0 else 0
 
+    print("-" * 65)
     print(f"• Node Minimax Murni : {nodes_minimax_count} nodes ({t_minimax:.2f} ms)")
     print(f"• Node Alpha-Beta    : {nodes_alphabeta_count} nodes ({t_ab:.2f} ms)")
     print(f"• Efisiensi          : Hemat {persen_hemat:.1f}% node evaluasi!")
@@ -354,7 +398,8 @@ def run_benchmark_trials(num_games=5):
                     hasil['MENANG_X' if w == 'X' else ('MENANG_O' if w == 'O' else 'DRAW')] += 1
                     break
                 empty = get_empty_cells(board)
-                if not empty: break
+                if not empty:
+                    break
                 if curr == 'O':
                     board[random.choice(empty)] = 'O'
                     curr = 'X'
@@ -367,7 +412,22 @@ def run_benchmark_trials(num_games=5):
 
 
 # ------------------------------------------------------------------------------
-# ENTRY POINT: LANGSUNG MULAI MAIN SECARA OTOMATIS!
+# ENTRY POINT PROGRAM
 # ------------------------------------------------------------------------------
 if __name__ == "__main__":
-    play_game('hard')
+    print("=" * 60)
+    print("      STUDI KASUS & POST-TEST PRAKTIKUM AI: TIC-TAC-TOE      ")
+    print("=" * 60)
+    print("Pilihan Menu:")
+    print("  [1] Main Game Interaktif (Pilih Mode, Duluan, Undo, Restart)")
+    print("  [2] Jalankan Benchmark Otomatis 5x Permainan (Laporan)")
+    print("  [3] Bandingkan Efisiensi Node (Minimax vs Alpha-Beta)")
+    print("=" * 60)
+    menu_choice = input("Pilih menu (1/2/3) [default: 1]: ").strip()
+
+    if menu_choice == '2':
+        run_benchmark_trials(num_games=5)
+    elif menu_choice == '3':
+        compare_minimax_vs_alphabeta()
+    else:
+        play_game()
