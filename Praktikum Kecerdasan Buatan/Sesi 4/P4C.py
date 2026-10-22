@@ -2,11 +2,12 @@
 # PRAKTIKUM KECERDASAN BUATAN - SESI 4 (CHALLENGE / POST-TEST)
 # FILE: P4C.py
 # FITUR LENGKAP:
-# 1. Tiga Tingkat Kesulitan: Easy (Acak), Medium (Depth-Limited), Hard (Alpha-Beta)
-# 2. Pemilihan Siapa Jalan Duluan: Manusia ('O') atau Bot ('X')
-# 3. Fitur In-Game: UNDO ('u') & RESTART ('r')
-# 4. Analisis & Perbandingan Node (Minimax vs Alpha-Beta)
-# 5. Benchmark Otomatis 5x Pertandingan per Level
+# 1. Early Draw Detection: Otomatis DRAW jika semua garis sudah terblokir
+# 2. Tiga Tingkat Kesulitan: Easy (Acak), Medium (Depth-Limited), Hard (Alpha-Beta)
+# 3. Pemilihan Siapa Jalan Duluan: Manusia, Bot, atau RANDOM (50:50)
+# 4. Fitur In-Game: UNDO ('u') & RESTART ('r')
+# 5. Analisis & Perbandingan Node (Minimax vs Alpha-Beta)
+# 6. Benchmark Otomatis 5x Pertandingan per Level
 # ==============================================================================
 
 import sys
@@ -27,7 +28,7 @@ nodes_alphabeta_count = 0
 
 
 # ------------------------------------------------------------------------------
-# 1. INISIALISASI PAPAN & CEK KEMENANGAN
+# 1. INISIALISASI PAPAN & CEK KEMENANGAN (DENGAN DETEKSI OTOMATIS DRAW)
 # ------------------------------------------------------------------------------
 def print_board(board):
     print("\n  Papan Tic-Tac-Toe         Panduan Nomor Petak")
@@ -45,11 +46,27 @@ def check_winner(board):
         [0, 3, 6], [1, 4, 7], [2, 5, 8], # Kolom
         [0, 4, 8], [2, 4, 6]             # Diagonal
     ]
+
+    # 1. Cek pemenang
     for cond in win_conditions:
         if board[cond[0]] == board[cond[1]] == board[cond[2]] != ' ':
             return board[cond[0]]
+
+    # 2. Cek papan penuh
     if ' ' not in board:
         return 'DRAW'
+
+    # 3. Fitur Early Draw: Jika semua garis sudah mengandung X dan O
+    all_lines_blocked = True
+    for cond in win_conditions:
+        line_symbols = {board[cond[0]], board[cond[1]], board[cond[2]]}
+        if not ('X' in line_symbols and 'O' in line_symbols):
+            all_lines_blocked = False
+            break
+
+    if all_lines_blocked:
+        return 'DRAW'
+
     return None
 
 def get_empty_cells(board):
@@ -184,11 +201,9 @@ def get_bot_move(board, difficulty):
     if not empty_cells:
         return -1, 0
 
-    # 1. Easy: Acak Murni
     if difficulty.lower() == 'easy':
         return random.choice(empty_cells), 1
 
-    # 2. Medium: Minimax Kedalaman Max 2
     elif difficulty.lower() == 'medium':
         best_score = -math.inf
         best_move = empty_cells[0]
@@ -201,8 +216,7 @@ def get_bot_move(board, difficulty):
                 best_move = move
         return best_move, 0
 
-    # 3. Hard: Alpha-Beta Pruning (Unbeatable)
-    else:
+    else: # HARD
         global nodes_alphabeta_count
         nodes_alphabeta_count = 0
 
@@ -220,7 +234,7 @@ def get_bot_move(board, difficulty):
 
 
 # ------------------------------------------------------------------------------
-# 6. FUNGSI UTAMA: play_game() INTERAKTIF (PILIH MODE, GILIRAN, UNDO, RESTART)
+# 6. FUNGSI UTAMA: play_game() INTERAKTIF
 # ------------------------------------------------------------------------------
 def play_game(difficulty=None, first_player=None):
     valid_levels = {'1': 'easy', '2': 'medium', '3': 'hard', 'easy': 'easy', 'medium': 'medium', 'hard': 'hard'}
@@ -243,43 +257,55 @@ def play_game(difficulty=None, first_player=None):
         print("\n[PILIHAN] SIAPA YANG JALAN DULUAN:")
         print("  [1] Manusia duluan ('O')")
         print("  [2] Bot duluan ('X')")
-        fp_choice = input("Pilih giliran pertama (1/2) [default: 1]: ").strip()
-        first_player = 'X' if fp_choice == '2' else 'O'
+        print("  [3] Random / Acak (Kocok otomatis 50:50)")
+        fp_choice = input("Pilih giliran pertama (1/2/3) [default: 1]: ").strip()
+        turn_choice_mode = fp_choice if fp_choice in ['1', '2', '3'] else '1'
+    else:
+        turn_choice_mode = '2' if first_player == 'X' else '1'
 
     while True:
+        if turn_choice_mode == '3':
+            active_first = random.choice(['O', 'X'])
+            print(f"\n🎲 Hasil Undian Acak: {'KAMU (O)' if active_first == 'O' else 'BOT (X)'} jalan duluan!")
+        elif turn_choice_mode == '2':
+            active_first = 'X'
+        else:
+            active_first = 'O'
+
         board = [' '] * 9
-        history = []  # Menyimpan snapshot board untuk fitur UNDO ('u')
-        current_player = first_player
+        history = []
+        current_player = active_first
 
         print("\n" + "=" * 60)
         print(f"🎮 MULAI PERMAINAN - LEVEL: [{difficulty.upper()}] 🎮")
-        print(f"Pemain Pertama : {'BOT (X)' if first_player == 'X' else 'KAMU (O)'}")
+        print(f"Pemain Pertama : {'BOT (X)' if active_first == 'X' else 'KAMU (O)'}")
         print("Petunjuk Kontrol:")
         print("  • Masukkan 0-8 : Memilih kotak langkah")
         print("  • Ketik 'u'    : UNDO (Batalkan langkah terakhir)")
         print("  • Ketik 'r'    : RESTART (Ulangi game dari awal)")
         print("=" * 60)
 
-        # Loop Ronde Permainan
         while True:
+            # Cek status sebelum giliran jalan
+            winner = check_winner(board)
+            if winner:
+                print_board(board)
+                print("=" * 45)
+                if winner == 'DRAW':
+                    print("🤝 HASIL AKHIR: GAME SERI (DRAW)!")
+                    print("💡 Info: Semua garis kemenangan sudah terblokir (Otomatis Seri).")
+                elif winner == 'X':
+                    print(f"🤖 HASIL AKHIR: BOT [{difficulty.upper()}] MENANG!")
+                else:
+                    print("🎉 HASIL AKHIR: SELAMAT, KAMU (O) MENANG!")
+                print("=" * 45)
+                break
+
             # --- GILIRAN MANUSIA ('O') ---
             if current_player == 'O':
                 print_board(board)
-                winner = check_winner(board)
-                if winner:
-                    print("=" * 45)
-                    if winner == 'DRAW':
-                        print("🤝 HASIL AKHIR: GAME SERI (DRAW)!")
-                    elif winner == 'X':
-                        print(f"🤖 HASIL AKHIR: BOT [{difficulty.upper()}] MENANG!")
-                    else:
-                        print("🎉 HASIL AKHIR: SELAMAT, KAMU (O) MENANG!")
-                    print("=" * 45)
-                    break
-
                 user_input = input("👉 Giliranmu (O)! Masukkan petak (0-8) [u = Undo, r = Ulangi]: ").strip().lower()
 
-                # --- FITUR UNDO ---
                 if user_input in ['u', 'undo']:
                     if len(history) > 0:
                         board = history.pop()
@@ -289,7 +315,6 @@ def play_game(difficulty=None, first_player=None):
                         print("\n⚠️ Belum ada langkah yang bisa di-undo!")
                         continue
 
-                # --- FITUR RESTART IN-GAME ---
                 if user_input in ['r', 'reset', 'ulang']:
                     print("\n[🔄 RESTART] Game diulang dari awal oleh pemain!\n")
                     break
@@ -303,7 +328,6 @@ def play_game(difficulty=None, first_player=None):
                         print("⚠️ Petak tersebut sudah terisi, pilih petak kosong!")
                         continue
 
-                    # Simpan snapshot sebelum melangkah
                     history.append(list(board))
                     board[move] = 'O'
                     current_player = 'X'
@@ -313,19 +337,6 @@ def play_game(difficulty=None, first_player=None):
 
             # --- GILIRAN BOT ('X') ---
             else:
-                winner = check_winner(board)
-                if winner:
-                    print_board(board)
-                    print("=" * 45)
-                    if winner == 'DRAW':
-                        print("🤝 HASIL AKHIR: GAME SERI (DRAW)!")
-                    elif winner == 'X':
-                        print(f"🤖 HASIL AKHIR: BOT [{difficulty.upper()}] MENANG!")
-                    else:
-                        print("🎉 HASIL AKHIR: SELAMAT, KAMU (O) MENANG!")
-                    print("=" * 45)
-                    break
-
                 print(f"🤖 Bot [{difficulty.upper()}] sedang berpikir...")
                 bot_move, nodes_count = get_bot_move(board, difficulty)
                 if bot_move != -1:
@@ -336,8 +347,7 @@ def play_game(difficulty=None, first_player=None):
 
                 current_player = 'O'
 
-        # Opsi setelah game usai
-        tanya = input("\n🔄 Mau main lagi? (y = Ya / n = Keluar / g = Ganti Pengaturan Level): ").strip().lower()
+        tanya = input("\n🔄 Mau main lagi? (y = Ya / n = Keluar / g = Ganti Pengaturan): ").strip().lower()
         if tanya == 'g':
             play_game()
             break
