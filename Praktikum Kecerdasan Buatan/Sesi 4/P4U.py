@@ -189,7 +189,7 @@ def main_cli():
     diff = levels.get(d_inp, 'hard')
 
     print("\n[PILIHAN GILIRAN PERTAMA]")
-    print("  1. Manusia (O)")
+    print("  1. User (O)")
     print("  2. Bot (X)")
     print("  3. Acak (50:50)")
     f_inp = input("Pilih giliran (1/2/3) [default: 1]: ").strip()

@@ -11,374 +11,527 @@
       padding: 0;
     }
 
-    body {
-      background: #09090b;
-      color: #fafafa;
+    html, body {
+      height: 100%;
+      background: #f1f5f9;
+      color: #0f172a;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px 16px;
+      overflow-x: hidden;
     }
 
-    /* Container Card Utama: Hitam-Putih, Flat, Proporsional */
-    #tictactoe-root {
-      background: #121215;
-      border: 1px solid #27272a;
-      border-radius: 4px;
-      padding: 24px;
-      width: 100%;
-      max-width: 460px;
+    /* Container Dashboard Utama - Muat Pas 1 Layar Desktop Tanpa Scroll */
+    .app-container {
+      display: flex;
+      flex-direction: row;
+      gap: 22px;
+      width: 95%;
+      max-width: 920px;
+      background: #ffffff;
+      border: 4px solid #000000;
+      border-radius: 8px;
+      padding: 20px 22px;
+      box-shadow: 6px 6px 0px #000000;
+      align-items: stretch;
     }
 
-    /* Header Minimalis */
+    /* Kolom Kiri: Arena Permainan */
+    .game-panel {
+      flex: 1.15;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Kolom Kanan: Statistik & Riwayat */
+    .sidebar-panel {
+      flex: 0.85;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-left: 3px solid #000000;
+      padding-left: 20px;
+    }
+
+    /* Header Ringkas */
     .header {
-      border-bottom: 1px solid #27272a;
-      padding-bottom: 16px;
-      margin-bottom: 20px;
+      border-bottom: 3px solid #000000;
+      padding-bottom: 10px;
+      margin-bottom: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
     .subtitle {
-      font-size: 11px;
+      font-size: 10px;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: #71717a;
-      font-weight: 700;
+      letter-spacing: 1.2px;
+      color: #64748b;
+      font-weight: 800;
     }
     .title {
-      font-size: 20px;
-      font-weight: 800;
+      font-size: 19px;
+      font-weight: 900;
       letter-spacing: -0.5px;
-      color: #fafafa;
-      margin-top: 2px;
+      color: #000000;
+      margin-top: 1px;
     }
     .status-pill {
       font-size: 11px;
-      font-weight: 700;
-      padding: 5px 12px;
-      background: #18181b;
-      border: 1px solid #3f3f46;
-      border-radius: 2px;
-      color: #fafafa;
+      font-weight: 900;
+      padding: 5px 10px;
+      background: #000000;
+      color: #ffffff;
+      border-radius: 4px;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      transition: all 0.2s ease;
+      letter-spacing: 0.8px;
     }
 
-    /* Form Kontrol Dropdown */
-    .controls {
+    /* Kontrol Segmented Buttons (Bukan Dropdown List Kaku) */
+    .controls-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 12px;
     }
-    label {
-      font-size: 11px;
-      font-weight: 700;
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .control-label {
+      font-size: 10px;
+      font-weight: 900;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: #a1a1aa;
-      display: block;
-      margin-bottom: 6px;
+      letter-spacing: 0.6px;
+      color: #000000;
     }
-    select {
-      width: 100%;
-      background: #18181b;
-      color: #fafafa;
-      border: 1px solid #27272a;
-      padding: 9px 12px;
-      border-radius: 2px;
-      font-size: 13px;
-      font-weight: 500;
-      outline: none;
+    .segmented-control {
+      display: flex;
+      background: #ffffff;
+      border: 3px solid #000000;
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 2px 2px 0px #000000;
+    }
+    .segment-btn {
+      flex: 1;
+      background: #ffffff;
+      color: #000000;
+      border: none;
+      border-right: 2px solid #000000;
+      padding: 6px 4px;
+      font-size: 11px;
+      font-weight: 800;
       cursor: pointer;
-      transition: border-color 0.15s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      transition: background 0.1s ease, color 0.1s ease;
+      user-select: none;
+      text-align: center;
     }
-    select:focus {
-      border-color: #71717a;
+    .segment-btn:last-child {
+      border-right: none;
+    }
+    .segment-btn:hover:not(.active) {
+      background: #f1f5f9;
+    }
+    .segment-btn.active {
+      background: #000000;
+      color: #ffffff;
     }
 
-    /* Papan Permainan Proporsional & Solid */
+    /* Papan Hashtag (#) Persis Sesuai Referensi Gambar */
     .board-wrapper {
-      width: 100%;
-      margin: 16px 0 20px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 8px 0;
     }
-    .grid {
+    .hashtag-board {
+      position: relative;
+      width: 270px;
+      height: 270px;
+      background: #ffffff;
+    }
+
+    /* 4 Garis Silang Hitam Tebal (#) dengan Rounded Ends */
+    .hash-line {
+      position: absolute;
+      background: #000000;
+      border-radius: 999px;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .hash-v1 {
+      width: 8px;
+      top: 4px;
+      bottom: 4px;
+      left: calc(33.333% - 4px);
+    }
+    .hash-v2 {
+      width: 8px;
+      top: 4px;
+      bottom: 4px;
+      left: calc(66.666% - 4px);
+    }
+    .hash-h1 {
+      height: 8px;
+      left: 4px;
+      right: 4px;
+      top: calc(33.333% - 4px);
+    }
+    .hash-h2 {
+      height: 8px;
+      left: 4px;
+      right: 4px;
+      top: calc(66.666% - 4px);
+    }
+
+    /* 9 Petak Kotak */
+    .cells-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      background: #18181b;
-      padding: 8px;
-      border: 1px solid #27272a;
-      border-radius: 4px;
-      aspect-ratio: 1 / 1;
+      grid-template-rows: repeat(3, 1fr);
       width: 100%;
+      height: 100%;
     }
     .cell-btn {
-      background: #09090b;
-      border: 1px solid #27272a;
-      border-radius: 2px;
-      font-size: clamp(38px, 10vw, 56px);
-      font-weight: 800;
-      color: #fafafa;
+      background: transparent;
+      border: none;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 6px;
       user-select: none;
-      transition: background 0.15s ease, border-color 0.15s ease;
-      line-height: 1;
+      z-index: 1;
+      transition: background 0.12s ease;
+      border-radius: 4px;
     }
     .cell-btn:hover:not(:disabled) {
-      background: #1c1c20;
-      border-color: #52525b;
+      background: #f8fafc;
     }
     .cell-btn:disabled {
       cursor: default;
     }
+    .cell-win {
+      background: rgba(254, 240, 138, 0.75) !important;
+    }
 
-    /* Animasi Pop-in Halus Saat Langkah Ditaruh */
-    @keyframes popIn {
+    /* Animasi Pop-In Bouncy untuk Simbol */
+    @keyframes popBouncy {
       0% {
-        transform: scale(0.65);
+        transform: scale(0.3);
         opacity: 0;
       }
-      70% {
-        transform: scale(1.05);
+      65% {
+        transform: scale(1.15);
+        opacity: 1;
       }
       100% {
         transform: scale(1);
         opacity: 1;
       }
     }
-    .mark-anim {
-      display: inline-block;
-      animation: popIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    .symbol-svg {
+      width: 82%;
+      height: 82%;
+      display: block;
+      animation: popBouncy 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     }
 
-    /* Simbol Monokrom: Putih Bersih (O) & Abu-abu Terang (X) */
-    .mark-o { color: #ffffff; }
-    .mark-x { color: #d4d4d8; }
-
-    /* Highlight Petak Pemenang */
-    .cell-win {
-      background: #27272a !important;
-      border-color: #ffffff !important;
-    }
-
-    /* Status Text */
+    /* Pesan Status Permainan */
     .message {
       text-align: center;
       font-size: 13px;
-      font-weight: 600;
-      min-height: 24px;
-      color: #d4d4d8;
-      margin-bottom: 20px;
-      letter-spacing: -0.2px;
+      font-weight: 800;
+      min-height: 20px;
+      color: #000000;
+      margin: 8px 0 10px 0;
     }
 
     /* Tombol Aksi */
     .actions {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 22px;
+      gap: 8px;
     }
     .action-btn {
-      padding: 11px 8px;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.8px;
-      border-radius: 2px;
+      padding: 8px 4px;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      border: 3px solid #000000;
+      border-radius: 4px;
       cursor: pointer;
       text-transform: uppercase;
       outline: none;
-      transition: background 0.15s ease, transform 0.1s ease;
+      box-shadow: 2px 2px 0px #000000;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+    .action-btn:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px #000000;
     }
     .action-btn:active {
-      transform: scale(0.98);
+      transform: translate(2px, 2px);
+      box-shadow: 0px 0px 0px #000000;
     }
     .btn-undo {
-      background: #18181b;
-      color: #e4e4e7;
-      border: 1px solid #27272a;
-    }
-    .btn-undo:hover {
-      background: #27272a;
-      border-color: #3f3f46;
+      background: #ffffff;
+      color: #000000;
     }
     .btn-restart {
-      background: #ffffff;
-      color: #09090b;
-      border: 1px solid #ffffff;
-    }
-    .btn-restart:hover {
-      background: #e4e4e7;
+      background: #000000;
+      color: #ffffff;
     }
     .btn-reset {
-      background: #18181b;
-      color: #71717a;
-      border: 1px solid #27272a;
-    }
-    .btn-reset:hover {
-      color: #a1a1aa;
-      border-color: #3f3f46;
+      background: #f8fafc;
+      color: #64748b;
     }
 
-    /* Statistik Pertandingan Monokrom */
+    /* Panel Kanan: Statistik */
     .stats-box {
-      background: #18181b;
-      border: 1px solid #27272a;
-      border-radius: 2px;
-      padding: 14px 16px;
-      margin-bottom: 18px;
+      background: #f8fafc;
+      border: 3px solid #000000;
+      border-radius: 4px;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      box-shadow: 2px 2px 0px #000000;
     }
-    .stats-title {
-      font-size: 11px;
+    .panel-title {
+      font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 1px;
-      color: #71717a;
-      font-weight: 700;
-      margin-bottom: 10px;
+      color: #64748b;
+      font-weight: 900;
+      margin-bottom: 6px;
     }
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       text-align: center;
-      font-size: 11px;
+      gap: 4px;
     }
-    .stats-grid span {
-      color: #71717a;
-      font-weight: 600;
+    .stats-item span {
+      display: block;
+      color: #64748b;
+      font-weight: 800;
+      font-size: 9px;
       text-transform: uppercase;
     }
     .score-val {
-      font-size: 20px;
-      font-weight: 800;
-      color: #fafafa;
-      margin-top: 4px;
+      font-size: 18px;
+      font-weight: 900;
+      color: #000000;
+      margin-top: 1px;
     }
 
-    /* Tabel Riwayat Match */
+    /* Panel Kanan: Tabel Riwayat Pertandingan */
     .history-box {
-      background: #18181b;
-      border: 1px solid #27272a;
-      border-radius: 2px;
-      padding: 14px 16px;
+      background: #f8fafc;
+      border: 3px solid #000000;
+      border-radius: 4px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      box-shadow: 2px 2px 0px #000000;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .history-scroll {
+      flex: 1;
+      max-height: 180px;
+      overflow-y: auto;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 12px;
+      font-size: 11px;
       text-align: left;
     }
     th {
-      padding: 8px 6px;
-      border-bottom: 1px solid #27272a;
-      color: #71717a;
-      font-weight: 700;
+      padding: 6px 4px;
+      border-bottom: 2px solid #000000;
+      color: #000000;
+      font-weight: 900;
       text-transform: uppercase;
-      font-size: 11px;
+      font-size: 10px;
     }
     td {
-      padding: 8px 6px;
-      border-bottom: 1px solid #202024;
-      color: #e4e4e7;
+      padding: 5px 4px;
+      border-bottom: 1px solid #e2e8f0;
+      color: #0f172a;
+      font-weight: 700;
     }
-    .tag-win { color: #ffffff; font-weight: 700; }
-    .tag-loss { color: #a1a1aa; font-weight: 500; }
-    .tag-draw { color: #71717a; font-weight: 600; }
+    .tag-win { color: #16a34a; font-weight: 900; }
+    .tag-loss { color: #dc2626; font-weight: 900; }
+    .tag-draw { color: #64748b; font-weight: 900; }
+
+    /* Info Engine AI Badge */
+    .info-badge {
+      background: #000000;
+      color: #ffffff;
+      padding: 8px 10px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+    .info-badge strong {
+      color: #38bdf8;
+    }
+
+    /* Responsive untuk Tablet / Layar Kecil */
+    @media (max-width: 820px) {
+      html, body {
+        height: auto;
+        padding: 16px;
+      }
+      .app-container {
+        flex-direction: column;
+        max-width: 440px;
+        gap: 16px;
+      }
+      .sidebar-panel {
+        border-left: none;
+        border-top: 3px solid #000000;
+        padding-left: 0;
+        padding-top: 16px;
+      }
+      .history-scroll {
+        max-height: 140px;
+      }
+    }
   </style>
 </head>
 <body>
 
-<div id="tictactoe-root">
-  <!-- Header -->
-  <div class="header">
+<div class="app-container" id="tictactoe-root">
+  <!-- KOLOM KIRI: ARENA PERMAINAN -->
+  <div class="game-panel">
+    <!-- Header -->
+    <div class="header">
+      <div>
+        <div class="subtitle">Praktikum Kecerdasan Buatan - Sesi 4</div>
+        <div class="title">TIC-TAC-TOE ENGINE</div>
+      </div>
+      <div id="status-pill" class="status-pill">READY</div>
+    </div>
+
+    <!-- Segmented Control: Tingkat Kesulitan & Giliran Pertama -->
+    <div class="controls-grid">
+      <!-- Tingkat Kesulitan -->
+      <div class="control-group">
+        <div class="control-label">Tingkat Kesulitan</div>
+        <div class="segmented-control" id="diff-control">
+          <button type="button" class="segment-btn" data-value="easy" onclick="setDifficulty('easy')">Easy</button>
+          <button type="button" class="segment-btn" data-value="medium" onclick="setDifficulty('medium')">Medium</button>
+          <button type="button" class="segment-btn active" data-value="hard" onclick="setDifficulty('hard')">Hard</button>
+        </div>
+      </div>
+
+      <!-- Giliran Pertama (User / Bot / Acak) -->
+      <div class="control-group">
+        <div class="control-label">Giliran Pertama</div>
+        <div class="segmented-control" id="turn-control">
+          <button type="button" class="segment-btn active" data-value="human" onclick="setFirstTurn('human')">User (O)</button>
+          <button type="button" class="segment-btn" data-value="bot" onclick="setFirstTurn('bot')">Bot (X)</button>
+          <button type="button" class="segment-btn" data-value="random" onclick="setFirstTurn('random')">Acak</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Papan Garis Silang (#) Persis Referensi -->
+    <div class="board-wrapper">
+      <div class="hashtag-board">
+        <!-- 4 Garis Silang Hashtag Hitam Tebal -->
+        <div class="hash-line hash-v1"></div>
+        <div class="hash-line hash-v2"></div>
+        <div class="hash-line hash-h1"></div>
+        <div class="hash-line hash-h2"></div>
+
+        <!-- 9 Petak Interaktif -->
+        <div class="cells-grid" id="board-grid">
+          <button class="cell-btn" id="cell-0" onclick="humanMove(0)"></button>
+          <button class="cell-btn" id="cell-1" onclick="humanMove(1)"></button>
+          <button class="cell-btn" id="cell-2" onclick="humanMove(2)"></button>
+          <button class="cell-btn" id="cell-3" onclick="humanMove(3)"></button>
+          <button class="cell-btn" id="cell-4" onclick="humanMove(4)"></button>
+          <button class="cell-btn" id="cell-5" onclick="humanMove(5)"></button>
+          <button class="cell-btn" id="cell-6" onclick="humanMove(6)"></button>
+          <button class="cell-btn" id="cell-7" onclick="humanMove(7)"></button>
+          <button class="cell-btn" id="cell-8" onclick="humanMove(8)"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pesan Status -->
+    <div id="status-message" class="message">Giliranmu jalan pertama: Pilih kotak (O)</div>
+
+    <!-- Tombol Aksi -->
+    <div class="actions">
+      <button class="action-btn btn-undo" onclick="undoMove()">Undo</button>
+      <button class="action-btn btn-restart" onclick="restartRound()">Restart</button>
+      <button class="action-btn btn-reset" onclick="resetAllStats()">Reset Skor</button>
+    </div>
+  </div>
+
+  <!-- KOLOM KANAN: STATISTIK & RIWAYAT -->
+  <div class="sidebar-panel">
+    <!-- Header Sidebar -->
     <div>
-      <div class="subtitle">Praktikum Kecerdasan Buatan - Sesi 4</div>
-      <div class="title">TIC-TAC-TOE ENGINE</div>
+      <div class="panel-title">Statistik Permainan</div>
+      <div class="stats-box">
+        <div class="stats-grid">
+          <div class="stats-item">
+            <span>User</span>
+            <div id="stat-win" class="score-val">0</div>
+          </div>
+          <div class="stats-item">
+            <span>Bot</span>
+            <div id="stat-loss" class="score-val">0</div>
+          </div>
+          <div class="stats-item">
+            <span>Seri</span>
+            <div id="stat-draw" class="score-val">0</div>
+          </div>
+          <div class="stats-item">
+            <span>Total</span>
+            <div id="stat-total" class="score-val">0</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div id="status-pill" class="status-pill">READY</div>
-  </div>
 
-  <!-- Pengaturan Mode & Giliran -->
-  <div class="controls">
-    <div>
-      <label>Tingkat Kesulitan</label>
-      <select id="diff-select" onchange="restartRound()">
-        <option value="easy">Easy (Langkah Acak)</option>
-        <option value="medium">Medium (Kedalaman Max 2)</option>
-        <option value="hard" selected>Hard (Alpha-Beta / Unbeatable)</option>
-      </select>
+    <!-- Tabel Riwayat Pertandingan -->
+    <div class="history-box">
+      <div class="panel-title">Riwayat Pertandingan Terakhir</div>
+      <div class="history-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Game</th>
+              <th>Level</th>
+              <th>Awal</th>
+              <th>Hasil</th>
+              <th>Langkah</th>
+            </tr>
+          </thead>
+          <tbody id="history-body">
+            <tr><td colspan="5" style="text-align: center; color: #94a3b8; padding: 12px 4px;">Belum ada riwayat permainan</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-    <div>
-      <label>Giliran Pertama</label>
-      <select id="turn-select" onchange="restartRound()">
-        <option value="human">Manusia (O)</option>
-        <option value="bot">Bot (X)</option>
-        <option value="random">Acak / Random (50:50)</option>
-      </select>
-    </div>
-  </div>
 
-  <!-- Papan Permainan Proporsional 1:1 -->
-  <div class="board-wrapper">
-    <div class="grid">
-      <button class="cell-btn" data-idx="0" onclick="userMove(0)"></button>
-      <button class="cell-btn" data-idx="1" onclick="userMove(1)"></button>
-      <button class="cell-btn" data-idx="2" onclick="userMove(2)"></button>
-      <button class="cell-btn" data-idx="3" onclick="userMove(3)"></button>
-      <button class="cell-btn" data-idx="4" onclick="userMove(4)"></button>
-      <button class="cell-btn" data-idx="5" onclick="userMove(5)"></button>
-      <button class="cell-btn" data-idx="6" onclick="userMove(6)"></button>
-      <button class="cell-btn" data-idx="7" onclick="userMove(7)"></button>
-      <button class="cell-btn" data-idx="8" onclick="userMove(8)"></button>
-    </div>
-  </div>
-
-  <!-- Pesan Giliran / Hasil -->
-  <div id="game-message" class="message">Giliran Pemain: Klik salah satu kotak kosong</div>
-
-  <!-- Tombol Aksi -->
-  <div class="actions">
-    <button class="action-btn btn-undo" onclick="undoMove()">UNDO</button>
-    <button class="action-btn btn-restart" onclick="restartRound()">RESTART</button>
-    <button class="action-btn btn-reset" onclick="resetStats()">RESET SKOR</button>
-  </div>
-
-  <!-- Statistik Rekap -->
-  <div class="stats-box">
-    <div class="stats-title">Statistik Pertandingan</div>
-    <div class="stats-grid">
-      <div><span>Menang</span><div id="score-win" class="score-val">0</div></div>
-      <div><span>Kalah</span><div id="score-loss" class="score-val">0</div></div>
-      <div><span>Seri</span><div id="score-draw" class="score-val">0</div></div>
-      <div><span>Total</span><div id="score-total" class="score-val">0</div></div>
-    </div>
-  </div>
-
-  <!-- Tabel Riwayat Match -->
-  <div class="history-box">
-    <div class="stats-title">Riwayat Pertandingan Terakhir</div>
-    <div style="max-height: 140px; overflow-y: auto;">
-      <table>
-        <thead>
-          <tr>
-            <th>Game</th>
-            <th>Level</th>
-            <th>Awal</th>
-            <th>Hasil</th>
-            <th>Langkah</th>
-          </tr>
-        </thead>
-        <tbody id="history-body">
-          <tr><td colspan="5" style="text-align: center; color: #52525b; padding: 12px 6px;">Belum ada riwayat permainan</td></tr>
-        </tbody>
-      </table>
+    <!-- AI Info Badge -->
+    <div class="info-badge">
+      AI Engine: <strong>Minimax + Alpha-Beta Pruning</strong><br>
+      Smart Draw: Deteksi dini remis otomatis aktif.
     </div>
   </div>
 </div>
@@ -392,11 +545,34 @@
   let stats = { win: 0, loss: 0, draw: 0, total: 0 };
   let matchHistory = [];
 
+  let currentDifficulty = 'hard';
+  let currentFirstTurn = 'human';
+  let actualStarter = 'O';
+
   const winConditions = [
     [0, 1, 2], [3, 4, 5], [6, 7, 8],
     [0, 3, 6], [1, 4, 7], [2, 5, 8],
     [0, 4, 8], [2, 4, 6]
   ];
+
+  // SVG Ikon Persis Sesuai Gambar Referensi:
+  // 'X' = Cyan-Blue (#00d2ff) dengan outline hitam tebal tebal dan ujung rounded
+  const SVG_X = `
+    <svg viewBox="0 0 100 100" class="symbol-svg">
+      <line x1="22" y1="22" x2="78" y2="78" stroke="#000000" stroke-width="26" stroke-linecap="round" />
+      <line x1="78" y1="22" x2="22" y2="78" stroke="#000000" stroke-width="26" stroke-linecap="round" />
+      <line x1="22" y1="22" x2="78" y2="78" stroke="#00d2ff" stroke-width="14" stroke-linecap="round" />
+      <line x1="78" y1="22" x2="22" y2="78" stroke="#00d2ff" stroke-width="14" stroke-linecap="round" />
+    </svg>
+  `;
+
+  // 'O' = Coral-Red (#ff4757) Donut dengan outline hitam tebal luar dan dalam
+  const SVG_O = `
+    <svg viewBox="0 0 100 100" class="symbol-svg">
+      <circle cx="50" cy="50" r="34" stroke="#000000" stroke-width="26" fill="none" />
+      <circle cx="50" cy="50" r="34" stroke="#ff4757" stroke-width="14" fill="none" />
+    </svg>
+  `;
 
   function checkWinnerState(b) {
     for (let c of winConditions) {
@@ -406,7 +582,7 @@
     }
     if (!b.includes(' ')) return { winner: 'DRAW', line: null };
 
-    // Smart Early Draw Detection: Semua 8 garis sudah terblokir oleh X dan O
+    // Smart Early Draw Detection: Semua 8 garis kemenangan terblokir
     let allBlocked = true;
     for (let c of winConditions) {
       let set = new Set([b[c[0]], b[c[1]], b[c[2]]]);
@@ -456,158 +632,215 @@
     }
   }
 
-  function getBestBotMove(diff) {
+  function evaluateHeuristic(b) {
+    let score = 0;
+    for (let c of winConditions) {
+      let line = [b[c[0]], b[c[1]], b[c[2]]];
+      let xCount = line.filter(v => v === 'X').length;
+      let oCount = line.filter(v => v === 'O').length;
+      if (xCount > 0 && oCount === 0) {
+        if (xCount === 2) score += 5;
+        else if (xCount === 1) score += 1;
+      } else if (oCount > 0 && xCount === 0) {
+        if (oCount === 2) score -= 5;
+        else if (oCount === 1) score -= 1;
+      }
+    }
+    return score;
+  }
+
+  function getBotMove(b, difficulty) {
     let empty = [];
-    for (let i = 0; i < 9; i++) if (board[i] === ' ') empty.push(i);
+    for (let i = 0; i < 9; i++) if (b[i] === ' ') empty.push(i);
     if (empty.length === 0) return -1;
 
-    if (diff === 'easy') {
+    // Easy: Langkah Acak
+    if (difficulty === 'easy') {
       return empty[Math.floor(Math.random() * empty.length)];
-    } else if (diff === 'medium') {
-      let bestS = -Infinity, bestM = empty[0];
+    }
+
+    // Cek kemenangan / blokir instan
+    for (let m of empty) {
+      b[m] = 'X';
+      if (checkWinnerState(b)?.winner === 'X') { b[m] = ' '; return m; }
+      b[m] = ' ';
+    }
+    for (let m of empty) {
+      b[m] = 'O';
+      if (checkWinnerState(b)?.winner === 'O') { b[m] = ' '; return m; }
+      b[m] = ' ';
+    }
+
+    // Medium: Heuristik Terbatas
+    if (difficulty === 'medium') {
+      let bestS = -Infinity;
+      let bestM = empty[0];
       for (let m of empty) {
-        board[m] = 'X';
-        let s = minimaxAB(board, 2, -Infinity, Infinity, false);
-        board[m] = ' ';
-        if (s > bestS) { bestS = s; bestM = m; }
-      }
-      return bestM;
-    } else {
-      let bestS = -Infinity, bestM = empty[0];
-      for (let m of empty) {
-        board[m] = 'X';
-        let s = minimaxAB(board, 0, -Infinity, Infinity, false);
-        board[m] = ' ';
+        b[m] = 'X';
+        let s = evaluateHeuristic(b);
+        b[m] = ' ';
         if (s > bestS) { bestS = s; bestM = m; }
       }
       return bestM;
     }
+
+    // Hard: Minimax dengan Alpha-Beta Pruning
+    let bestVal = -Infinity;
+    let bestMove = empty[0];
+    for (let m of empty) {
+      b[m] = 'X';
+      let val = minimaxAB(b, 0, -Infinity, Infinity, false);
+      b[m] = ' ';
+      if (val > bestVal) {
+        bestVal = val;
+        bestMove = m;
+      }
+    }
+    return bestMove;
   }
 
-  function updateDOM(winLine = null) {
+  function renderBoard(winningLine = null) {
     for (let i = 0; i < 9; i++) {
-      let btn = document.querySelector(`.cell-btn[data-idx="${i}"]`);
-      if (btn) {
-        if (board[i] !== ' ') {
-          btn.innerHTML = `<span class="mark-anim ${board[i] === 'O' ? 'mark-o' : 'mark-x'}">${board[i]}</span>`;
-        } else {
-          btn.innerHTML = '';
-        }
-        btn.disabled = board[i] !== ' ' || isGameOver;
-        if (winLine && winLine.includes(i)) {
-          btn.classList.add('cell-win');
-        } else {
-          btn.classList.remove('cell-win');
-        }
+      let cell = document.getElementById(`cell-${i}`);
+      cell.classList.remove('cell-win');
+      if (board[i] === 'X') {
+        cell.innerHTML = SVG_X;
+        cell.disabled = true;
+      } else if (board[i] === 'O') {
+        cell.innerHTML = SVG_O;
+        cell.disabled = true;
+      } else {
+        cell.innerHTML = '';
+        cell.disabled = isGameOver;
+      }
+
+      if (winningLine && winningLine.includes(i)) {
+        cell.classList.add('cell-win');
       }
     }
   }
 
-  function finalizeGame(resultObj) {
-    isGameOver = true;
-    updateDOM(resultObj.line);
-
-    let resText = '';
+  function updateStatus(text, pillText = 'PLAYING', pillBg = '#000000') {
+    document.getElementById('status-message').innerText = text;
     let pill = document.getElementById('status-pill');
-    let msg = document.getElementById('game-message');
+    pill.innerText = pillText;
+    pill.style.background = pillBg;
+  }
 
-    if (resultObj.winner === 'DRAW') {
-      stats.draw++;
-      resText = 'Seri (Draw)';
-      pill.textContent = 'DRAW';
-      msg.textContent = 'Hasil Akhir: Seri (Semua garis kemenangan terblokir)';
-    } else if (resultObj.winner === 'X') {
-      stats.loss++;
-      resText = 'Bot Menang';
-      pill.textContent = 'DEFEAT';
-      msg.textContent = 'Hasil Akhir: Bot Menang!';
-    } else {
-      stats.win++;
-      resText = 'Kamu Menang';
-      pill.textContent = 'VICTORY';
-      msg.textContent = 'Hasil Akhir: Selamat, Kamu Menang!';
-    }
+  function addMatchRecord(resultText, tagClass) {
     stats.total++;
+    let initialStarter = (actualStarter === 'O') ? 'User' : 'Bot';
+    let record = {
+      game: stats.total,
+      level: currentDifficulty.toUpperCase(),
+      first: initialStarter,
+      result: resultText,
+      moves: moveCount,
+      tag: tagClass
+    };
+    matchHistory.unshift(record);
 
-    document.getElementById('score-win').textContent = stats.win;
-    document.getElementById('score-loss').textContent = stats.loss;
-    document.getElementById('score-draw').textContent = stats.draw;
-    document.getElementById('score-total').textContent = stats.total;
+    document.getElementById('stat-win').innerText = stats.win;
+    document.getElementById('stat-loss').innerText = stats.loss;
+    document.getElementById('stat-draw').innerText = stats.draw;
+    document.getElementById('stat-total').innerText = stats.total;
 
-    let diff = document.getElementById('diff-select').value.toUpperCase();
-    let turnChoice = document.getElementById('turn-select').value;
-    let first = turnChoice === 'bot' ? 'Bot' : 'Manusia';
-
-    matchHistory.unshift({
-      gameNo: stats.total,
-      diff: diff,
-      first: first,
-      res: resText,
-      moves: moveCount
-    });
-
-    renderHistory();
-  }
-
-  function renderHistory() {
     let tbody = document.getElementById('history-body');
-    if (!tbody) return;
-    if (matchHistory.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #52525b; padding: 12px 6px;">Belum ada riwayat permainan</td></tr>';
-      return;
-    }
-    tbody.innerHTML = matchHistory.slice(0, 5).map(m => `
-      <tr>
-        <td style="font-weight: 700;">#${m.gameNo}</td>
-        <td style="color: #a1a1aa;">${m.diff}</td>
-        <td style="color: #a1a1aa;">${m.first}</td>
-        <td class="${m.res.includes('Kamu') ? 'tag-win' : (m.res.includes('Bot') ? 'tag-loss' : 'tag-draw')}">${m.res}</td>
-        <td style="color: #71717a;">${m.moves}</td>
-      </tr>
-    `).join('');
+    let html = '';
+    matchHistory.slice(0, 10).forEach(r => {
+      html += `<tr>
+        <td>#${r.game}</td>
+        <td>${r.level}</td>
+        <td>${r.first}</td>
+        <td class="${r.tag}">${r.result}</td>
+        <td>${r.moves}</td>
+      </tr>`;
+    });
+    tbody.innerHTML = html;
   }
 
-  window.userMove = function(idx) {
-    if (isGameOver || board[idx] !== ' ') return;
+  function handleGameOver(result) {
+    isGameOver = true;
+    renderBoard(result.line);
+    if (result.winner === 'O') {
+      stats.win++;
+      updateStatus('Selamat! Kamu Menang Lawan Bot!', 'VICTORY', '#16a34a');
+      addMatchRecord('Menang', 'tag-win');
+    } else if (result.winner === 'X') {
+      stats.loss++;
+      updateStatus(`Bot (${currentDifficulty.toUpperCase()}) Berhasil Menang!`, 'DEFEAT', '#dc2626');
+      addMatchRecord('Kalah', 'tag-loss');
+    } else {
+      stats.draw++;
+      updateStatus('Permainan Seri (Draw)!', 'DRAW', '#64748b');
+      addMatchRecord('Seri', 'tag-draw');
+    }
+  }
+
+  window.setDifficulty = function(level) {
+    currentDifficulty = level;
+    document.querySelectorAll('#diff-control .segment-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-value') === level);
+    });
+    restartRound();
+  };
+
+  window.setFirstTurn = function(turn) {
+    currentFirstTurn = turn;
+    document.querySelectorAll('#turn-control .segment-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-value') === turn);
+    });
+    restartRound();
+  };
+
+  window.humanMove = function(index) {
+    if (isGameOver || board[index] !== ' ') return;
 
     historyStack.push([...board]);
-    board[idx] = 'O';
+    board[index] = 'O';
     moveCount++;
-    updateDOM();
+    renderBoard();
 
     let res = checkWinnerState(board);
-    if (res) { finalizeGame(res); return; }
+    if (res) {
+      handleGameOver(res);
+      return;
+    }
 
-    document.getElementById('game-message').textContent = 'Bot sedang berpikir...';
-    document.getElementById('status-pill').textContent = 'BOT TURN';
+    updateStatus(`Bot (${currentDifficulty.toUpperCase()}) sedang berpikir...`, 'THINKING', '#0284c7');
+    for (let i = 0; i < 9; i++) document.getElementById(`cell-${i}`).disabled = true;
 
     setTimeout(() => {
-      let diff = document.getElementById('diff-select').value;
-      let bMove = getBestBotMove(diff);
-      if (bMove !== -1) {
-        board[bMove] = 'X';
+      if (isGameOver) return;
+      let bm = getBotMove(board, currentDifficulty);
+      if (bm !== -1) {
+        board[bm] = 'X';
         moveCount++;
-        updateDOM();
       }
-
-      let res2 = checkWinnerState(board);
-      if (res2) {
-        finalizeGame(res2);
+      let bRes = checkWinnerState(board);
+      if (bRes) {
+        handleGameOver(bRes);
       } else {
-        document.getElementById('game-message').textContent = 'Giliranmu: Pilih kotak kosong (O)';
-        document.getElementById('status-pill').textContent = 'YOUR TURN';
+        renderBoard();
+        updateStatus('Giliranmu: Pilih kotak (O)', 'YOUR TURN', '#000000');
       }
-    }, 140);
+    }, 240);
   };
 
   window.undoMove = function() {
-    if (historyStack.length === 0 || isGameOver) return;
+    if (isGameOver) return;
+    if (historyStack.length === 0) {
+      updateStatus('Tidak ada langkah untuk di-undo.', 'INFO', '#64748b');
+      return;
+    }
+
     board = historyStack.pop();
-    moveCount = Math.max(0, moveCount - 2);
-    isGameOver = false;
-    document.getElementById('status-pill').textContent = 'YOUR TURN';
-    document.getElementById('game-message').textContent = 'Langkah terakhir dibatalkan (Undo)';
-    updateDOM();
+    if (actualStarter === 'O' && historyStack.length > 0 && board.filter(x => x === 'X').length > board.filter(x => x === 'O').length) {
+      board = historyStack.pop();
+    }
+    moveCount = board.filter(x => x !== ' ').length;
+    renderBoard();
+    updateStatus('Langkah berhasil dibatalkan. Giliranmu (O)', 'YOUR TURN', '#000000');
   };
 
   window.restartRound = function() {
@@ -616,44 +849,45 @@
     isGameOver = false;
     moveCount = 0;
 
-    let turnChoice = document.getElementById('turn-select').value;
-    let starter = 'O';
-    if (turnChoice === 'bot') starter = 'X';
-    else if (turnChoice === 'random') starter = Math.random() < 0.5 ? 'O' : 'X';
-
-    updateDOM();
-
-    if (starter === 'X') {
-      document.getElementById('status-pill').textContent = 'BOT FIRST';
-      document.getElementById('game-message').textContent = 'Bot melangkah pertama...';
-      setTimeout(() => {
-        let diff = document.getElementById('diff-select').value;
-        let bMove = getBestBotMove(diff);
-        if (bMove !== -1) {
-          board[bMove] = 'X';
-          moveCount++;
-          updateDOM();
-        }
-        document.getElementById('status-pill').textContent = 'YOUR TURN';
-        document.getElementById('game-message').textContent = 'Giliranmu: Pilih kotak kosong (O)';
-      }, 160);
+    if (currentFirstTurn === 'random') {
+      actualStarter = Math.random() < 0.5 ? 'O' : 'X';
+    } else if (currentFirstTurn === 'bot') {
+      actualStarter = 'X';
     } else {
-      document.getElementById('status-pill').textContent = 'YOUR TURN';
-      document.getElementById('game-message').textContent = 'Giliranmu jalan pertama: Pilih kotak (O)';
+      actualStarter = 'O';
+    }
+
+    renderBoard();
+
+    if (actualStarter === 'X') {
+      updateStatus(`Bot (${currentDifficulty.toUpperCase()}) jalan pertama...`, 'BOT TURN', '#0284c7');
+      for (let i = 0; i < 9; i++) document.getElementById(`cell-${i}`).disabled = true;
+      setTimeout(() => {
+        let bm = getBotMove(board, currentDifficulty);
+        if (bm !== -1) {
+          board[bm] = 'X';
+          moveCount++;
+        }
+        renderBoard();
+        updateStatus('Giliranmu: Pilih kotak (O)', 'YOUR TURN', '#000000');
+      }, 350);
+    } else {
+      updateStatus('Giliranmu jalan pertama: Pilih kotak (O)', 'YOUR TURN', '#000000');
     }
   };
 
-  window.resetStats = function() {
+  window.resetAllStats = function() {
     stats = { win: 0, loss: 0, draw: 0, total: 0 };
     matchHistory = [];
-    document.getElementById('score-win').textContent = '0';
-    document.getElementById('score-loss').textContent = '0';
-    document.getElementById('score-draw').textContent = '0';
-    document.getElementById('score-total').textContent = '0';
-    renderHistory();
+    document.getElementById('stat-win').innerText = '0';
+    document.getElementById('stat-loss').innerText = '0';
+    document.getElementById('stat-draw').innerText = '0';
+    document.getElementById('stat-total').innerText = '0';
+    document.getElementById('history-body').innerHTML = '<tr><td colspan="5" style="text-align: center; color: #94a3b8; padding: 12px 4px;">Belum ada riwayat permainan</td></tr>';
+    restartRound();
   };
 
-  window.restartRound();
+  restartRound();
 })();
 </script>
 </body>
