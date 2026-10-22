@@ -1,7 +1,7 @@
 # ==============================================================================
 # PRAKTIKUM KECERDASAN BUATAN - SESI 4
 # GAME TIC-TAC-TOE: ALGORITMA MINIMAX & ALPHA-BETA PRUNING
-# Lengkap: Langkah 1, Langkah 2, Langkah 3, dan Langkah 4 (Game Interaktif + Restart)
+# Lengkap: Langkah 1, 2, 3, dan Langkah 4 (Game Interaktif + In-Game Restart 'r')
 # ==============================================================================
 import math
 
@@ -77,9 +77,9 @@ def find_best_move(board):
 def minimax_alpha_beta(board, depth, alpha, beta, is_maximizing):
     winner = check_winner(board)
     if winner == 'X':
-        return 10 - depth  # Penalti kedalaman: menang lebih cepat lebih bagus
+        return 10 - depth  # Penalti kedalaman
     if winner == 'O':
-        return depth - 10  # Menunda kekalahan
+        return depth - 10
     if winner == 'DRAW':
         return 0
 
@@ -123,22 +123,24 @@ def find_best_move_ab(board):
 
 
 # ------------------------------------------------------------------------------
-# LANGKAH 4: GAME LOOP INTERAKTIF (INPUT PEMAIN vs AI BOT + OPSI RESTART)
+# LANGKAH 4: GAME LOOP INTERAKTIF (DENGAN OPSI ULANGI IN-GAME 'r')
 # ------------------------------------------------------------------------------
 def main_game():
     while True:
         board = [' '] * 9
-        print("=" * 50)
+        print("=" * 55)
         print("🎮 GAME TIC-TAC-TOE: MANUSIA vs AI BOT 🎮")
-        print("=" * 50)
+        print("=" * 55)
         print("Panduan Indeks Petak (0 - 8):")
         print("| 0 | 1 | 2 |")
         print("| 3 | 4 | 5 |")
         print("| 6 | 7 | 8 |")
         print("\nKamu = 'O' (Manusia) | Bot = 'X' (AI Alpha-Beta)")
-        print("=" * 50 + "\n")
+        print("💡 TIPS: Ketik 'r' kapan saja saat giliranmu untuk ULANGI GAME")
+        print("=" * 55 + "\n")
 
         current_player = 'O' # Manusia mulai duluan
+        restart_ingame = False
 
         while True:
             print_board(board)
@@ -158,8 +160,18 @@ def main_game():
 
             # Giliran Manusia
             if current_player == 'O':
+                user_input = input("\n👉 Giliranmu! Masukkan petak (0-8) atau [r = Ulangi]: ").strip().lower()
+                
+                # Fitur In-Game Restart: Ulangi kapan saja
+                if user_input in ['r', 'reset', 'ulang']:
+                    print("\n" + "🔄" * 15)
+                    print("🔄 Permainan diulang dari awal oleh pemain!")
+                    print("🔄" * 15 + "\n")
+                    restart_ingame = True
+                    break
+
                 try:
-                    move = int(input("\n👉 Giliranmu! Masukkan petak (0-8): "))
+                    move = int(user_input)
                     if move < 0 or move > 8:
                         print("⚠️ Pilihan harus angka 0 sampai 8!")
                         continue
@@ -169,7 +181,7 @@ def main_game():
                     board[move] = 'O'
                     current_player = 'X'
                 except ValueError:
-                    print("⚠️ Harap masukkan angka yang valid!")
+                    print("⚠️ Harap masukkan angka 0-8 atau ketik 'r' untuk mengulang!")
             else:
                 # Giliran Bot AI
                 print("\n🤖 Bot (X) sedang menghitung langkah terbaik...")
@@ -178,12 +190,16 @@ def main_game():
                 print(f"✅ Bot memilih petak indeks: {move}\n")
                 current_player = 'O'
 
-        # Opsi / Konfirmasi Ulangi Game
+        # Jika diulang saat game masih jalan (in-game restart)
+        if restart_ingame:
+            continue
+
+        # Opsi ulangi setelah game selesai normal
         ulang = input("\n🔄 Mau main lagi? (y/n): ").strip().lower()
         if ulang != 'y':
             print("\n👋 Terima kasih sudah bermain! Sampai jumpa lagi.\n")
             break
-        print("\n" + "~" * 50 + "\n")
+        print("\n" + "~" * 55 + "\n")
 
 
 # Jalankan game interaktif jika dieksekusi langsung
