@@ -1,7 +1,7 @@
 # ==============================================================================
 # PRAKTIKUM KECERDASAN BUATAN - SESI 4
 # GAME TIC-TAC-TOE: ALGORITMA MINIMAX & ALPHA-BETA PRUNING
-# Lengkap: Langkah 1, Langkah 2, Langkah 3, dan Langkah 4 (Game Interaktif)
+# Lengkap: Langkah 1, Langkah 2, Langkah 3, dan Langkah 4 (Game Interaktif + Restart)
 # ==============================================================================
 import math
 
@@ -123,59 +123,67 @@ def find_best_move_ab(board):
 
 
 # ------------------------------------------------------------------------------
-# LANGKAH 4: GAME LOOP INTERAKTIF (INPUT PEMAIN vs AI BOT)
+# LANGKAH 4: GAME LOOP INTERAKTIF (INPUT PEMAIN vs AI BOT + OPSI RESTART)
 # ------------------------------------------------------------------------------
 def main_game():
-    board = [' '] * 9
-    print("=" * 50)
-    print("🎮 GAME TIC-TAC-TOE: MANUSIA vs AI BOT 🎮")
-    print("=" * 50)
-    print("Panduan Indeks Petak (0 - 8):")
-    print("| 0 | 1 | 2 |")
-    print("| 3 | 4 | 5 |")
-    print("| 6 | 7 | 8 |")
-    print("\nKamu = 'O' (Manusia) | Bot = 'X' (AI Alpha-Beta)")
-    print("=" * 50 + "\n")
-
-    current_player = 'O' # Manusia mulai duluan
-
     while True:
-        print_board(board)
-        
-        # Cek kondisi kemenangan
-        winner = check_winner(board)
-        if winner:
-            print("\n" + "=" * 35)
-            if winner == 'DRAW':
-                print("🤝 HASIL AKHIR: GAME SERI (DRAW)!")
-            elif winner == 'X':
-                print("🤖 HASIL AKHIR: BOT (X) MENANG!")
-            else:
-                print("🎉 HASIL AKHIR: KAMU (O) MENANG!")
-            print("=" * 35)
-            break
+        board = [' '] * 9
+        print("=" * 50)
+        print("🎮 GAME TIC-TAC-TOE: MANUSIA vs AI BOT 🎮")
+        print("=" * 50)
+        print("Panduan Indeks Petak (0 - 8):")
+        print("| 0 | 1 | 2 |")
+        print("| 3 | 4 | 5 |")
+        print("| 6 | 7 | 8 |")
+        print("\nKamu = 'O' (Manusia) | Bot = 'X' (AI Alpha-Beta)")
+        print("=" * 50 + "\n")
 
-        # Giliran Manusia
-        if current_player == 'O':
-            try:
-                move = int(input("\n👉 Giliranmu! Masukkan petak (0-8): "))
-                if move < 0 or move > 8:
-                    print("⚠️ Pilihan harus angka 0 sampai 8!")
-                    continue
-                if board[move] != ' ':
-                    print("⚠️ Petak tersebut sudah terisi, pilih yang kosong!")
-                    continue
-                board[move] = 'O'
-                current_player = 'X'
-            except ValueError:
-                print("⚠️ Harap masukkan angka yang valid!")
-        else:
-            # Giliran Bot AI
-            print("\n🤖 Bot (X) sedang menghitung langkah terbaik...")
-            move = find_best_move_ab(board)
-            board[move] = 'X'
-            print(f"✅ Bot memilih petak indeks: {move}\n")
-            current_player = 'O'
+        current_player = 'O' # Manusia mulai duluan
+
+        while True:
+            print_board(board)
+            
+            # Cek kondisi kemenangan
+            winner = check_winner(board)
+            if winner:
+                print("\n" + "=" * 35)
+                if winner == 'DRAW':
+                    print("🤝 HASIL AKHIR: GAME SERI (DRAW)!")
+                elif winner == 'X':
+                    print("🤖 HASIL AKHIR: BOT (X) MENANG!")
+                else:
+                    print("🎉 HASIL AKHIR: KAMU (O) MENANG!")
+                print("=" * 35)
+                break
+
+            # Giliran Manusia
+            if current_player == 'O':
+                try:
+                    move = int(input("\n👉 Giliranmu! Masukkan petak (0-8): "))
+                    if move < 0 or move > 8:
+                        print("⚠️ Pilihan harus angka 0 sampai 8!")
+                        continue
+                    if board[move] != ' ':
+                        print("⚠️ Petak tersebut sudah terisi, pilih yang kosong!")
+                        continue
+                    board[move] = 'O'
+                    current_player = 'X'
+                except ValueError:
+                    print("⚠️ Harap masukkan angka yang valid!")
+            else:
+                # Giliran Bot AI
+                print("\n🤖 Bot (X) sedang menghitung langkah terbaik...")
+                move = find_best_move_ab(board)
+                board[move] = 'X'
+                print(f"✅ Bot memilih petak indeks: {move}\n")
+                current_player = 'O'
+
+        # Opsi / Konfirmasi Ulangi Game
+        ulang = input("\n🔄 Mau main lagi? (y/n): ").strip().lower()
+        if ulang != 'y':
+            print("\n👋 Terima kasih sudah bermain! Sampai jumpa lagi.\n")
+            break
+        print("\n" + "~" * 50 + "\n")
 
 
 # Jalankan game interaktif jika dieksekusi langsung
