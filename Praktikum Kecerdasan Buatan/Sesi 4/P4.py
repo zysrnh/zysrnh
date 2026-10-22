@@ -1,11 +1,12 @@
 # ==============================================================================
 # PRAKTIKUM KECERDASAN BUATAN - SESI 4
-# LANGKAH 1, 2, & 3: TIC-TAC-TOE DENGAN MINIMAX & ALPHA-BETA PRUNING
+# GAME TIC-TAC-TOE: ALGORITMA MINIMAX & ALPHA-BETA PRUNING
+# Lengkap: Langkah 1, Langkah 2, Langkah 3, dan Langkah 4 (Game Interaktif)
 # ==============================================================================
 import math
 
 # ------------------------------------------------------------------------------
-# LANGKAH 1: Inisialisasi Papan & Cek Kemenangan
+# LANGKAH 1: INISIALISASI PAPAN & CEK KEMENANGAN
 # ------------------------------------------------------------------------------
 def print_board(board):
     for row in [board[i*3:(i+1)*3] for i in range(3)]:
@@ -26,7 +27,7 @@ def check_winner(board):
 
 
 # ------------------------------------------------------------------------------
-# LANGKAH 2: Fungsi Rekursif Minimax Standar
+# LANGKAH 2: FUNGSI REKURSIF MINIMAX STANDAR
 # ------------------------------------------------------------------------------
 def minimax(board, is_maximizing):
     winner = check_winner(board)
@@ -43,7 +44,7 @@ def minimax(board, is_maximizing):
             if board[i] == ' ':
                 board[i] = 'X'
                 score = minimax(board, False)
-                board[i] = ' '
+                board[i] = ' ' # Backtrack
                 best_score = max(score, best_score)
         return best_score
     else:
@@ -52,7 +53,7 @@ def minimax(board, is_maximizing):
             if board[i] == ' ':
                 board[i] = 'O'
                 score = minimax(board, True)
-                board[i] = ' '
+                board[i] = ' ' # Backtrack
                 best_score = min(score, best_score)
         return best_score
 
@@ -63,7 +64,7 @@ def find_best_move(board):
         if board[i] == ' ':
             board[i] = 'X'
             score = minimax(board, False)
-            board[i] = ' '
+            board[i] = ' ' # Backtrack
             if score > best_score:
                 best_score = score
                 best_move = i
@@ -71,14 +72,14 @@ def find_best_move(board):
 
 
 # ------------------------------------------------------------------------------
-# LANGKAH 3: Minimax dengan Alpha-Beta Pruning (Optimalisasi Pencarian)
+# LANGKAH 3: MINIMAX DENGAN ALPHA-BETA PRUNING
 # ------------------------------------------------------------------------------
 def minimax_alpha_beta(board, depth, alpha, beta, is_maximizing):
     winner = check_winner(board)
     if winner == 'X':
-        return 10 - depth  # Penalti kedalaman
+        return 10 - depth  # Penalti kedalaman: menang lebih cepat lebih bagus
     if winner == 'O':
-        return depth - 10
+        return depth - 10  # Menunda kekalahan
     if winner == 'DRAW':
         return 0
 
@@ -88,7 +89,7 @@ def minimax_alpha_beta(board, depth, alpha, beta, is_maximizing):
             if board[i] == ' ':
                 board[i] = 'X'
                 eval_score = minimax_alpha_beta(board, depth + 1, alpha, beta, False)
-                board[i] = ' '
+                board[i] = ' ' # Backtrack
                 max_eval = max(max_eval, eval_score)
                 alpha = max(alpha, eval_score)
                 if beta <= alpha:
@@ -100,7 +101,7 @@ def minimax_alpha_beta(board, depth, alpha, beta, is_maximizing):
             if board[i] == ' ':
                 board[i] = 'O'
                 eval_score = minimax_alpha_beta(board, depth + 1, alpha, beta, True)
-                board[i] = ' '
+                board[i] = ' ' # Backtrack
                 min_eval = min(min_eval, eval_score)
                 beta = min(beta, eval_score)
                 if beta <= alpha:
@@ -114,7 +115,7 @@ def find_best_move_ab(board):
         if board[i] == ' ':
             board[i] = 'X'
             score = minimax_alpha_beta(board, 0, -math.inf, math.inf, False)
-            board[i] = ' '
+            board[i] = ' ' # Backtrack
             if score > best_score:
                 best_score = score
                 best_move = i
@@ -122,18 +123,61 @@ def find_best_move_ab(board):
 
 
 # ------------------------------------------------------------------------------
-# Test Papan Sederhana & Perbandingan
+# LANGKAH 4: GAME LOOP INTERAKTIF (INPUT PEMAIN vs AI BOT)
 # ------------------------------------------------------------------------------
+def main_game():
+    board = [' '] * 9
+    print("=" * 50)
+    print("🎮 GAME TIC-TAC-TOE: MANUSIA vs AI BOT 🎮")
+    print("=" * 50)
+    print("Panduan Indeks Petak (0 - 8):")
+    print("| 0 | 1 | 2 |")
+    print("| 3 | 4 | 5 |")
+    print("| 6 | 7 | 8 |")
+    print("\nKamu = 'O' (Manusia) | Bot = 'X' (AI Alpha-Beta)")
+    print("=" * 50 + "\n")
+
+    current_player = 'O' # Manusia mulai duluan
+
+    while True:
+        print_board(board)
+        
+        # Cek kondisi kemenangan
+        winner = check_winner(board)
+        if winner:
+            print("\n" + "=" * 35)
+            if winner == 'DRAW':
+                print("🤝 HASIL AKHIR: GAME SERI (DRAW)!")
+            elif winner == 'X':
+                print("🤖 HASIL AKHIR: BOT (X) MENANG!")
+            else:
+                print("🎉 HASIL AKHIR: KAMU (O) MENANG!")
+            print("=" * 35)
+            break
+
+        # Giliran Manusia
+        if current_player == 'O':
+            try:
+                move = int(input("\n👉 Giliranmu! Masukkan petak (0-8): "))
+                if move < 0 or move > 8:
+                    print("⚠️ Pilihan harus angka 0 sampai 8!")
+                    continue
+                if board[move] != ' ':
+                    print("⚠️ Petak tersebut sudah terisi, pilih yang kosong!")
+                    continue
+                board[move] = 'O'
+                current_player = 'X'
+            except ValueError:
+                print("⚠️ Harap masukkan angka yang valid!")
+        else:
+            # Giliran Bot AI
+            print("\n🤖 Bot (X) sedang menghitung langkah terbaik...")
+            move = find_best_move_ab(board)
+            board[move] = 'X'
+            print(f"✅ Bot memilih petak indeks: {move}\n")
+            current_player = 'O'
+
+
+# Jalankan game interaktif jika dieksekusi langsung
 if __name__ == "__main__":
-    board_sample = ['X', 'O', 'X', ' ', 'O', ' ', ' ', ' ', 'X']
-    print("--- Kondisi Papan Saat Ini ---")
-    print_board(board_sample)
-    print("Status Game:", check_winner(board_sample))
-
-    # Uji Langkah 2 (Minimax Standar)
-    move_standard = find_best_move(board_sample)
-    print(f"\n[Langkah 2 - Minimax Standar] Langkah Terbaik Bot (X): Indeks {move_standard}")
-
-    # Uji Langkah 3 (Minimax + Alpha-Beta Pruning)
-    move_ab = find_best_move_ab(board_sample)
-    print(f"[Langkah 3 - Alpha-Beta Pruning] Langkah Terbaik Bot (X): Indeks {move_ab}")
+    main_game()
