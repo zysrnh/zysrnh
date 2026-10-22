@@ -5,12 +5,13 @@
 # - Pemilihan Mode Kesulitan (Easy, Medium, Hard)
 # - Pemilihan Siapa Jalan Duluan (Manusia atau Bot)
 # - Fitur In-Game Undo ('u') & Ulangi ('r') Kapan Saja
+# - 100% Kompatibel Google Colab (Input Dijamin Muncul)
 # ==============================================================================
 import sys
 import math
 import random
 
-# Menjaga kompatibilitas output encoding
+# Menjaga kompatibilitas output encoding di Windows Terminal & Google Colab
 if hasattr(sys.stdout, 'reconfigure'):
     try:
         sys.stdout.reconfigure(encoding='utf-8', errors='replace')
@@ -189,21 +190,21 @@ def main_game():
 
     while True:
         board = [' '] * 9
-        history = []  # Menyimpan riwayat papan untuk fitur UNDO ('u')
+        history = []  # Riwayat papan untuk fitur UNDO ('u')
         current_player = first_player
 
         print("\n" + "=" * 60)
         print(f"✨ PERMAINAN DIMULAI! LEVEL: [{difficulty.upper()}] ✨")
         print(f"Pemain Pertama: {'BOT (X)' if first_player == 'X' else 'KAMU (O)'}")
         print("Kontrol In-Game:")
-        print("  • Ketik 0 - 8 : Memilih petak langkah")
+        print("  • Ketik 0 - 8 : Memilih nomor petak")
         print("  • Ketik 'u'   : UNDO (Batalkan langkah terakhir)")
         print("  • Ketik 'r'   : RESTART (Ulangi game dari awal)")
         print("=" * 60)
 
         # Loop Ronde Permainan
         while True:
-            # Jika giliran Manusia: Tampilkan papan dan simpan snapshot untuk Undo
+            # Jika giliran Manusia: Tampilkan papan dan ambil input
             if current_player == 'O':
                 print_board(board)
                 winner = check_winner(board)
@@ -218,7 +219,7 @@ def main_game():
                     print("=" * 45)
                     break
 
-                # Simpan keadaan papan sebelum manusia melangkah agar bisa di-undo
+                # Input giliran pemain manusia (PASTI MUNCUL KOTAK KETIKNYA DI COLAB)
                 user_input = input("👉 Giliranmu (O)! Masukkan petak (0-8) [u = Undo, r = Ulangi]: ").strip().lower()
 
                 # --- FITUR UNDO ---
@@ -245,7 +246,7 @@ def main_game():
                         print("⚠️ Petak tersebut sudah terisi, pilih petak yang kosong!")
                         continue
 
-                    # Simpan snapshot sebelum menaruh 'O'
+                    # Simpan snapshot sebelum jalan
                     history.append(list(board))
                     board[move] = 'O'
                     current_player = 'X'
@@ -268,7 +269,7 @@ def main_game():
                     print("=" * 45)
                     break
 
-                print(f"🤖 Bot [{difficulty.upper()}] sedang berpikir...")
+                print(f"\n🤖 Bot [{difficulty.upper()}] sedang berpikir...")
                 bot_move = get_bot_move(board, difficulty)
                 if bot_move != -1:
                     board[bot_move] = 'X'
