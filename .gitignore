@@ -3,3 +3,6 @@
 *.mkv
 *.avi
 *.mov
+
+__pycache__/
+*.pyc
