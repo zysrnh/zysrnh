@@ -1,22 +1,30 @@
 # ==============================================================================
 # PRAKTIKUM KECERDASAN BUATAN - SESI 4
 # FILE: P4.py
-# GAME TIC-TAC-TOE LENGKAP:
-# - Pemilihan Mode Kesulitan (Easy, Medium, Hard)
-# - Pemilihan Siapa Jalan Duluan (Manusia atau Bot)
-# - Fitur In-Game Undo ('u') & Ulangi ('r') Kapan Saja
-# - 100% Kompatibel Google Colab (Input Dijamin Muncul)
+# GAME TIC-TAC-TOE LENGKAP & INTERAKTIF:
+# 1. Pemilihan Mode Kesulitan (Easy, Medium, Hard)
+# 2. Pemilihan Siapa Duluan: Manusia, Bot, atau RANDOM (Acak 50:50)
+# 3. Fitur In-Game:
+#    - Angka 0 - 8 : Memilih petak langkah
+#    - 'u' : UNDO (Kembalikan langkah terakhir)
+#    - 'r' : RESTART (Ulangi game ronde ini dari awal)
+#    - 'h' : HISTORY (Lihat riwayat pertandingan & rekap skor)
+#    - 'q' : HENTIKAN PERMAINAN (Keluar dari game)
+# 4. 100% Kompatibel Google Colab (Input langsung muncul & lancar)
 # ==============================================================================
 import sys
 import math
 import random
 
-# Menjaga kompatibilitas output encoding di Windows Terminal & Google Colab
+# Menjaga kompatibilitas output encoding
 if hasattr(sys.stdout, 'reconfigure'):
     try:
         sys.stdout.reconfigure(encoding='utf-8', errors='replace')
     except Exception:
         pass
+
+# Riwayat seluruh pertandingan yang dimainkan selama sesi
+match_history = []
 
 
 # ------------------------------------------------------------------------------
@@ -50,7 +58,7 @@ def get_empty_cells(board):
 
 
 # ------------------------------------------------------------------------------
-# 2. LOGIKA AI: EASY, MEDIUM (DEPTH-LIMITED), HARD (ALPHA-BETA)
+# 2. LOGIKA AI BOT (EASY, MEDIUM, HARD)
 # ------------------------------------------------------------------------------
 def evaluate_board_heuristic(board):
     lines = [
@@ -165,12 +173,45 @@ def get_bot_move(board, difficulty):
 
 
 # ------------------------------------------------------------------------------
-# 3. GAME LOOP INTERAKTIF: PILIH MODE, PILIH DULUAN, UNDO & RESTART
+# 3. FUNGSI RIWAYAT PERMAINAN (MATCH HISTORY & REKAP SKOR)
+# ------------------------------------------------------------------------------
+def print_history():
+    print("\n" + "=" * 70)
+    print("📜 RIWAYAT PERTANDINGAN (MATCH HISTORY) 📜")
+    print("=" * 70)
+    if not match_history:
+        print("  Belum ada pertandingan yang selesai dicatat.")
+        print("=" * 70 + "\n")
+        return
+
+    print(f"{'Game #':<8} | {'Level':<8} | {'Jalan Awal':<12} | {'Hasil Akhir':<18} | {'Total Langkah'}")
+    print("-" * 70)
+    menang_kamu = 0
+    menang_bot = 0
+    seri = 0
+
+    for match in match_history:
+        print(f"Game {match['game_no']:<3} | {match['difficulty']:<8} | {match['first']:<12} | {match['result']:<18} | {match['steps']} langkah")
+        if match['result'] == 'Kamu Menang':
+            menang_kamu += 1
+        elif match['result'] == 'Bot Menang':
+            menang_bot += 1
+        elif match['result'] == 'Seri (Draw)':
+            seri += 1
+
+    print("=" * 70)
+    print(f"📊 REKAP SKOR: Menang (Kamu): {menang_kamu} | Menang (Bot): {menang_bot} | Seri: {seri} | Total Game: {len(match_history)}")
+    print("=" * 70 + "\n")
+
+
+# ------------------------------------------------------------------------------
+# 4. GAME LOOP INTERAKTIF LENGKAP
 # ------------------------------------------------------------------------------
 def main_game():
-    print("=" * 60)
+    global match_history
+    print("=" * 65)
     print("🎮 GAME TIC-TAC-TOE: MANUSIA vs AI BOT 🎮")
-    print("=" * 60)
+    print("=" * 65)
 
     # 1. Pemilihan Tingkat Kesulitan
     print("\n[1] PILIH TINGKAT KESULITAN:")
@@ -181,60 +222,97 @@ def main_game():
     levels = {'1': 'easy', '2': 'medium', '3': 'hard'}
     difficulty = levels.get(diff_inp, 'hard')
 
-    # 2. Pemilihan Siapa Jalan Duluan
+    # 2. Pemilihan Siapa Jalan Duluan (Bisa Manusia, Bot, atau RANDOM)
     print("\n[2] PILIH SIAPA YANG JALAN DULUAN:")
     print("  1. Manusia duluan ('O')")
     print("  2. Bot duluan ('X')")
-    first_inp = input("👉 Pilih giliran pertama (1/2) [default: 1]: ").strip()
-    first_player = 'X' if first_inp == '2' else 'O'
+    print("  3. Random / Acak (Kocok otomatis 50:50)")
+    first_inp = input("👉 Pilih giliran pertama (1/2/3) [default: 1]: ").strip()
+    turn_choice_mode = first_inp if first_inp in ['1', '2', '3'] else '1'
 
     while True:
+        # Tentukan giliran pertama ronde ini
+        if turn_choice_mode == '3':
+            first_player = random.choice(['O', 'X'])
+            print(f"\n🎲 Hasil Undian Acak: {'KAMU (O)' if first_player == 'O' else 'BOT (X)'} jalan duluan!")
+        elif turn_choice_mode == '2':
+            first_player = 'X'
+        else:
+            first_player = 'O'
+
         board = [' '] * 9
-        history = []  # Riwayat papan untuk fitur UNDO ('u')
+        history = []  # Riwayat snapshot papan untuk fitur UNDO ('u')
         current_player = first_player
+        total_steps = 0
 
-        print("\n" + "=" * 60)
-        print(f"✨ PERMAINAN DIMULAI! LEVEL: [{difficulty.upper()}] ✨")
-        print(f"Pemain Pertama: {'BOT (X)' if first_player == 'X' else 'KAMU (O)'}")
+        print("\n" + "=" * 65)
+        print(f"✨ RONDE DIMULAI! LEVEL: [{difficulty.upper()}] ✨")
+        print(f"Pemain Pertama : {'BOT (X)' if first_player == 'X' else 'KAMU (O)'}")
         print("Kontrol In-Game:")
-        print("  • Ketik 0 - 8 : Memilih nomor petak")
+        print("  • Ketik 0 - 8 : Memilih petak langkah")
         print("  • Ketik 'u'   : UNDO (Batalkan langkah terakhir)")
-        print("  • Ketik 'r'   : RESTART (Ulangi game dari awal)")
-        print("=" * 60)
+        print("  • Ketik 'r'   : RESTART (Ulangi ronde ini dari awal)")
+        print("  • Ketik 'h'   : HISTORY (Lihat riwayat pertandingan)")
+        print("  • Ketik 'q'   : HENTIKAN PERMAINAN (Keluar dari game)")
+        print("=" * 65)
 
-        # Loop Ronde Permainan
+        # Loop Pergerakan dalam Satu Ronde
         while True:
-            # Jika giliran Manusia: Tampilkan papan dan ambil input
+            # --- GILIRAN MANUSIA ('O') ---
             if current_player == 'O':
                 print_board(board)
                 winner = check_winner(board)
                 if winner:
                     print("=" * 45)
                     if winner == 'DRAW':
+                        result_text = 'Seri (Draw)'
                         print("🤝 HASIL AKHIR: GAME SERI (DRAW)!")
                     elif winner == 'X':
+                        result_text = 'Bot Menang'
                         print(f"🤖 HASIL AKHIR: BOT [{difficulty.upper()}] MENANG!")
                     else:
+                        result_text = 'Kamu Menang'
                         print("🎉 HASIL AKHIR: SELAMAT, KAMU (O) MENANG!")
                     print("=" * 45)
+
+                    # Catat ke riwayat pertandingan
+                    match_history.append({
+                        'game_no': len(match_history) + 1,
+                        'difficulty': difficulty.upper(),
+                        'first': 'Manusia (O)' if first_player == 'O' else 'Bot (X)',
+                        'result': result_text,
+                        'steps': total_steps
+                    })
                     break
 
-                # Input giliran pemain manusia (PASTI MUNCUL KOTAK KETIKNYA DI COLAB)
-                user_input = input("👉 Giliranmu (O)! Masukkan petak (0-8) [u = Undo, r = Ulangi]: ").strip().lower()
+                # Input langkah giliran manusia
+                user_input = input("👉 Giliranmu (O)! Masukkan petak (0-8) [u=Undo, r=Reset, h=Hist, q=Stop]: ").strip().lower()
 
-                # --- FITUR UNDO ---
+                # --- 1. FITUR HENTIKAN PERMAINAN ('q') ---
+                if user_input in ['q', 'quit', 'exit', 'stop', 'hentikan']:
+                    print("\n🛑 Permainan dihentikan oleh pemain.")
+                    print_history()
+                    return
+
+                # --- 2. FITUR LIHAT HISTORY IN-GAME ('h') ---
+                if user_input in ['h', 'hist', 'history']:
+                    print_history()
+                    continue
+
+                # --- 3. FITUR UNDO ('u') ---
                 if user_input in ['u', 'undo']:
                     if len(history) > 0:
                         board = history.pop()
+                        total_steps = max(0, total_steps - 1)
                         print("\n[⏪ UNDO BERHASIL] Langkah terakhir dibatalkan!")
                         continue
                     else:
                         print("\n⚠️ Belum ada langkah yang bisa di-undo!")
                         continue
 
-                # --- FITUR RESTART IN-GAME ---
+                # --- 4. FITUR RESTART IN-GAME ('r') ---
                 if user_input in ['r', 'reset', 'ulang']:
-                    print("\n[🔄 RESTART] Game diulang kembali dari awal!\n")
+                    print("\n[🔄 RESTART] Game ronde ini diulang kembali dari awal!\n")
                     break
 
                 try:
@@ -246,43 +324,63 @@ def main_game():
                         print("⚠️ Petak tersebut sudah terisi, pilih petak yang kosong!")
                         continue
 
-                    # Simpan snapshot sebelum jalan
+                    # Simpan snapshot sebelum melangkah
                     history.append(list(board))
                     board[move] = 'O'
+                    total_steps += 1
                     current_player = 'X'
 
                 except ValueError:
-                    print("⚠️ Harap masukkan angka 0-8, 'u' untuk undo, atau 'r' untuk ulangi!")
+                    print("⚠️ Ketik angka 0-8, 'u' (undo), 'r' (reset), 'h' (history), atau 'q' (stop)!")
 
-            # Jika giliran Bot ('X')
+            # --- GILIRAN BOT ('X') ---
             else:
                 winner = check_winner(board)
                 if winner:
                     print_board(board)
                     print("=" * 45)
                     if winner == 'DRAW':
+                        result_text = 'Seri (Draw)'
                         print("🤝 HASIL AKHIR: GAME SERI (DRAW)!")
                     elif winner == 'X':
+                        result_text = 'Bot Menang'
                         print(f"🤖 HASIL AKHIR: BOT [{difficulty.upper()}] MENANG!")
                     else:
+                        result_text = 'Kamu Menang'
                         print("🎉 HASIL AKHIR: SELAMAT, KAMU (O) MENANG!")
                     print("=" * 45)
+
+                    match_history.append({
+                        'game_no': len(match_history) + 1,
+                        'difficulty': difficulty.upper(),
+                        'first': 'Manusia (O)' if first_player == 'O' else 'Bot (X)',
+                        'result': result_text,
+                        'steps': total_steps
+                    })
                     break
 
                 print(f"\n🤖 Bot [{difficulty.upper()}] sedang berpikir...")
                 bot_move = get_bot_move(board, difficulty)
                 if bot_move != -1:
                     board[bot_move] = 'X'
+                    total_steps += 1
                     print(f"✅ Bot meletakkan 'X' di petak nomor: {bot_move}")
                 current_player = 'O'
 
-        # Setelah satu game berakhir: Opsi main lagi
-        tanya = input("\n🔄 Mau main lagi? (y = Ya / n = Keluar / g = Ganti Pengaturan): ").strip().lower()
+        # Tanya opsi setelah satu ronde berakhir
+        tanya = input("\n🔄 Mau main lagi? (y = Ya / g = Ganti Setting / h = History / q = Keluar): ").strip().lower()
         if tanya == 'g':
             main_game()
             break
-        elif tanya != 'y':
-            print("\n👋 Terima kasih sudah bermain! Sampai jumpa lagi.\n")
+        elif tanya == 'h':
+            print_history()
+            lanjut = input("Mau lanjut main lagi? (y/n): ").strip().lower()
+            if lanjut != 'y':
+                print("\n👋 Terima kasih sudah bermain! Sampai jumpa lagi.\n")
+                break
+        elif tanya in ['q', 'n', 'exit', 'quit', 'stop']:
+            print_history()
+            print("👋 Terima kasih sudah bermain! Sampai jumpa lagi.\n")
             break
 
 
