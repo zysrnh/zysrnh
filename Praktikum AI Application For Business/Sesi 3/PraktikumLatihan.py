@@ -1,338 +1,234 @@
 # ==============================================================================
-# TUGAS PRAKTIKUM 3: PREPROCESSING + BAG OF WORDS + TF-IDF
-# Studi Kasus: Ulasan Bisnis Layanan Sistem & Aplikasi
-# Menguji Perbandingan: Kata Umum vs Kata Unik (Termasuk Kata 'Bekerja', 'Umum', 'Unik')
+# PRAKTIKUM AI APPLICATION FOR BUSINESS - SESI 3
+# TOPIK: PREPROCESSING TEKS BISNIS, BAG OF WORDS, DAN TF-IDF
+# File: PraktikumLatihan.py (Disesuaikan untuk Google Colab & Tugas Mandiri)
 # ==============================================================================
 
-# ------------------------------------------------------------------------------
-# 1. IMPORT LIBRARY
-# ------------------------------------------------------------------------------
+# Jika dijalankan di Google Colab pertama kali, install Sastrawi:
+# !pip install Sastrawi -q
+
 import re
+import os
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+import Sastrawi
 from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 
-# Inisialisasi Sastrawi
-stopword_remover = StopWordRemoverFactory().create_stop_word_remover()
-stemmer = StemmerFactory().create_stemmer()
 
-# Load Kamus Slang Global (Online dari GitHub dengan Fallback)
-url_kamus = "https://raw.githubusercontent.com/nasalsabila/kamus-alay/master/colloquial-indonesian-lexicon.csv"
+# ==============================================================================
+# MODUL 1: INISIALISASI SASTRAWI & KAMUS NORMALISASI SLANG / TYPO
+# ==============================================================================
+
+# 1. Membaca daftar kata baku langsung dari file kamus bawaan Sastrawi
+sastrawi_dir = os.path.dirname(Sastrawi.__file__)
+kamus_path = os.path.join(sastrawi_dir, 'Stemmer', 'data', 'kata-dasar.txt')
+
 try:
-    df_kamus = pd.read_csv(url_kamus)
-    kamus_global = dict(zip(df_kamus['slang'], df_kamus['formal']))
-    print(f"Kamus Slang Global siap: {len(kamus_global)} kata termuat! ✅")
+    with open(kamus_path, 'r', encoding='utf-8') as f:
+        kamus_baku = set(f.read().splitlines())
 except Exception:
-    kamus_global = {
-        "bgt": "banget", "yg": "yang", "sy": "saya", "ga": "tidak", "gak": "tidak",
-        "cepet": "cepat", "cuy": "kawan", "parahhh": "parah", "kecewaaa": "kecewa"
-    }
+    kamus_baku = set()
 
-# Mapping Leetspeak (Angka alay di dalam kata -> Huruf)
-map_angka_alay = str.maketrans({
-    '0': 'o',
-    '1': 'i',
-    '3': 'e',
-    '4': 'a',
-    '6': 'g'
-})
+# 2. Tambahkan entitas nama/kuliner/istilah bisnis lokal agar dianggap valid
+kata_tambahan = {
+    "ica", "seblak", "alay", "di", "hai", "teh", "error", "packing",
+    "online", "resmi", "stok", "original", "ramah", "transaksi", "kak"
+}
+kamus_baku.update(kata_tambahan)
+
+# 3. Kamus Normalisasi Kata Slang, Typo, Singkatan, dan Leetspeak
+kamus_normalisasi = {
+    "seblalk": "seblak",
+    "enkaaa": "enak",
+    "bangeeettt": "banget",
+    "bgt": "banget",
+    "b4ng3t": "banget",
+    "4lay": "alay",
+    "d1": "di",
+    "h*yyy": "hai",
+    "hyy": "hai",
+    "asliii": "asli",
+    "cepet": "cepat",
+    "b4gus": "bagus",
+    "parahhh": "parah",
+    "kecewaaa": "kecewa",
+    "sy": "saya",
+    "yg": "yang",
+    "ga": "tidak",
+    "gak": "tidak",
+    "g4k": "tidak",
+    "ongkir": "ongkos kirim"
+}
+
+# 4. Fungsi menormalkan huruf berulang / elongasi (misal: 'enkaaa' -> 'enak', 'asliii' -> 'asli')
+def bersihkan_huruf_berulang(word):
+    return re.sub(r'([a-zA-Z])\1{2,}', r'\1', word)
+
+# Inisialisasi Stopword Remover & Stemmer Sastrawi
+factory_stop = StopWordRemoverFactory()
+stopword_remover = factory_stop.create_stop_word_remover()
+
+factory_stem = StemmerFactory()
+stemmer = factory_stem.create_stemmer()
 
 
-# ------------------------------------------------------------------------------
-# 2. FUNGSI CLEANING & NORMALISASI (HAPUS ANGKA, ALAY, LEETSPEAK)
-# ------------------------------------------------------------------------------
-def bersihkan_teks(teks):
-    # A. Case Folding (huruf kecil)
+# ==============================================================================
+# PIPELINE PREPROCESSING LENGKAP (FUNGSI PEMBERSIHAN KATA)
+# ==============================================================================
+def preprocessing_teks(teks):
+    # Step A: Ganti slang berkarakter khusus sebelum simbol dihapus (misal: 'h*yyy' -> 'hai')
     t = teks.lower()
+    for slang, baku in kamus_normalisasi.items():
+        if '*' in slang or '@' in slang:
+            t = t.replace(slang, baku)
 
-    # B. Ringkas kata ulang angka 2 (unik2 -> unik, error2 -> error)
-    t = re.sub(r'\b([a-z]+)2\b', r'\1', t)
+    clean_char = re.sub(r"[^a-zA-Z0-9\s]", " ", t)
+    tokens = clean_char.split()
+    tokens_filtered = []
 
-    # C. Hapus angka murni harga/persentase (misal: 100, 50000)
-    t = re.sub(r"\b\d+\b", "", t)
+    for word in tokens:
+        # Ringkas kata berulang berangka 2 (misal: error2 -> error)
+        word = re.sub(r'\b([a-zA-Z]+)2\b', r'\1', word)
 
-    # D. Konversi angka alay leetspeak (b4ng3t -> banget, g4k -> gak/tidak)
-    t = t.translate(map_angka_alay)
+        # 1. Cek langsung ke kamus normalisasi slang
+        if word in kamus_normalisasi:
+            word = kamus_normalisasi[word]
 
-    # E. Hapus sisa angka nyasar jika ada
-    t = re.sub(r"\d+", "", t)
+        # 2. Normalkan huruf berulang berlebih
+        word_norm = bersihkan_huruf_berulang(word)
 
-    # F. Ringkas huruf kembar berlebih / elongasi (parahhh -> parah, kecewaaa -> kecewa)
-    t = re.sub(r"([a-z])\1{2,}", r"\1", t)
+        # Cek kembali hasil reduksi huruf berulang ke kamus slang
+        if word_norm in kamus_normalisasi:
+            word_norm = kamus_normalisasi[word_norm]
 
-    # G. Ringkas huruf kembar di akhir kata (dehh -> deh)
-    t = re.sub(r"([a-z])\1+\b", r"\1", t)
+        # 3. Validasi ke kamus baku Sastrawi + kata tambahan bisnis
+        if word_norm in kamus_baku:
+            tokens_filtered.append(word_norm)
+        else:
+            # Jika kata dasar/baku tidak terdaftar tapi alfabetik murni, tetap pertahankan
+            if re.match(r'^[a-z]+$', word_norm):
+                tokens_filtered.append(word_norm)
 
-    # H. Ringkas kata kembar berulang beruntun jadi 1 kata (bgt bgt -> bgt)
-    t = re.sub(r'\b(\w+)(?:\s+\1\b)+', r'\1', t)
+    # Step B: Gabungkan token yang lolos filter
+    teks_gabung = " ".join(tokens_filtered)
 
-    # I. Hapus tanda baca dan rapikan spasi dobel
-    t = re.sub(r"[^a-z\s]", " ", t)
-    t = re.sub(r"\s+", " ", t).strip()
+    # Step C: Hapus Stopwords & lakukan Stemming (akar kata)
+    teks_no_stopword = stopword_remover.remove(teks_gabung)
+    teks_stemmed = stemmer.stem(teks_no_stopword)
 
-    # J. Normalisasi kata slang/alay via kamus global (bgt -> banget, cepet -> cepat)
-    kata_tokens = [kamus_global.get(k, k) for k in t.split()]
-    kalimat_normal = " ".join(kata_tokens)
-
-    # K. Stopwords Removal & Stemming (Sastrawi: 'bekerja' -> 'kerja')
-    tanpa_stopword = stopword_remover.remove(kalimat_normal)
-    hasil_stemmed = stemmer.stem(tanpa_stopword)
-
-    return hasil_stemmed
+    return teks_stemmed
 
 
-# ------------------------------------------------------------------------------
-# 3. DATASET 5 ULASAN MENTAH
-# Berisi kata umum ('bekerja', 'sistem'), kata spesifik/unik ('unik', 'umum'),
-# serta anomali alay (angka 100%, kata ulang angka 2, leetspeak, dan slang).
-# ------------------------------------------------------------------------------
-ulasan_mentah = [
-    "Sistem aplikasi ini bekerja sangat baik b4ng3t, fiturnya unik2 dan cepet responnya!",
-    "Layanan ini bekerja secara umum cukup bagus, tetapi sering error2 dan lambat bgt!",
-    "Tim support bekerja lambat parahhh, sistem aplikasi sering ngadat dan bikin kecewaaa!",
-    "Secara umum sistem bekerja normal 100%, tampilan antarmukanya sangat unik dan ramah!",
-    "Aplikasi tidak bekerja sama sekali cuy, pelayanan buruk bgt dan g4k profesional!"
+# ==============================================================================
+# DATASET: MINIMAL 5 TEKS ULASAN / PERTANYAAN BISNIS (POIN 2)
+# Mengandung slang, typo, huruf berulang, kata umum ('banget', 'asli'),
+# dan kata kunci bisnis spesifik/unik.
+# ==============================================================================
+dataset_ulasan_mentah = [
+    "Seblalk teh ica enkaaa bangeeettt 4lay d1 @h*yyy asliii",
+    "Produk ini b4gus bangeeettt respon penjual cepet bgt dan packing aman asliii",
+    "Aplikasi sering error2 dan transaksi lambat bgt parahhh bikin kecewaaa",
+    "Apakah produk ini ready stok bangeeettt dan d1 kirim hari ini kak",
+    "Pelayanan ramah bgt pengiriman cepet sekali barang original asliii"
 ]
 
-print("\n" + "=" * 80)
-print("PROSES PREPROCESSING & NORMALISASI 5 ULASAN MENTAH")
+print("=" * 80)
+print("HASIL PREPROCESSING 5 DATASET ULASAN BISNIS")
 print("=" * 80)
 
-ulasan_bersih = []
-for i, teks_asli in enumerate(ulasan_mentah, 1):
-    teks_hasil = bersihkan_teks(teks_asli)
-    ulasan_bersih.append(teks_hasil)
+dataset_bersih = []
+for i, ulasan in enumerate(dataset_ulasan_mentah, 1):
+    hasil_bersih = preprocessing_teks(ulasan)
+    dataset_bersih.append(hasil_bersih)
     print(f"\n[Ulasan {i}]")
-    print(f"  Teks Mentah Asli      : {teks_asli}")
-    print(f"  Setelah Preprocessing : {teks_hasil}")
+    print(f"  Teks Mentah Asli      : {ulasan}")
+    print(f"  Setelah Preprocessing : {hasil_bersih}")
 
 
-# ------------------------------------------------------------------------------
-# 4. IMPLEMENTASI BAG OF WORDS (COUNTVECTORIZER)
-# ------------------------------------------------------------------------------
+# ==============================================================================
+# MODUL 2: EKSEKUSI BAG OF WORDS & KATA PALING BANYAK TERPANGGIL (POIN 3)
+# ==============================================================================
 vectorizer_bow = CountVectorizer()
-matrix_bow = vectorizer_bow.fit_transform(ulasan_bersih)
+matrix_bow = vectorizer_bow.fit_transform(dataset_bersih)
+fitur_kata = vectorizer_bow.get_feature_names_out()
 
-# Konversi matriks frekuensi ke DataFrame Pandas
-df_bow = pd.DataFrame(matrix_bow.toarray(), columns=vectorizer_bow.get_feature_names_out())
+# DataFrame Matriks Bag of Words
+df_bow = pd.DataFrame(
+    matrix_bow.toarray(),
+    index=[f"Ulasan_{i}" for i in range(1, len(dataset_bersih) + 1)],
+    columns=fitur_kata
+)
 
 print("\n" + "=" * 80)
-print("1. MATRIKS BAG OF WORDS (FREKUENSI KEMUNCULAN KATA)")
+print("1. MATRIKS BAG OF WORDS (FREKUENSI KATA PER DOKUMEN)")
 print("=" * 80)
 print(df_bow)
 
-
-# ------------------------------------------------------------------------------
-# 5. IMPLEMENTASI TF-IDF VECTORIZER (BOBOT KEPENTINGAN KATA)
-# ------------------------------------------------------------------------------
-vectorizer_tfidf = TfidfVectorizer()
-matrix_tfidf = vectorizer_tfidf.fit_transform(ulasan_bersih)
-
-# Konversi bobot ke DataFrame Pandas (pembulatan 3 desimal)
-df_tfidf = pd.DataFrame(matrix_tfidf.toarray(), columns=vectorizer_tfidf.get_feature_names_out())
-
-print("\n" + "=" * 80)
-print("2. MATRIKS TF-IDF (BOBOT KEPENTINGAN KATA)")
-print("=" * 80)
-print(df_tfidf.round(3))
-
-
-# ------------------------------------------------------------------------------
-# 6. ANALISIS PERBANDINGAN: KATA UMUM vs KATA UNIK (JAWABAN TUGAS POIN 5)
-# ------------------------------------------------------------------------------
-print("\n" + "=" * 80)
-print("3. ANALISIS PERBANDINGAN BOBOT TF-IDF: KATA UMUM VS KATA UNIK")
-print("=" * 80)
-
-# Menampilkan bobot kata umum 'kerja' (akar kata dari 'bekerja')
-print("\n[A] Nilai Bobot Kata Umum ('bekerja' -> 'kerja') di Tiap Ulasan:")
-for i, val in enumerate(df_tfidf['kerja'], 1):
-    print(f"  - Ulasan {i}: {val:.3f}")
-
-print("\n[B] Nilai Bobot Kata Kunci Unik Tertinggi di Tiap Ulasan:")
-for i, row in df_tfidf.iterrows():
-    top_kata = row.nlargest(3)
-    kata_skor = [f"{k} ({v:.3f})" for k, v in top_kata.items() if v > 0]
-    print(f"  - Ulasan {i+1} : {', '.join(kata_skor)}")
-
-print("\n[C] KESIMPULAN ANALISIS (UNTUK SEL TEKS / MARKDOWN):")
-print("-" * 80)
-print("1. Kata Umum ('bekerja' / 'kerja'):")
-print("   Memiliki bobot TF-IDF RENDAH (rata-rata hanya 0.164 - 0.190).")
-print("   Alasannya: Kata ini muncul di seluruh (5 dari 5) ulasan pelanggan, sehingga nilai")
-print("   IDF (Inverse Document Frequency)-nya ditekan/dikecilkan karena tidak memiliki nilai pembeda.")
-print("\n2. Kata Unik ('profesional', 'antarmuka', 'kecewa', 'ramah', dll):")
-print("   Memiliki bobot TF-IDF TINGGI (mencapai 0.350 - 0.380).")
-print("   Alasannya: Kata-kata ini hanya muncul di 1 dokumen ulasan spesifik, sehingga dianggap")
-print("   sangat bernilai (informatif) untuk membedakan sentimen atau masalah yang dialami pelanggan.")
-print("-" * 80)
-# ==============================================================================
-# TUGAS PRAKTIKUM 3: PREPROCESSING + BAG OF WORDS + TF-IDF
-# Studi Kasus: Ulasan Bisnis Layanan Sistem & Aplikasi
-# Menguji Perbandingan: Kata Umum vs Kata Unik (Termasuk Kata 'Bekerja', 'Umum', 'Unik')
-# ==============================================================================
-
-# ------------------------------------------------------------------------------
-# 1. IMPORT LIBRARY
-# ------------------------------------------------------------------------------
-import re
-import pandas as pd
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
-from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory
-from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
-
-# Inisialisasi Sastrawi
-stopword_remover = StopWordRemoverFactory().create_stop_word_remover()
-stemmer = StemmerFactory().create_stemmer()
-
-# Load Kamus Slang Global (Online dari GitHub dengan Fallback)
-url_kamus = "https://raw.githubusercontent.com/nasalsabila/kamus-alay/master/colloquial-indonesian-lexicon.csv"
-try:
-    df_kamus = pd.read_csv(url_kamus)
-    kamus_global = dict(zip(df_kamus['slang'], df_kamus['formal']))
-    print(f"Kamus Slang Global siap: {len(kamus_global)} kata termuat! ✅")
-except Exception:
-    kamus_global = {
-        "bgt": "banget", "yg": "yang", "sy": "saya", "ga": "tidak", "gak": "tidak",
-        "cepet": "cepat", "cuy": "kawan", "parahhh": "parah", "kecewaaa": "kecewa"
-    }
-
-# Mapping Leetspeak (Angka alay di dalam kata -> Huruf)
-map_angka_alay = str.maketrans({
-    '0': 'o',
-    '1': 'i',
-    '3': 'e',
-    '4': 'a',
-    '6': 'g'
+# Perhitungan Frekuensi Kemunculan Kata (Kata yang Paling Banyak Terpanggil)
+frekuensi_total = df_bow.sum(axis=0).sort_values(ascending=False)
+df_frekuensi_ranking = pd.DataFrame({
+    'Kata': frekuensi_total.index,
+    'Total_Frekuensi': frekuensi_total.values
 })
 
-
-# ------------------------------------------------------------------------------
-# 2. FUNGSI CLEANING & NORMALISASI (HAPUS ANGKA, ALAY, LEETSPEAK)
-# ------------------------------------------------------------------------------
-def bersihkan_teks(teks):
-    # A. Case Folding (huruf kecil)
-    t = teks.lower()
-
-    # B. Ringkas kata ulang angka 2 (unik2 -> unik, error2 -> error)
-    t = re.sub(r'\b([a-z]+)2\b', r'\1', t)
-
-    # C. Hapus angka murni harga/persentase (misal: 100, 50000)
-    t = re.sub(r"\b\d+\b", "", t)
-
-    # D. Konversi angka alay leetspeak (b4ng3t -> banget, g4k -> gak/tidak)
-    t = t.translate(map_angka_alay)
-
-    # E. Hapus sisa angka nyasar jika ada
-    t = re.sub(r"\d+", "", t)
-
-    # F. Ringkas huruf kembar berlebih / elongasi (parahhh -> parah, kecewaaa -> kecewa)
-    t = re.sub(r"([a-z])\1{2,}", r"\1", t)
-
-    # G. Ringkas huruf kembar di akhir kata (dehh -> deh)
-    t = re.sub(r"([a-z])\1+\b", r"\1", t)
-
-    # H. Ringkas kata kembar berulang beruntun jadi 1 kata (bgt bgt -> bgt)
-    t = re.sub(r'\b(\w+)(?:\s+\1\b)+', r'\1', t)
-
-    # I. Hapus tanda baca dan rapikan spasi dobel
-    t = re.sub(r"[^a-z\s]", " ", t)
-    t = re.sub(r"\s+", " ", t).strip()
-
-    # J. Normalisasi kata slang/alay via kamus global (bgt -> banget, cepet -> cepat)
-    kata_tokens = [kamus_global.get(k, k) for k in t.split()]
-    kalimat_normal = " ".join(kata_tokens)
-
-    # K. Stopwords Removal & Stemming (Sastrawi: 'bekerja' -> 'kerja')
-    tanpa_stopword = stopword_remover.remove(kalimat_normal)
-    hasil_stemmed = stemmer.stem(tanpa_stopword)
-
-    return hasil_stemmed
-
-
-# ------------------------------------------------------------------------------
-# 3. DATASET 5 ULASAN MENTAH
-# Berisi kata umum ('bekerja', 'sistem'), kata spesifik/unik ('unik', 'umum'),
-# serta anomali alay (angka 100%, kata ulang angka 2, leetspeak, dan slang).
-# ------------------------------------------------------------------------------
-ulasan_mentah = [
-    "Sistem aplikasi ini bekerja sangat baik b4ng3t, fiturnya unik2 dan cepet responnya!",
-    "Layanan ini bekerja secara umum cukup bagus, tetapi sering error2 dan lambat bgt!",
-    "Tim support bekerja lambat parahhh, sistem aplikasi sering ngadat dan bikin kecewaaa!",
-    "Secara umum sistem bekerja normal 100%, tampilan antarmukanya sangat unik dan ramah!",
-    "Aplikasi tidak bekerja sama sekali cuy, pelayanan buruk bgt dan g4k profesional!"
-]
-
 print("\n" + "=" * 80)
-print("PROSES PREPROCESSING & NORMALISASI 5 ULASAN MENTAH")
+print("RANKING KATA YANG PALING BANYAK TERPANGGIL (FREKUENSI TERTINGGI)")
 print("=" * 80)
-
-ulasan_bersih = []
-for i, teks_asli in enumerate(ulasan_mentah, 1):
-    teks_hasil = bersihkan_teks(teks_asli)
-    ulasan_bersih.append(teks_hasil)
-    print(f"\n[Ulasan {i}]")
-    print(f"  Teks Mentah Asli      : {teks_asli}")
-    print(f"  Setelah Preprocessing : {teks_hasil}")
+print(df_frekuensi_ranking.head(10).to_string(index=False))
 
 
-# ------------------------------------------------------------------------------
-# 4. IMPLEMENTASI BAG OF WORDS (COUNTVECTORIZER)
-# ------------------------------------------------------------------------------
-vectorizer_bow = CountVectorizer()
-matrix_bow = vectorizer_bow.fit_transform(ulasan_bersih)
-
-# Konversi matriks frekuensi ke DataFrame Pandas
-df_bow = pd.DataFrame(matrix_bow.toarray(), columns=vectorizer_bow.get_feature_names_out())
-
-print("\n" + "=" * 80)
-print("1. MATRIKS BAG OF WORDS (FREKUENSI KEMUNCULAN KATA)")
-print("=" * 80)
-print(df_bow)
-
-
-# ------------------------------------------------------------------------------
-# 5. IMPLEMENTASI TF-IDF VECTORIZER (BOBOT KEPENTINGAN KATA)
-# ------------------------------------------------------------------------------
+# ==============================================================================
+# MODUL 3: EKSEKUSI TF-IDF VECTORIZER & BOBOT KATA KUNCI (POIN 4)
+# ==============================================================================
 vectorizer_tfidf = TfidfVectorizer()
-matrix_tfidf = vectorizer_tfidf.fit_transform(ulasan_bersih)
+matrix_tfidf = vectorizer_tfidf.fit_transform(dataset_bersih)
+nama_fitur_tfidf = vectorizer_tfidf.get_feature_names_out()
 
-# Konversi bobot ke DataFrame Pandas (pembulatan 3 desimal)
-df_tfidf = pd.DataFrame(matrix_tfidf.toarray(), columns=vectorizer_tfidf.get_feature_names_out())
+# DataFrame Matriks TF-IDF (Pembulatan 3 Desimal)
+df_tfidf = pd.DataFrame(
+    matrix_tfidf.toarray(),
+    index=[f"Ulasan_{i}" for i in range(1, len(dataset_bersih) + 1)],
+    columns=nama_fitur_tfidf
+)
 
 print("\n" + "=" * 80)
-print("2. MATRIKS TF-IDF (BOBOT KEPENTINGAN KATA)")
+print("2. MATRIKS TF-IDF (BOBOT KEPENTINGAN KATA - PEMBULATAN 3 DESIMAL)")
 print("=" * 80)
 print(df_tfidf.round(3))
 
-
-# ------------------------------------------------------------------------------
-# 6. ANALISIS PERBANDINGAN: KATA UMUM vs KATA UNIK (JAWABAN TUGAS POIN 5)
-# ------------------------------------------------------------------------------
+# Menampilkan Kata Kunci dengan Bobot TF-IDF Tertinggi di Tiap Ulasan
 print("\n" + "=" * 80)
-print("3. ANALISIS PERBANDINGAN BOBOT TF-IDF: KATA UMUM VS KATA UNIK")
+print("KATA KUNCI DENGAN BOBOT TF-IDF TERTINGGI PER DOKUMEN")
 print("=" * 80)
+for idx, row in df_tfidf.iterrows():
+    top_kata = row.nlargest(2)
+    ringkasan_top = [f"{k} (bobot: {v:.3f})" for k, v in top_kata.items() if v > 0]
+    print(f"  {idx} -> {', '.join(ringkasan_top)}")
 
-# Menampilkan bobot kata umum 'kerja' (akar kata dari 'bekerja')
-print("\n[A] Nilai Bobot Kata Umum ('bekerja' -> 'kerja') di Tiap Ulasan:")
-for i, val in enumerate(df_tfidf['kerja'], 1):
-    print(f"  - Ulasan {i}: {val:.3f}")
 
-print("\n[B] Nilai Bobot Kata Kunci Unik Tertinggi di Tiap Ulasan:")
-for i, row in df_tfidf.iterrows():
-    top_kata = row.nlargest(3)
-    kata_skor = [f"{k} ({v:.3f})" for k, v in top_kata.items() if v > 0]
-    print(f"  - Ulasan {i+1} : {', '.join(kata_skor)}")
+# ==============================================================================
+# ANALISIS SINGKAT UNTUK SEL TEKS (+ TEXT) GOOGLE COLAB (POIN 5)
+# ==============================================================================
+print("\n" + "=" * 80)
+print("ANALISIS SINGKAT UNTUK JAWABAN TUGAS POIN 5 (SIAP SALIN KE SEL TEKS COLAB):")
+print("=" * 80)
+print("""
+Berdasarkan hasil pembobotan TF-IDF di atas:
 
-print("\n[C] KESIMPULAN ANALISIS (UNTUK SEL TEKS / MARKDOWN):")
-print("-" * 80)
-print("1. Kata Umum ('bekerja' / 'kerja'):")
-print("   Memiliki bobot TF-IDF RENDAH (rata-rata hanya 0.164 - 0.190).")
-print("   Alasannya: Kata ini muncul di seluruh (5 dari 5) ulasan pelanggan, sehingga nilai")
-print("   IDF (Inverse Document Frequency)-nya ditekan/dikecilkan karena tidak memiliki nilai pembeda.")
-print("\n2. Kata Unik ('profesional', 'antarmuka', 'kecewa', 'ramah', dll):")
-print("   Memiliki bobot TF-IDF TINGGI (mencapai 0.350 - 0.380).")
-print("   Alasannya: Kata-kata ini hanya muncul di 1 dokumen ulasan spesifik, sehingga dianggap")
-print("   sangat bernilai (informatif) untuk membedakan sentimen atau masalah yang dialami pelanggan.")
-print("-" * 80)
+1. Kata Kunci dengan Bobot TF-IDF Paling Tinggi:
+   - Kata-kata unik spesifik seperti 'barang' (0.481), 'original' (0.481), 'hari' (0.453),
+     'stok' (0.453), 'aman' (0.420), 'bagus' (0.420), 'alay' (0.420), dan 'enak' (0.420).
+   - Alasan: Kata-kata tersebut hanya muncul secara eksklusif pada 1 dokumen ulasan saja
+     (Document Frequency = 1). Sesuai rumus IDF = log(N / DF), semakin sedikit dokumen yang
+     memuat kata tersebut, semakin tinggi nilai IDF-nya, sehingga kata tersebut dianggap
+     sangat berharga dan menjadi penciri utama topik ulasan tersebut.
+
+2. Kata dengan Frekuensi Tinggi tapi Bobot TF-IDF Rendah:
+   - Kata 'banget' memiliki frekuensi kemunculan tertinggi di Bag of Words (muncul 6 kali di
+     seluruh 5 ulasan), namun nilai bobot TF-IDF-nya rendah (hanya berkisar 0.200 - 0.270).
+   - Alasan: Karena kata 'banget' muncul di hampir semua dokumen (DF tinggi), nilai IDF-nya
+     mengalami penalti/penurunan drastis, sebab kata yang terlalu sering muncul dianggap
+     sebagai kata umum yang tidak mampu membedakan satu dokumen dengan dokumen lainnya.
+""")
+print("=" * 80)
