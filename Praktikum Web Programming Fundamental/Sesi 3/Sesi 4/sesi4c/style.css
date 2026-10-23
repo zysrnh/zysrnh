@@ -1,0 +1,19 @@
+h1{
+    text-align: center;
+    background-color: green;
+    color:white;
+    font:bolder;
+}
+b{
+    color: red;
+    font-size: 25;
+    
+}
+i{
+    color: blue;
+    font-size: 25;
+}
+p{
+    font-family: 'Courier New', Courier, monospace;
+    color: black;
+}

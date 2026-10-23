@@ -1,0 +1,43 @@
+*{
+    font-family: monospace;
+}
+h1{
+    text-align: center;
+    color: white;
+    background-color: navy;
+    font:bolder
+}
+h2{
+    text-align: left;
+    color: navy;
+}
+li{
+    color:red;
+}
+li#al{
+    color:gold;
+}
+li#we{
+    color:blue;
+}
+li#da{
+    color:green;
+}
+li#ka{
+    color:red;
+}
+li#fi{
+    color:yellow;
+}
+li#ke{
+    color:magenta;
+}
+li#ba{
+    color:maroon;
+}
+li#pa{
+    color:black;
+}
+li#fi{
+    color:cyan;
+}
