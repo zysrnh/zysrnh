@@ -214,37 +214,7 @@ def jalankan_chatbot():
 
 
 # ==============================================================================
-# 7. SIMULASI PENGUJIAN OTOMATIS (POIN 5 MODUL)
-# ==============================================================================
-def simulasi_pengujian():
-    dataset = load_kamus_intent()
-    print("\n" + "=" * 70)
-    print("SIMULASI PENGUJIAN 3 KALIMAT PELANGGAN BERBEDA (POIN 5 MODUL 4)")
-    print("=" * 70)
-
-    pertanyaan_uji = [
-        "Halo min, ada sepatu running diskon ga hari ini?",
-        "Dimana alamat toko offline nya ya?",
-        "Paket nyangkut nih barang belum sampai sama sekali!"
-    ]
-
-    for i, tanya in enumerate(pertanyaan_uji, 1):
-        tag, balasan = deteksi_intent(tanya, dataset)
-        entitas = ekstrak_entitas(tanya)
-        print(f"\n[Uji {i}]")
-        print(f"  Pertanyaan        : {tanya}")
-        print(f"  Intent Terdeteksi : {tag}")
-        print(f"  Entitas Khusus    : {entitas if entitas else 'None'}")
-        print(f"  Balasan Chatbot   : {balasan}")
-
-
-# ==============================================================================
 # ENTRY POINT
 # ==============================================================================
 if __name__ == "__main__":
-    # 1. Jalankan simulasi pengujian modul
-    simulasi_pengujian()
-
-    # 2. Buka sesi chat interaktif
-    print("\n")
     jalankan_chatbot()
