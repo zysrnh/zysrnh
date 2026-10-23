@@ -1,0 +1,112 @@
+{
+    "intents": [
+        {
+            "tag": "sapaan",
+            "patterns": [
+                "halo",
+                "hai",
+                "selamat pagi",
+                "permisi admin",
+                "halo min",
+                "pagi",
+                "assalamualaikum",
+                "halo kak",
+                "hai admin",
+                "aku mau minta tolong",
+                "bisa tolong saya",
+                "mau tanya dong",
+                "bisa bantu saya ga",
+                "butuh bantuan",
+                "mau tanya min",
+                "tolong bantu"
+            ],
+            "responses": [
+                "Halo Kak! Dengan senang hati kami siap membantu. Ada yang bisa kami bantu hari ini?",
+                "Hai! Selamat datang di Toko Kami. Silakan tanyakan apa saja, kami siap melayani Kakak."
+            ]
+        },
+        {
+            "tag": "tanya_produk",
+            "patterns": [
+                "apa saja produk unggulan",
+                "jual apa saja",
+                "lihat katalog produk",
+                "ready produk apa",
+                "ada sepatu apa",
+                "katalog sepatu",
+                "daftar barang",
+                "jual apa",
+                "stok barang",
+                "apakah ada sepatu sneaker",
+                "rekomendasi produk"
+            ],
+            "responses": [
+                "Kami menjual berbagai pilihan Sepatu Sneaker, Sepatu Running, dan Aksesoris Original.",
+                "Katalog produk kami mencakup Sneaker Casual, Running Shoes, dan Kaos Kaki Premium Kak!"
+            ]
+        },
+        {
+            "tag": "cek_lokasi",
+            "patterns": [
+                "dimana alamat toko",
+                "lokasi toko dimana",
+                "bisa datang langsung ke toko",
+                "alamat offline",
+                "toko di mana",
+                "cabang bandung",
+                "dimana sih toko kalian",
+                "posisi toko di mana",
+                "buka jam berapa"
+            ],
+            "responses": [
+                "Toko offline kami beralamat di Jl. Soekarno-Hatta No. 456, Bandung.",
+                "Silakan mampir ke outlet kami di Jl. Soekarno-Hatta No. 456, Bandung. Buka setiap hari pukul 09.00 - 21.00 WIB."
+            ]
+        },
+        {
+            "tag": "komplain_pesanan",
+            "patterns": [
+                "barang belum sampai",
+                "pesanan rusak",
+                "paket nyangkut",
+                "retur barang",
+                "salah kirim barang",
+                "produk jelek",
+                "sangat jelek",
+                "jelek",
+                "buruk",
+                "kualitas buruk",
+                "kecewa",
+                "sangat kecewa",
+                "parah",
+                "tidak sesuai",
+                "cacat",
+                "rusak",
+                "mengecewakan",
+                "kualitas jelek banget bikin kecewa"
+            ],
+            "responses": [
+                "Mohon maaf sebesar-besarnya atas ketidaknyamanan Kakak. Produk kami bergaransi 100% Ganti Baru atau Uang Kembali. Silakan infokan nomor pesanan dan foto/video kendala produk agar tim kami proses ganti rugi segera.",
+                "Kami sangat menyesal mendengar kendala ini Kak. Kepuasan Kakak adalah prioritas kami. Mohon kirimkan Nomor Resi / Bukti kendala untuk kami ganti dengan produk baru hari ini juga."
+            ]
+        },
+        {
+            "tag": "tanya_harga",
+            "patterns": [
+                "berapa harganya",
+                "pricelist sepatu",
+                "harga produk ini berapa",
+                "ada diskon ga",
+                "berapaan min",
+                "daftar harga",
+                "potongan harga",
+                "harganya berapaan kak",
+                "ada promo apa"
+            ],
+            "responses": [
+                "Harga sepatu kami mulai dari Rp 250.000 hingga Rp 750.000 tergantung model dan brand Kak.",
+                "Untuk pricelist lengkap dan promo diskon 10%, silakan cek katalog promo mingguan kami ya!"
+            ]
+        }
+    ]
+}

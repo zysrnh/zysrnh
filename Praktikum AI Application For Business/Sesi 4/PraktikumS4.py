@@ -1,6 +1,6 @@
 # ==============================================================================
 # PRAKTIKUM AI APPLICATION FOR BUSINESS - SESI 4
-# TOPIK: INTENT & ENTITIES + SMART KEYWORD EXTRACTION & ACTIVE LEARNING
+# TOPIK: INTENT & ENTITIES DENGAN ENGINE TF-IDF COSINE SIMILARITY (AI SEMANTIK)
 # File: PraktikumS4.py (Siap Dijalankan di Google Colab)
 # ==============================================================================
 
@@ -9,6 +9,9 @@ import os
 import random
 import re
 import sys
+import numpy as np
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 # Menjaga kompatibilitas output encoding di Windows Terminal & Google Colab
 if hasattr(sys.stdout, 'reconfigure'):
@@ -20,16 +23,8 @@ if hasattr(sys.stdout, 'reconfigure'):
 # File penyimpanan memori intent di Google Colab / Local
 JSON_FILE = os.path.join(os.path.dirname(__file__), 'kamus_intent.json') if '__file__' in globals() else 'kamus_intent.json'
 
-# Daftar kata umum / kata sambung (Stopwords) yang diabaikan saat ekstraksi kata kunci
-STOPWORDS = {
-    'apakah', 'disini', 'di', 'sini', 'ada', 'yang', 'ini', 'itu', 'ke', 'dari',
-    'saya', 'aku', 'kamu', 'anda', 'kami', 'toko', 'kak', 'min', 'admin',
-    'dong', 'ya', 'nih', 'sih', 'deh', 'gan', 'bro', 'bisa', 'mau', 'ingin',
-    'tolong', 'mohon', 'sangat', 'banget', 'bgt', 'kah', 'pun'
-}
-
 # ==============================================================================
-# 1. STRUKTUR DATASET AWAL (5 KATEGORI INTENT + KATA KUNCI LENGKAP)
+# 1. STRUKTUR DATASET AWAL (5 KATEGORI INTENT BISNIS LENGKAP)
 # ==============================================================================
 default_dataset_intent = {
     "intents": [
@@ -37,19 +32,21 @@ default_dataset_intent = {
             "tag": "sapaan",
             "patterns": [
                 "halo", "hai", "selamat pagi", "permisi admin", "halo min",
-                "pagi", "assalamualaikum", "halo kak", "hai admin"
+                "pagi", "assalamualaikum", "halo kak", "hai admin",
+                "aku mau minta tolong", "bisa tolong saya", "mau tanya dong",
+                "bisa bantu saya ga", "butuh bantuan", "mau tanya min", "tolong bantu"
             ],
             "responses": [
-                "Halo Kak! Ada yang bisa kami bantu hari ini?",
-                "Hai! Selamat datang di Toko Kami, silakan tanyakan apa saja ya."
+                "Halo Kak! Dengan senang hati kami siap membantu. Ada yang bisa kami bantu hari ini?",
+                "Hai! Selamat datang di Toko Kami. Silakan tanyakan apa saja, kami siap melayani Kakak."
             ]
         },
         {
             "tag": "tanya_produk",
             "patterns": [
                 "apa saja produk unggulan", "jual apa saja", "lihat katalog produk",
-                "ready produk apa", "ada sepatu apa", "katalog", "daftar barang",
-                "jual apa", "stok barang"
+                "ready produk apa", "ada sepatu apa", "katalog sepatu", "daftar barang",
+                "jual apa", "stok barang", "apakah ada sepatu sneaker", "rekomendasi produk"
             ],
             "responses": [
                 "Kami menjual berbagai pilihan Sepatu Sneaker, Sepatu Running, dan Aksesoris Original.",
@@ -60,7 +57,8 @@ default_dataset_intent = {
             "tag": "cek_lokasi",
             "patterns": [
                 "dimana alamat toko", "lokasi toko dimana", "bisa datang langsung ke toko",
-                "alamat offline", "toko di mana", "cabang toko", "buka jam berapa"
+                "alamat offline", "toko di mana", "cabang bandung", "dimana sih toko kalian",
+                "posisi toko di mana", "buka jam berapa"
             ],
             "responses": [
                 "Toko offline kami beralamat di Jl. Soekarno-Hatta No. 456, Bandung.",
@@ -73,7 +71,7 @@ default_dataset_intent = {
                 "barang belum sampai", "pesanan rusak", "paket nyangkut", "retur barang",
                 "salah kirim barang", "produk jelek", "sangat jelek", "jelek", "buruk",
                 "kualitas buruk", "kecewa", "sangat kecewa", "parah", "tidak sesuai",
-                "cacat", "rusak", "mengecewakan"
+                "cacat", "rusak", "mengecewakan", "kualitas jelek banget bikin kecewa"
             ],
             "responses": [
                 "Mohon maaf sebesar-besarnya atas ketidaknyamanan Kakak. Produk kami bergaransi 100% Ganti Baru atau Uang Kembali. Silakan infokan nomor pesanan dan foto/video kendala produk agar tim kami proses ganti rugi segera.",
@@ -84,7 +82,8 @@ default_dataset_intent = {
             "tag": "tanya_harga",
             "patterns": [
                 "berapa harganya", "pricelist sepatu", "harga produk ini berapa",
-                "ada diskon ga", "berapaan min", "daftar harga", "potongan harga"
+                "ada diskon ga", "berapaan min", "daftar harga", "potongan harga",
+                "harganya berapaan kak", "ada promo apa"
             ],
             "responses": [
                 "Harga sepatu kami mulai dari Rp 250.000 hingga Rp 750.000 tergantung model dan brand Kak.",
@@ -115,21 +114,7 @@ def ekstrak_entitas(pesan):
 
 
 # ==============================================================================
-# 3. FUNGSI EKSTRAKSI KATA KUNCI (MENGATASI KALIMAT PANJANG)
-# ==============================================================================
-def ekstrak_kata_kunci(kalimat):
-    """
-    Menyaring kata sambung (stopwords) dan mengekstrak kata kunci inti
-    agar bot mengenali kalimat panjang maupun kata tunggal.
-    """
-    clean = re.sub(r'[^a-zA-Z0-9\s]', ' ', kalimat.lower())
-    words = clean.split()
-    kata_kunci = [w for w in words if w not in STOPWORDS and len(w) > 1]
-    return kata_kunci
-
-
-# ==============================================================================
-# 4. FUNGSI LOAD & SAVE MEMORI JSON KE SISTEM
+# 3. FUNGSI LOAD & SAVE MEMORI JSON KE SISTEM
 # ==============================================================================
 def load_kamus_intent():
     """Membaca memori intent dari file JSON, jika belum ada buat dari default."""
@@ -150,66 +135,71 @@ def simpan_kamus_intent(dataset):
 
 
 # ==============================================================================
-# 5. FUNGSI PENCOCOKAN INTENT CERDAS (TOKEN & OVERLAP MATCHING)
+# 4. ENGINE TF-IDF & COSINE SIMILARITY (OTOMATIS MEMAHAMI MAKNA KALIMAT)
 # ==============================================================================
-def deteksi_intent(pesan_pelanggan, dataset):
+class IntentSimilarityEngine:
     """
-    Mendeteksi intent dengan 2 tingkatan:
-    1. Exact / Substring Match langsung pada pattern.
-    2. Token Overlap Matching pada kata kunci penting (mengatasi kalimat panjang & pendek).
+    Engine AI cerdas berbasis TF-IDF & Cosine Similarity:
+    Menghitung sudut kemiripan vektor antara kalimat pelanggan dengan seluruh
+    pola intent di kamus, sehingga variasi kalimat panjang, typo, atau kalimat umum
+    langsung dipahami otomatis tanpa perlu didaftarkan satu per satu.
     """
-    pesan_clean = pesan_pelanggan.lower().strip()
-    pesan_no_punct = re.sub(r'[^a-zA-Z0-9\s]', ' ', pesan_clean)
-    words = pesan_no_punct.split()
-    kata_kunci_user = ekstrak_kata_kunci(pesan_clean)
+    def __init__(self, dataset):
+        self.dataset = dataset
+        self.build_engine()
 
-    # Tingkat 1: Exact Match atau Substring Match pada pola
-    for intent in dataset['intents']:
-        for pattern in intent['patterns']:
-            pattern_clean = pattern.lower().strip()
-            if pattern_clean == pesan_clean or pattern_clean in pesan_clean or pattern_clean in words:
-                return intent['tag'], random.choice(intent['responses'])
+    def build_engine(self):
+        self.corpus_patterns = []
+        self.corpus_tags = []
+        for item in self.dataset["intents"]:
+            for pat in item["patterns"]:
+                self.corpus_patterns.append(pat.lower().strip())
+                self.corpus_tags.append(item["tag"])
 
-    # Tingkat 2: Pencocokan Berbasis Kata Kunci Inti (Token Overlap)
-    if kata_kunci_user:
-        best_intent = None
-        best_score = 0
-        for intent in dataset['intents']:
-            score = 0
-            for pattern in intent['patterns']:
-                p_clean = pattern.lower().strip()
-                p_words = set(re.sub(r'[^a-zA-Z0-9\s]', ' ', p_clean).split())
-                # Hitung berapa kata kunci user yang cocok dengan pola dalam intent
-                overlap = sum(1 for kw in kata_kunci_user if kw in p_words or kw in p_clean)
-                if overlap > score:
-                    score = overlap
-            if score > best_score:
-                best_score = score
-                best_intent = intent
+        # Menggunakan kombinasi Unigram & Bigram agar frasa 2 kata terbobot sempurna
+        self.vectorizer = TfidfVectorizer(ngram_range=(1, 2))
+        self.pattern_vectors = self.vectorizer.fit_transform(self.corpus_patterns)
 
-        # Jika ada minimal 1 kata kunci penting yang cocok, tentukan intent tersebut
-        if best_intent and best_score >= 1:
-            return best_intent['tag'], random.choice(best_intent['responses'])
+    def predict(self, user_message, threshold=0.25):
+        clean_msg = user_message.lower().strip()
+        # Jika kosong
+        if not clean_msg:
+            return "unknown", 0.0, None
 
-    return 'unknown', None
+        # 1. Cek Exact Match langsung
+        for item in self.dataset["intents"]:
+            for pat in item["patterns"]:
+                if pat.lower().strip() == clean_msg:
+                    return item["tag"], 1.0, random.choice(item["responses"])
+
+        # 2. Hitung Cosine Similarity berbasis TF-IDF
+        user_vec = self.vectorizer.transform([clean_msg])
+        sims = cosine_similarity(user_vec, self.pattern_vectors).flatten()
+        best_idx = int(np.argmax(sims))
+        best_score = float(sims[best_idx])
+        best_tag = self.corpus_tags[best_idx]
+
+        # Jika skor kemiripan >= threshold (misal 25%), AI langsung mengenali maksudnya
+        if best_score >= threshold:
+            for item in self.dataset["intents"]:
+                if item["tag"] == best_tag:
+                    return best_tag, best_score, random.choice(item["responses"])
+
+        return "unknown", best_score, None
 
 
 # ==============================================================================
-# 6. MEKANISME SELF-LEARNING CERDAS (MENYIMPAN KALIMAT & KATA KUNCI)
+# 5. MEKANISME SELF-LEARNING CERDAS (ACTIVE LEARNING)
 # ==============================================================================
-def pelajari_kata_baru(pesan_baru, dataset):
+def pelajari_kata_baru(pesan_baru, dataset, engine):
     """
-    Fitur Pintar: Ketika ada kalimat panjang atau kata baru, sistem mengekstrak
-    kata kuncinya, meminta konfirmasi kategori, lalu menyimpan kalimat dan kata kunci
-    ke memori JSON agar langsung dikenali baik dalam bentuk panjang maupun pendek.
+    Fitur Belajar: Hanya aktif jika skor kemiripan sangat rendah (< 25%),
+    menanyakan kategori ke pengguna lalu menyimpan dan mere-train engine otomatis.
     """
     pesan_clean = pesan_baru.lower().strip()
-    kata_kunci = ekstrak_kata_kunci(pesan_clean)
 
     print("\n" + "=" * 65)
-    print(f"[AI LEARNING]: Kalimat/kata '{pesan_clean}' belum ada di memoriku!")
-    if kata_kunci:
-        print(f"Kata kunci terdeteksi: {kata_kunci}")
+    print(f"[AI LEARNING]: Kalimat/kata '{pesan_clean}' belum dikenali sistem!")
     print("Bantu aku ya, maksud kalimat ini tergolong ke kategori apa?")
     print("-" * 65)
 
@@ -224,19 +214,17 @@ def pelajari_kata_baru(pesan_baru, dataset):
         idx = int(pilihan) - 1
         if 0 <= idx < len(tags):
             tag_terpilih = tags[idx]
-            # Tambahkan kalimat lengkap ke pola
             for intent in dataset['intents']:
                 if intent['tag'] == tag_terpilih:
                     if pesan_clean not in intent['patterns']:
                         intent['patterns'].append(pesan_clean)
-                    # Tambahkan juga setiap kata kunci penting secara individual
-                    for kw in kata_kunci:
-                        if kw not in intent['patterns']:
-                            intent['patterns'].append(kw)
 
-                    # Simpan memori terbaru ke file JSON di Colab
+                    # Simpan memori terbaru ke file JSON
                     simpan_kamus_intent(dataset)
-                    print(f"[SUKSES TERSIMPAN]: Pola '{pesan_clean}' dan kata kunci {kata_kunci} berhasil disimpan ke intent '{tag_terpilih}'!")
+                    # Rebuild TF-IDF engine agar langsung paham detik ini juga
+                    engine.build_engine()
+
+                    print(f"[SUKSES TERSIMPAN]: Pola '{pesan_clean}' berhasil dipelajari ke intent '{tag_terpilih}'!")
                     print("=" * 65 + "\n")
                     return tag_terpilih, random.choice(intent['responses'])
     except ValueError:
@@ -244,17 +232,19 @@ def pelajari_kata_baru(pesan_baru, dataset):
 
     print("[PERINGATAN]: Kata dilewati tanpa disimpan ke memori.")
     print("=" * 65 + "\n")
-    return 'unknown', "Maaf Kak, saya belum memahami pertanyaan tersebut. Ada yang bisa dibantu lainnya?"
+    return 'unknown', "Maaf Kak, saya belum memahami pertanyaan tersebut. Ada yang bisa kami bantu terkait katalog produk, harga, atau lokasi toko kami?"
 
 
 # ==============================================================================
-# 7. MODE CHAT INTERAKTIF (GOOGLE COLAB)
+# 6. MODE CHAT INTERAKTIF DENGAN AI KEMIRIPAN SEMANTIK (GOOGLE COLAB)
 # ==============================================================================
 def jalankan_chatbot():
     dataset = load_kamus_intent()
+    engine = IntentSimilarityEngine(dataset)
+
     print("=" * 70)
-    print("[CHATBOT BISNIS INTERAKTIF - FITUR SELF-LEARNING CERDAS]")
-    print("Status Memori: 5 Kategori Intent Siap Digunakan.")
+    print("[CHATBOT BISNIS CERDAS - ENGINE TF-IDF & COSINE SIMILARITY]")
+    print(f"Status Memori: {len(dataset['intents'])} Kategori Intent | Model AI Siap.")
     print("Ketik pesan Anda di bawah. Ketik 'exit' atau 'keluar' untuk mengakhiri.")
     print("=" * 70)
 
@@ -275,15 +265,16 @@ def jalankan_chatbot():
         # A. Ekstraksi Entitas
         entitas = ekstrak_entitas(pesan)
 
-        # B. Deteksi Intent (Cerdas: Kalimat Panjang, Kata Singkat, dan Bad Review)
-        tag, balasan = deteksi_intent(pesan, dataset)
+        # B. Prediksi Intent Menggunakan Cosine Similarity TF-IDF
+        tag, skor, balasan = engine.predict(pesan)
 
-        # C. Jika Belum Dikenali -> Aktifkan Mekanisme Belajar Otomatis
+        # C. Jika Kemiripan di Bawah Batas Ambang -> Aktifkan Belajar Otomatis
         if tag == 'unknown':
-            tag, balasan = pelajari_kata_baru(pesan, dataset)
+            tag, balasan = pelajari_kata_baru(pesan, dataset, engine)
 
-        # D. Tampilkan Respon Chatbot
-        print(f"[Chatbot] ({tag}): {balasan}")
+        # D. Tampilkan Respon Chatbot beserta Confidence Score
+        confidence_info = f" (Akurasi: {skor:.1%})" if tag != 'unknown' and skor > 0 else ""
+        print(f"[Chatbot] ({tag}){confidence_info}: {balasan}")
         if entitas:
             print(f"  [Entitas Ditemukan]: {entitas}")
 
