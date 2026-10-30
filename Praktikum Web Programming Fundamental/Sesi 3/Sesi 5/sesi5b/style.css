@@ -1,0 +1,12 @@
+p{
+    background-color: green;
+
+}
+
+.absolute{
+    background-color: yellow;
+    position: absolute;
+    top: 100px;
+    left: 200px;
+    
+}

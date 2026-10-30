@@ -1,0 +1,10 @@
+p{
+    background-color: brown;
+}
+
+.fix{
+    background-color: purple;
+    position: fixed;
+    top: 100px;
+    left: 200px;
+}
