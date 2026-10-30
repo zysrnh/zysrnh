@@ -2,6 +2,23 @@ h2 {
     background-color: rgb(20, 5, 136);
 }
 
-.artikel1{
-    background-color: yellowgreen;
+.judul1, .artikel1 {
+    background-color: rgb(255, 94, 0);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.judul2, .artikel2 {
+    background-color: maroon;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.judul3, .artikel3 {
+    background-color: purple;
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
