@@ -355,9 +355,9 @@
             const cleanMessage = rawMessage.toLowerCase();
 
             // 1. EKSTRAKSI REGEX ENTITAS ANGKA: NOMOR NOTA / SERVIS (MODUL 5)
-            // Menangkap format: 'Nota: 12345', 'Nota 12345', 'Invoice: 889214', 'Nota: 12 34 56'
-            const matchNota = rawMessage.match(/(?:nota|invoice|inv|servis|service|lacak|tiket)\s*[:#]?\s*([a-zA-Z0-9\s]+)/i);
-            if (matchNota && /\d+/.test(matchNota[1])) {
+            // Menangkap format: 'Nota: 12345', 'Nota 12345', 'Invoice #889214', 'Nota: 12 34 56'
+            const matchNota = rawMessage.match(/(?:nota|invoice|inv|resi|servis|service|tiket)[^\d\n]*(\d+(?:[\s-]+\d+)*)/i);
+            if (matchNota) {
                 const noNotaBersih = matchNota[1].replace(/\D/g, '');
                 return `🔍 <strong>Pelacakan Ditemukan!</strong><br>Perangkat dengan Nomor Nota <span class="entity-highlight">#${noNotaBersih}</span> saat ini <strong>berstatus dalam proses perbaikan teknisi resmi</strong> di Service Center iTech.<br>Estimasi selesai: 1-2 hari kerja. Kami akan infokan via WA jika unit sudah siap diambil.`;
             }
