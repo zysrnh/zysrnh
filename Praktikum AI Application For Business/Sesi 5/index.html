@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iTech Gadget Store - Customer Service Virtual</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #e5e7eb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 16px;
+        }
+
+        .chat-app {
+            width: 100%;
+            max-width: 680px;
+            height: 90vh;
+            background-color: #ffffff;
+            border: 1px solid #d1d5db;
+            display: flex;
+            flex-direction: column;
+            border-radius: 0;
+        }
+
+        /* HEADER */
+        .chat-header {
+            background-color: #1e293b;
+            color: #ffffff;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #0f172a;
+        }
+
+        .header-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+            background-color: #2563eb;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0;
+        }
+
+        .header-text h1 {
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .header-text p {
+            font-size: 12px;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #22c55e;
+            display: inline-block;
+        }
+
+        .badge-session {
+            background-color: #334155;
+            color: #cbd5e1;
+            font-size: 11px;
+            padding: 4px 8px;
+            border: 1px solid #475569;
+            font-weight: 500;
+        }
+
+        /* QUICK MENU CHIPS */
+        .quick-actions {
+            background-color: #f1f5f9;
+            padding: 10px 16px;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            border-bottom: 1px solid #e2e8f0;
+            white-space: nowrap;
+        }
+
+        .quick-actions::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .quick-actions::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+        }
+
+        .chip-btn {
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
+            padding: 6px 12px;
+            font-size: 12px;
+            color: #1e293b;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .chip-btn:hover {
+            background-color: #2563eb;
+            color: #ffffff;
+            border-color: #1d4ed8;
+        }
+
+        /* CHAT WINDOW */
+        .chat-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .chat-body::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-body::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+        }
+
+        .msg-row {
+            display: flex;
+            flex-direction: column;
+            max-width: 82%;
+        }
+
+        .msg-row.bot {
+            align-self: flex-start;
+        }
+
+        .msg-row.user {
+            align-self: flex-end;
+        }
+
+        .sender-tag {
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #64748b;
+        }
+
+        .msg-row.user .sender-tag {
+            text-align: right;
+            color: #1d4ed8;
+        }
+
+        .msg-bubble {
+            padding: 12px 16px;
+            font-size: 14px;
+            line-height: 1.5;
+            position: relative;
+            border-radius: 0;
+            word-wrap: break-word;
+        }
+
+        .msg-row.bot .msg-bubble {
+            background-color: #ffffff;
+            color: #0f172a;
+            border: 1px solid #cbd5e1;
+            border-left: 4px solid #2563eb;
+        }
+
+        .msg-row.user .msg-bubble {
+            background-color: #2563eb;
+            color: #ffffff;
+            border: 1px solid #1d4ed8;
+        }
+
+        .msg-meta {
+            font-size: 10px;
+            margin-top: 6px;
+            display: flex;
+            justify-content: flex-end;
+            color: #94a3b8;
+        }
+
+        .msg-row.user .msg-meta {
+            color: #bfdbfe;
+        }
+
+        .entity-highlight {
+            background-color: #fef08a;
+            color: #854d0e;
+            padding: 1px 4px;
+            font-weight: 600;
+        }
+
+        /* INPUT AREA */
+        .chat-footer {
+            background-color: #ffffff;
+            padding: 14px 16px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 14px;
+            font-size: 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 0;
+            outline: none;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+
+        .chat-input:focus {
+            border-color: #2563eb;
+            background-color: #ffffff;
+        }
+
+        .btn-send {
+            background-color: #2563eb;
+            color: #ffffff;
+            border: none;
+            padding: 0 22px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-send:hover {
+            background-color: #1d4ed8;
+        }
+
+        .btn-send:active {
+            background-color: #1e40af;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="chat-app">
+        <!-- HEADER -->
+        <header class="chat-header">
+            <div class="header-info">
+                <div class="avatar">iT</div>
+                <div class="header-text">
+                    <h1>iTech Gadget Store</h1>
+                    <p><span class="status-dot"></span> CS Virtual Active (AI Rule-Based)</p>
+                </div>
+            </div>
+            <div class="badge-session">Praktikum Sesi 1 - 5</div>
+        </header>
+
+        <!-- QUICK MENU CHIPS -->
+        <div class="quick-actions">
+            <button class="chip-btn" onclick="sendQuickMessage('Katalog produk')">📱 Katalog Produk</button>
+            <button class="chip-btn" onclick="sendQuickMessage('Berapa harga iPhone 15 128 GB?')">💰 Cek Harga & Varian</button>
+            <button class="chip-btn" onclick="sendQuickMessage('Bisa cicilan apa saja?')">💳 Info Cicilan</button>
+            <button class="chip-btn" onclick="sendQuickMessage('Kebijakan garansi resmi')">🛡️ Garansi Resmi</button>
+            <button class="chip-btn" onclick="sendQuickMessage('Tolong cek status Nota: 889214')">🔍 Lacak Nota Servis</button>
+        </div>
+
+        <!-- CHAT BODY -->
+        <main class="chat-body" id="chatContainer">
+            <div class="msg-row bot">
+                <span class="sender-tag">CS VIRTUAL (iTech)</span>
+                <div class="msg-bubble">
+                    Halo Kak! Selamat datang di <strong>iTech Gadget Store</strong>.<br><br>
+                    Saya asisten virtual cerdas yang siap membantu Anda seputar informasi produk, harga resmi, simulasi cicilan, serta pelacakan nota servis klaim garansi.<br><br>
+                    Silakan ketik pertanyaan Anda atau gunakan tombol pintas di atas!
+                </div>
+                <div class="msg-meta" id="initTime">Baru saja</div>
+            </div>
+        </main>
+
+        <!-- INPUT FOOTER -->
+        <footer class="chat-footer">
+            <input type="text" id="userInput" class="chat-input" placeholder="Ketik pesan Anda di sini (Contoh: Lacak Nota: 12345)..." autocomplete="off" />
+            <button id="sendBtn" class="btn-send">Kirim</button>
+        </footer>
+    </div>
+
+    <script>
+        // Set waktu awal
+        document.getElementById("initTime").innerText = getFormattedTime();
+
+        // Elemen DOM
+        const chatContainer = document.getElementById("chatContainer");
+        const userInput = document.getElementById("userInput");
+        const sendBtn = document.getElementById("sendBtn");
+
+        // Format Waktu Jam:Menit
+        function getFormattedTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            return `${hours}:${minutes} WIB`;
+        }
+
+        // Fungsi Tambah Bubble Pesan
+        function appendMessage(sender, text, isBot = false) {
+            const row = document.createElement("div");
+            row.className = isBot ? "msg-row bot" : "msg-row user";
+
+            const tag = document.createElement("span");
+            tag.className = "sender-tag";
+            tag.innerText = isBot ? "CS VIRTUAL (iTech)" : "Anda";
+
+            const bubble = document.createElement("div");
+            bubble.className = "msg-bubble";
+            bubble.innerHTML = text;
+
+            const meta = document.createElement("div");
+            meta.className = "msg-meta";
+            meta.innerText = getFormattedTime();
+
+            row.appendChild(tag);
+            row.appendChild(bubble);
+            row.appendChild(meta);
+
+            chatContainer.appendChild(row);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // ======================================================================
+        // LOGIKA CHATBOT RULE-BASED REGEX & INTENT (INTEGRASI MATERI 1 - 5)
+        // ======================================================================
+        function processChatbotResponse(message) {
+            const rawMessage = message.trim();
+            const cleanMessage = rawMessage.toLowerCase();
+
+            // 1. EKSTRAKSI REGEX ENTITAS ANGKA: NOMOR NOTA / SERVIS (MODUL 5)
+            // Pola: menangkap angka yang terpisah spasi atau langsung rapat
+            const matchNota = rawMessage.match(/(?:nota|invoice|inv|servis|service)\s*:\s*(\d+(?:\s+\d+)*)/i);
+            if (matchNota) {
+                const noNotaBersih = matchNota[1].replace(/\s+/g, '');
+                return `Pelacakan Ditemukan! Perangkat dengan Nomor Nota <span class="entity-highlight">#${noNotaBersih}</span> saat ini <strong>berstatus dalam perbaikan oleh teknisi resmi</strong> di Service Center iTech. Estimasi selesai 1-2 hari kerja.`;
+            }
+
+            // 2. EKSTRAKSI REGEX ENTITAS ANGKA: VARIAN KAPASITAS / STORAGE (MODUL 5)
+            const matchStorage = rawMessage.match(/(\d+)\s*gb/i);
+            const kapasitasTerdeteksi = matchStorage ? matchStorage[1] + " GB" : null;
+
+            // 3. ATURAN REGEX: SAPAAN (MODUL 4 & 5)
+            if (/\b(halo|hai|hey|pagi|siang|sore|malam|assalamualaikum|permisi)\b/i.test(cleanMessage)) {
+                return "Halo Kak! Senang bisa melayani Anda di <strong>iTech Gadget Store</strong>. Ada yang bisa kami bantu mengenai produk smartphone, laptop, info cicilan, atau klaim nota servis?";
+            }
+
+            // 4. ATURAN REGEX: TANYA HARGA & VARIAN PRODUK (MODUL 4 & 5)
+            if (/\b(harga|pricelist|biaya|tarif|berapaan|berapa)\b/i.test(cleanMessage)) {
+                let infoVarian = kapasitasTerdeteksi ? ` untuk varian <span class="entity-highlight">${kapasitasTerdeteksi}</span>` : "";
+                return `Daftar harga produk gadget resmi kami${infoVarian}:<br>
+                • <strong>iPhone 15 Series</strong> : Mulai dari Rp 13.999.000<br>
+                • <strong>Samsung Galaxy S24</strong> : Mulai dari Rp 12.499.000<br>
+                • <strong>MacBook Air M2/M3</strong> : Mulai dari Rp 16.299.000<br>
+                • <strong>iPad Gen 10 / Air</strong> : Mulai dari Rp 6.899.000<br>
+                <em>(Tersedia diskon cashback hingga Rp 1.000.000 bulan ini!)</em>`;
+            }
+
+            // 5. ATURAN REGEX: KATALOG & REKOMENDASI PRODUK
+            if (/\b(katalog|produk|jual|stok|ready|iphone|samsung|macbook|ipad|laptop|hp)\b/i.test(cleanMessage)) {
+                return `Kami menyediakan berbagai perangkat gadget 100% Original bergaransi resmi:<br>
+                1. <strong>Smartphone</strong>: iPhone 15/14 series, Samsung Galaxy S24/Z Fold/Flip.<br>
+                2. <strong>Laptop & PC</strong>: Apple MacBook Air, MacBook Pro, Asus ROG.<br>
+                3. <strong>Tablet</strong>: iPad Pro, iPad Air, Samsung Galaxy Tab.<br>
+                4. <strong>Aksesoris</strong>: AirPods, Adaptor 20W Original, Spigen Case.<br>
+                Kakak sedang mencari tipe atau brand tertentu?`;
+            }
+
+            // 6. ATURAN REGEX: METODE PEMBAYARAN & CICILAN
+            if (/\b(cicilan|kredit|kredivo|spaylater|paylater|bca|mandiri|kartu kredit|qris|bayar)\b/i.test(cleanMessage)) {
+                return `Metode pembayaran di iTech Gadget Store sangat fleksibel:<br>
+                • <strong>Cicilan 0%</strong>: Kartu Kredit BCA, Mandiri, BNI, CIMB Niaga (hingga 24 bulan).<br>
+                • <strong>Paylater Tanpa Kartu Kredit</strong>: Kredivo, Shopee PayLater, Indodana, Akulaku.<br>
+                • <strong>Cash & Instant</strong>: Transfer Bank, QRIS, dan Debit instan.`;
+            }
+
+            // 7. ATURAN REGEX: KEBIJAKAN GARANSI & RETUR
+            if (/\b(garansi|retur|rusak|klaim|servis|service|ibox|sein)\b/i.test(cleanMessage)) {
+                return `Semua produk di iTech Gadget Store bergaransi resmi:<br>
+                • <strong>Apple</strong>: Garansi Resmi iBox / Digimap 1 Tahun.<br>
+                • <strong>Samsung</strong>: Garansi Resmi SEIN Indonesia 1 Tahun.<br>
+                • <strong>Garansi Toko</strong>: Ganti unit baru 7 hari jika ditemukan cacat pabrik saat unboxing.<br>
+                Untuk pelacakan servis perangkat Anda, silakan ketik format: <code>Nota: [NomorNota]</code>.`;
+            }
+
+            // 8. ATURAN REGEX: ALAMAT & JAM OPERASIONAL
+            if (/\b(alamat|lokasi|toko|cabang|buka|jam|offline|posisi)\b/i.test(cleanMessage)) {
+                return `Outlet resmi iTech Gadget Store beralamat di:<br>
+                📍 <strong>Jl. Soekarno-Hatta No. 456, Bandung</strong><br>
+                ⏰ Buka setiap hari: Pukul 09.00 - 21.00 WIB. Silakan berkunjung untuk mencoba unit demo langsung!`;
+            }
+
+            // 9. ATURAN PETUNJUK RESI / NOTA TANPA TITIK DUA
+            if (/\b(nota|lacak|resi|posisi paket|status barang)\b/i.test(cleanMessage)) {
+                return "Untuk melacak status klaim garansi servis atau pesanan, silakan gunakan format: <code>Nota: [NomorNota]</code> (Contoh: <strong>Nota: 889214</strong>).";
+            }
+
+            // 10. ATURAN DEFAULT (FALLBACK - MODUL 5)
+            return "Maaf Kak, pesan Anda belum cocok dengan kata kunci sistem kami.<br>Silakan ketik kata kunci seperti: <strong>'katalog'</strong>, <strong>'harga'</strong>, <strong>'cicilan'</strong>, <strong>'garansi'</strong>, atau format <strong>'Nota: 12345'</strong> untuk pelacakan servis.";
+        }
+
+        // Handler Kirim Pesan
+        function handleSendMessage() {
+            const text = userInput.value.trim();
+            if (!text) return;
+
+            // 1. Tampilkan pesan user
+            appendMessage("user", text, false);
+            userInput.value = "";
+            userInput.focus();
+
+            // 2. Beri jeda realistis respon bot (300ms)
+            setTimeout(() => {
+                const botReply = processChatbotResponse(text);
+                appendMessage("bot", botReply, true);
+            }, 300);
+        }
+
+        // Quick Message Trigger
+        function sendQuickMessage(text) {
+            userInput.value = text;
+            handleSendMessage();
+        }
+
+        // Event Listener Tombol & Enter
+        sendBtn.addEventListener("click", handleSendMessage);
+        userInput.addEventListener("keydown", function(e) {
+            if (e.key === "Enter") {
+                handleSendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
