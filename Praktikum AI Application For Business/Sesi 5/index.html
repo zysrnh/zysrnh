@@ -355,53 +355,58 @@
             const cleanMessage = rawMessage.toLowerCase();
 
             // 1. EKSTRAKSI REGEX ENTITAS ANGKA: NOMOR NOTA / SERVIS (MODUL 5)
-            // Pola: menangkap angka yang terpisah spasi atau langsung rapat
-            const matchNota = rawMessage.match(/(?:nota|invoice|inv|servis|service)\s*:\s*(\d+(?:\s+\d+)*)/i);
+            // Mendukung variasi 'Nota: 12345', 'Nota 12345', 'Invoice: 12345', 'Nota: 12 34 56'
+            const matchNota = rawMessage.match(/(?:nota|invoice|inv|servis|service|lacak)\s*[:#]?\s*(\d+(?:\s+\d+)*)/i);
             if (matchNota) {
                 const noNotaBersih = matchNota[1].replace(/\s+/g, '');
-                return `Pelacakan Ditemukan! Perangkat dengan Nomor Nota <span class="entity-highlight">#${noNotaBersih}</span> saat ini <strong>berstatus dalam perbaikan oleh teknisi resmi</strong> di Service Center iTech. Estimasi selesai 1-2 hari kerja.`;
+                return `Pelacakan Ditemukan! Perangkat dengan Nomor Nota <span class="entity-highlight">#${noNotaBersih}</span> saat ini <strong>berstatus dalam proses perbaikan teknisi resmi</strong> di Service Center iTech. Estimasi selesai 1-2 hari kerja.`;
             }
 
             // 2. EKSTRAKSI REGEX ENTITAS ANGKA: VARIAN KAPASITAS / STORAGE (MODUL 5)
             const matchStorage = rawMessage.match(/(\d+)\s*gb/i);
             const kapasitasTerdeteksi = matchStorage ? matchStorage[1] + " GB" : null;
 
-            // 3. ATURAN REGEX: SAPAAN (MODUL 4 & 5)
-            if (/\b(halo|hai|hey|pagi|siang|sore|malam|assalamualaikum|permisi)\b/i.test(cleanMessage)) {
-                return "Halo Kak! Senang bisa melayani Anda di <strong>iTech Gadget Store</strong>. Ada yang bisa kami bantu mengenai produk smartphone, laptop, info cicilan, atau klaim nota servis?";
+            // 3. ATURAN REGEX: REAKSI FRUSTRASI / BINGUNG / KELUHAN
+            if (/\b(aneh|bingung|ga nyambung|gak nyambung|gajelas|rusak|kontol|anjing|bangsat|tai|bego|goblok)\b/i.test(cleanMessage)) {
+                return "Mohon maaf atas ketidaknyamanannya Kak! 🙏 Kami ingin membantu dengan baik. Apakah Kakak mau cek <strong>Katalog HP</strong>, tanya <strong>Harga & Promo</strong>, info <strong>Cicilan 0%</strong>, atau <strong>Lacak Nota Servis</strong>?";
             }
 
-            // 4. ATURAN REGEX: TANYA HARGA & VARIAN PRODUK (MODUL 4 & 5)
-            if (/\b(harga|pricelist|biaya|tarif|berapaan|berapa)\b/i.test(cleanMessage)) {
+            // 4. ATURAN REGEX: SAPAAN
+            if (/\b(halo|hai|hey|pagi|siang|sore|malam|assalamualaikum|permisi|tes|test)\b/i.test(cleanMessage)) {
+                return "Halo Kak! Senang bisa melayani Anda di <strong>iTech Gadget Store</strong>. Ada yang bisa kami bantu seputar produk smartphone, laptop, info cicilan, atau klaim nota servis?";
+            }
+
+            // 5. ATURAN REGEX: TANYA HARGA & PROMO
+            if (/\b(harga|pricelist|biaya|tarif|berapaan|berapa|diskon|promo|cashback|murah|potongan)\b/i.test(cleanMessage)) {
                 let infoVarian = kapasitasTerdeteksi ? ` untuk varian <span class="entity-highlight">${kapasitasTerdeteksi}</span>` : "";
                 return `Daftar harga produk gadget resmi kami${infoVarian}:<br>
                 • <strong>iPhone 15 Series</strong> : Mulai dari Rp 13.999.000<br>
                 • <strong>Samsung Galaxy S24</strong> : Mulai dari Rp 12.499.000<br>
                 • <strong>MacBook Air M2/M3</strong> : Mulai dari Rp 16.299.000<br>
                 • <strong>iPad Gen 10 / Air</strong> : Mulai dari Rp 6.899.000<br>
-                <em>(Tersedia diskon cashback hingga Rp 1.000.000 bulan ini!)</em>`;
+                <em>(Tersedia diskon cashback hingga Rp 1.000.000 dan garansi resmi!)</em>`;
             }
 
-            // 5. ATURAN REGEX: KATALOG & REKOMENDASI PRODUK
-            if (/\b(katalog|produk|jual|stok|ready|iphone|samsung|macbook|ipad|laptop|hp)\b/i.test(cleanMessage)) {
-                return `Kami menyediakan berbagai perangkat gadget 100% Original bergaransi resmi:<br>
-                1. <strong>Smartphone</strong>: iPhone 15/14 series, Samsung Galaxy S24/Z Fold/Flip.<br>
-                2. <strong>Laptop & PC</strong>: Apple MacBook Air, MacBook Pro, Asus ROG.<br>
-                3. <strong>Tablet</strong>: iPad Pro, iPad Air, Samsung Galaxy Tab.<br>
-                4. <strong>Aksesoris</strong>: AirPods, Adaptor 20W Original, Spigen Case.<br>
-                Kakak sedang mencari tipe atau brand tertentu?`;
+            // 6. ATURAN REGEX: KATALOG, BELI, CARI HP, PRODUK
+            if (/\b(beli|order|pesan|cari|rekomendasi|katalog|produk|jual|stok|ready|hp|handphone|smartphone|gadget|android|ios|iphone|samsung|macbook|ipad|laptop)\b/i.test(cleanMessage)) {
+                return `Pilihan gadget best seller di iTech Gadget Store:<br>
+                1. <strong>Smartphone Flagship</strong>: iPhone 15 & 15 Pro, Samsung Galaxy S24 Ultra, Z Flip/Fold 6.<br>
+                2. <strong>Smartphone Mid-Range</strong>: Samsung Galaxy A55 5G, iPhone 13 (Best Value).<br>
+                3. <strong>Laptop & Tablet</strong>: MacBook Air M3, iPad Gen 10 / Air M2.<br>
+                4. <strong>Aksesoris</strong>: AirPods Pro 2, Adaptor 20W Original, Spigen Case.<br><br>
+                Semua unit 100% Original dan bergaransi resmi. Kakak tertarik dengan model yang mana?`;
             }
 
-            // 6. ATURAN REGEX: METODE PEMBAYARAN & CICILAN
-            if (/\b(cicilan|kredit|kredivo|spaylater|paylater|bca|mandiri|kartu kredit|qris|bayar)\b/i.test(cleanMessage)) {
+            // 7. ATURAN REGEX: METODE PEMBAYARAN & CICILAN
+            if (/\b(cicil|cicilan|kredit|kredivo|spaylater|paylater|akulaku|indodana|angsuran|kartu kredit|qris|transfer|bca|mandiri|bayar)\b/i.test(cleanMessage)) {
                 return `Metode pembayaran di iTech Gadget Store sangat fleksibel:<br>
-                • <strong>Cicilan 0%</strong>: Kartu Kredit BCA, Mandiri, BNI, CIMB Niaga (hingga 24 bulan).<br>
+                • <strong>Cicilan 0%</strong>: Kartu Kredit BCA, Mandiri, BNI, CIMB Niaga (tenor hingga 24 bulan).<br>
                 • <strong>Paylater Tanpa Kartu Kredit</strong>: Kredivo, Shopee PayLater, Indodana, Akulaku.<br>
                 • <strong>Cash & Instant</strong>: Transfer Bank, QRIS, dan Debit instan.`;
             }
 
-            // 7. ATURAN REGEX: KEBIJAKAN GARANSI & RETUR
-            if (/\b(garansi|retur|rusak|klaim|servis|service|ibox|sein)\b/i.test(cleanMessage)) {
+            // 8. ATURAN REGEX: KEBIJAKAN GARANSI & RETUR
+            if (/\b(garansi|retur|rusak|klaim|servis|service|benerin|mati|ibox|sein)\b/i.test(cleanMessage)) {
                 return `Semua produk di iTech Gadget Store bergaransi resmi:<br>
                 • <strong>Apple</strong>: Garansi Resmi iBox / Digimap 1 Tahun.<br>
                 • <strong>Samsung</strong>: Garansi Resmi SEIN Indonesia 1 Tahun.<br>
@@ -409,20 +414,20 @@
                 Untuk pelacakan servis perangkat Anda, silakan ketik format: <code>Nota: [NomorNota]</code>.`;
             }
 
-            // 8. ATURAN REGEX: ALAMAT & JAM OPERASIONAL
-            if (/\b(alamat|lokasi|toko|cabang|buka|jam|offline|posisi)\b/i.test(cleanMessage)) {
+            // 9. ATURAN REGEX: ALAMAT & JAM OPERASIONAL
+            if (/\b(alamat|lokasi|toko|cabang|buka|tutup|jam|offline|posisi|dimana)\b/i.test(cleanMessage)) {
                 return `Outlet resmi iTech Gadget Store beralamat di:<br>
                 📍 <strong>Jl. Soekarno-Hatta No. 456, Bandung</strong><br>
                 ⏰ Buka setiap hari: Pukul 09.00 - 21.00 WIB. Silakan berkunjung untuk mencoba unit demo langsung!`;
             }
 
-            // 9. ATURAN PETUNJUK RESI / NOTA TANPA TITIK DUA
+            // 10. ATURAN PETUNJUK RESI / NOTA TANPA NOMOR
             if (/\b(nota|lacak|resi|posisi paket|status barang)\b/i.test(cleanMessage)) {
                 return "Untuk melacak status klaim garansi servis atau pesanan, silakan gunakan format: <code>Nota: [NomorNota]</code> (Contoh: <strong>Nota: 889214</strong>).";
             }
 
-            // 10. ATURAN DEFAULT (FALLBACK - MODUL 5)
-            return "Maaf Kak, pesan Anda belum cocok dengan kata kunci sistem kami.<br>Silakan ketik kata kunci seperti: <strong>'katalog'</strong>, <strong>'harga'</strong>, <strong>'cicilan'</strong>, <strong>'garansi'</strong>, atau format <strong>'Nota: 12345'</strong> untuk pelacakan servis.";
+            // 11. ATURAN DEFAULT (FALLBACK)
+            return "Maaf Kak, pesan Anda belum cocok dengan kata kunci sistem kami.<br>Silakan coba ketik: <strong>'mau beli hp'</strong>, <strong>'harga iphone'</strong>, <strong>'cicilan'</strong>, <strong>'garansi'</strong>, atau <strong>'Nota: 12345'</strong>.";
         }
 
         // Handler Kirim Pesan
