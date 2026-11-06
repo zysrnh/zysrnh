@@ -1,6 +1,7 @@
 # ==============================================================================
-# PRAKTIKUM AI APPLICATION FOR BUSINESS - PERTEMUAN 5 (LATIHAN MANDIRI / 5C)
-# TOPIK  : PENGEMBANGAN RULE-BASED CHATBOT BISNIS MENGGUNAKAN REGEX & IF-ELIF-ELSE
+# PRAKTIKUM AI APPLICATION FOR BUSINESS - PERTEMUAN 5 (GABUNGAN LENGKAP + INPUT)
+# TOPIK  : RULE-BASED CHATBOT BISNIS (INTEGRASI SESI 1-5: PREPROCESSING,
+#          ENTITAS, IF-ELIF-ELSE, REGEX re.IGNORECASE, EKSTRAKSI ANGKA \d+)
 # USAHA  : Toko Sepatu Official (Sneaker, Running Shoes, & Aksesoris Original)
 # FILE   : PraktikumS5C.py (Siap Dijalankan Langsung di Google Colab)
 # ==============================================================================
@@ -17,23 +18,81 @@ if hasattr(sys.stdout, "reconfigure"):
 
 
 # ==============================================================================
-# FUNGSI UTAMA RULE-BASED CHATBOT BISNIS (INSTRUKSI 2, 3, 4, & 5)
-# Disusun dari aturan paling spesifik (ekstraksi angka) ke aturan umum
+# 1. MODUL PREPROCESSING & NORMALISASI SLANG/TYPO (MATERI SESI 3)
+# ==============================================================================
+KAMUS_SLANG = {
+    "brp": "berapa",
+    "hrg": "harga",
+    "pricelistnya": "pricelist",
+    "bgt": "banget",
+    "cepet": "cepat",
+    "ga": "tidak",
+    "gak": "tidak",
+    "yg": "yang",
+    "dmn": "dimana",
+    "almt": "alamat",
+    "psn": "pesan",
+    "uk": "ukuran",
+    "sz": "size",
+    "garansinya": "garansi",
+    "ori": "original",
+    "byr": "bayar"
+}
+
+
+def normalisasi_teks(teks):
+    """Menyederhanakan huruf berulang (misal: 'halooo' -> 'halo') & menormalkan slang."""
+    teks_norm = re.sub(r"([a-zA-Z])\1{2,}", r"\1", teks.strip())
+    kata_list = teks_norm.split()
+    hasil_kata = [KAMUS_SLANG.get(k.lower(), k) for k in kata_list]
+    return " ".join(hasil_kata)
+
+
+# ==============================================================================
+# 2. MODUL EKSTRAKSI ENTITAS BISNIS (MATERI SESI 4)
+# ==============================================================================
+ENTITAS_BISNIS = {
+    "PRODUK": ["sneaker", "running", "casual", "basket", "kaos kaki", "sandal"],
+    "METODE_BAYAR": ["bca", "mandiri", "bni", "qris", "cod", "paylater", "gopay", "kredivo"]
+}
+
+
+def ekstrak_entitas(pesan):
+    """Mendeteksi entitas produk dan metode pembayaran di dalam kalimat pelanggan."""
+    ditemukan = {}
+    pesan_lower = pesan.lower()
+    for kategori, daftar_item in ENTITAS_BISNIS.items():
+        for item in daftar_item:
+            if item in pesan_lower:
+                ditemukan[kategori] = item.upper()
+                break
+    return ditemukan
+
+
+# ==============================================================================
+# 3. FUNGSI UTAMA RULE-BASED CHATBOT REGEX & IF-ELIF-ELSE (MATERI SESI 5)
 # ==============================================================================
 def chatbot_bisnis_sepatu(pesan_pelanggan):
     """
-    Rule-Based Chatbot Toko Sepatu Official yang mengombinasikan struktur
-    percabangan (if-elif-else) dan Regular Expressions (re.search) dengan
-    flag re.IGNORECASE serta ekstraksi entitas angka (\\d+).
+    Rule-Based Chatbot Toko Sepatu Official yang menyatukan:
+    - Normalisasi Slang (Sesi 3)
+    - Deteksi Entitas Produk & Pembayaran (Sesi 4)
+    - Logika If-Elif-Else + Regex re.search(re.IGNORECASE) + Ekstraksi Angka \\d+ (Sesi 5)
     """
-    pesan = pesan_pelanggan.strip()
+    # Tahap A: Normalisasi teks masukan pelanggan
+    pesan = normalisasi_teks(pesan_pelanggan)
 
-    # Deteksi opsional entitas angka ukuran sepatu (\d+)
+    # Tahap B: Ekstraksi entitas produk & metode pembayaran
+    entitas = ekstrak_entitas(pesan)
+    info_produk = f" kategori {entitas['PRODUK']}" if "PRODUK" in entitas else ""
+    info_bayar = f" via {entitas['METODE_BAYAR']}" if "METODE_BAYAR" in entitas else ""
+
+    # Tahap C: Deteksi opsional entitas angka ukuran sepatu (\d+)
     match_ukuran = re.search(r"\b(?:ukuran|size|nomor)\s*(\d+)\b", pesan, re.IGNORECASE)
 
     # --------------------------------------------------------------------------
     # ATURAN 1 (INSTRUKSI 4): Ekstraksi Entitas Angka Nomor Pesanan / Resi (\d+)
-    # Menangkap pola seperti: "Pesanan: 889214", "Order #12045", "Resi 998123"
+    # Contoh: "Pesanan: 889214", "Resi: 987654321", "Order #12045"
     # --------------------------------------------------------------------------
     match_pesanan = re.search(
         r"\b(?:pesanan|order|resi|invoice|nota)\s*[:#-]?\s*(\d+)",
@@ -43,14 +102,14 @@ def chatbot_bisnis_sepatu(pesan_pelanggan):
     if match_pesanan:
         nomor_pesanan = match_pesanan.group(1)
         return (
-            f"Chatbot: [LACAK PESANAN] Pesanan Anda dengan Nomor #{nomor_pesanan} "
+            f"Chatbot: [LACAK PESANAN] Pesanan Anda dengan Nomor #{nomor_pesanan}{info_produk} "
             f"saat ini berstatus 'Sedang Dikemas & Siap Dikirim oleh Kurir Ekspedisi'. "
             f"Estimasi tiba 1-2 hari kerja."
         )
 
     # --------------------------------------------------------------------------
     # ATURAN 2 (INSTRUKSI 4): Ekstraksi Entitas Angka Jumlah Unit Pembelian (\d+)
-    # Menangkap pola seperti: "pesan 3 pasang", "beli 2 unit"
+    # Contoh: "pesan 3 pasang", "beli 2 unit"
     # --------------------------------------------------------------------------
     match_jumlah = re.search(
         r"\b(?:beli|pesan|order|ambil)\s+(\d+)\s*(?:pasang|unit|pcs|box|buah)?\b",
@@ -67,12 +126,12 @@ def chatbot_bisnis_sepatu(pesan_pelanggan):
         )
         return (
             f"Chatbot: [ORDER UNIT] Siap Kak! Permintaan pembelian sebanyak {jumlah_unit} pasang sepatu"
-            f"{info_size} telah kami catat. {promo_grosir}"
+            f"{info_produk}{info_size}{info_bayar} telah kami catat. {promo_grosir}"
         )
 
     # --------------------------------------------------------------------------
     # ATURAN 3 (INSTRUKSI 4): Ekstraksi Entitas Angka Nomor ID Member (\d+)
-    # Menangkap pola seperti: "ID Member: 55012", "ID Anggota 10294"
+    # Contoh: "ID Member: 55012", "Member 10294"
     # --------------------------------------------------------------------------
     match_member = re.search(
         r"\b(?:id\s*member|id\s*anggota|member|anggota)\s*[:#-]?\s*(\d+)",
@@ -95,9 +154,9 @@ def chatbot_bisnis_sepatu(pesan_pelanggan):
         re.IGNORECASE
     ):
         return (
-            "Chatbot: [GARANSI & RETUR] Seluruh produk kami bergaransi 100% Original. "
-            "Kami menyediakan garansi retur 7 hari ganti baru jika cacat pabrik atau tukar ukuran (free exchange) "
-            "jika ukuran sepatu kekecilan/kebesaran."
+            f"Chatbot: [GARANSI & RETUR] Seluruh produk{info_produk} kami bergaransi 100% Original. "
+            f"Kami menyediakan garansi retur 7 hari ganti baru jika cacat pabrik atau tukar ukuran (free exchange) "
+            f"jika ukuran sepatu kekecilan/kebesaran."
         )
 
     # --------------------------------------------------------------------------
@@ -117,45 +176,54 @@ def chatbot_bisnis_sepatu(pesan_pelanggan):
     # ATURAN 6 (FAQ 3): Informasi Harga, Biaya, Pricelist, & Diskon Promo
     # --------------------------------------------------------------------------
     elif re.search(
-        r"\b(harga|biaya|tarif|pricelist|berapa\s*harga|berapaan|diskon|promo|cashback|murah)\b",
+        r"\b(harga|biaya|tarif|pricelist|berapa|berapaan|diskon|promo|cashback|murah)\b",
         pesan,
         re.IGNORECASE
     ):
         return (
-            "Chatbot: [DAFTAR HARGA] Harga koleksi sepatu kami mulai dari Rp 250.000 hingga Rp 750.000: "
-            "• Sneaker Casual: Rp 275.000 | • Sepatu Running Pro: Rp 450.000 | • Limited Series: Rp 750.000. "
-            "Sedang ada promo diskon 10% minggu ini!"
+            f"Chatbot: [DAFTAR HARGA] Harga koleksi sepatu{info_produk} kami mulai dari Rp 250.000 hingga Rp 750.000: "
+            f"• Sneaker Casual: Rp 275.000 | • Sepatu Running Pro: Rp 450.000 | • Limited Series: Rp 750.000. "
+            f"Sedang ada promo diskon 10% minggu ini!"
         )
 
     # --------------------------------------------------------------------------
     # ATURAN 7 (FAQ 4): Metode Pembayaran, Transfer, QRIS, & COD
     # --------------------------------------------------------------------------
     elif re.search(
-        r"\b(bayar|pembayaran|transfer|qris|cod|cicilan|paylater|bca|mandiri|gopay)\b",
+        r"\b(bayar|pembayaran|transfer|qris|cod|cicilan|paylater|bca|mandiri|bni|gopay|kredivo)\b",
         pesan,
         re.IGNORECASE
     ):
         return (
-            "Chatbot: [METODE PEMBAYARAN] Kami melayani pembayaran via Transfer Bank (BCA/Mandiri/BNI), "
-            "QRIS, E-Wallet, PayLater, serta COD (Bayar di Tempat)."
+            f"Chatbot: [METODE PEMBAYARAN] Kami melayani pembayaran{info_bayar} via Transfer Bank (BCA/Mandiri/BNI), "
+            f"QRIS, E-Wallet, PayLater, serta COD (Bayar di Tempat)."
         )
 
     # --------------------------------------------------------------------------
     # ATURAN 8 (FAQ 5): Informasi Katalog Produk & Ketersediaan Stok
     # --------------------------------------------------------------------------
     elif re.search(
-        r"\b(produk|katalog|jual|ready|stok|sepatu|sneaker|running|casual|olahraga|model)\b",
+        r"\b(produk|katalog|jual|ready|stok|sepatu|sneaker|running|casual|basket|olahraga|model)\b",
         pesan,
         re.IGNORECASE
     ):
         info_size = f" untuk ukuran {match_ukuran.group(1)}" if match_ukuran else " (tersedia ukuran 38 s/d 45)"
         return (
             f"Chatbot: [KATALOG PRODUK] Kami menyediakan koleksi Sepatu Running, Sneaker Casual, "
-            f"Sepatu Basket, dan Kaos Kaki Olahraga Original{info_size}. Seluruh stok ready!"
+            f"Sepatu Basket, dan Kaos Kaki Olahraga Original{info_produk}{info_size}. Seluruh stok ready!"
         )
 
     # --------------------------------------------------------------------------
-    # ATURAN 9 (FAQ 6): Sapaan Pelanggan & Pembuka Percakapan
+    # ATURAN 9 (FAQ 6): Panduan Lacak Resi / Pesanan Tanpa Angka
+    # --------------------------------------------------------------------------
+    elif re.search(r"\b(resi|lacak|posisi paket|kiriman|status)\b", pesan, re.IGNORECASE):
+        return (
+            "Chatbot: Untuk melacak paket atau pesanan, silakan ketik dengan angka seperti: "
+            "'Pesanan: 889214' atau 'Resi: 987654321'."
+        )
+
+    # --------------------------------------------------------------------------
+    # ATURAN 10 (FAQ 7): Sapaan Pelanggan & Ucapan Terima Kasih
     # --------------------------------------------------------------------------
     elif re.search(
         r"\b(halo|hai|hey|selamat\s*(pagi|siang|sore|malam)|permisi|assalamualaikum|min|admin)\b",
@@ -167,8 +235,11 @@ def chatbot_bisnis_sepatu(pesan_pelanggan):
             "Ada yang bisa kami bantu seputar katalog produk, harga, lokasi toko, garansi, atau cek pesanan?"
         )
 
+    elif re.search(r"\b(makasih|terima\s*kasih|thanks|thx|oke|ok|sip|siap)\b", pesan, re.IGNORECASE):
+        return "Chatbot: Sama-sama Kak! Senang bisa membantu Anda di Toko Sepatu Official."
+
     # --------------------------------------------------------------------------
-    # ATURAN 10 (INSTRUKSI 5): Penanganan Pesan Fallback (else)
+    # ATURAN 11 (INSTRUKSI 5): Penanganan Pesan Fallback (else)
     # --------------------------------------------------------------------------
     else:
         return (
@@ -184,31 +255,50 @@ def chatbot_bisnis_sepatu(pesan_pelanggan):
 
 
 # ==============================================================================
-# SIMULASI PENGUJIAN CHATBOT (INSTRUKSI 6: MINIMAL 5 KALIMAT BERBEDA)
+# 4. EKSEKUSI UJI OTOMATIS (INSTRUKSI 6) + LIVE CHAT INTERAKTIF DENGAN input()
 # ==============================================================================
-if __name__ == "__main__":
+def jalankan_program():
     print("=" * 85)
-    print("   TUGAS PRAKTIKUM PERTEMUAN 5: RULE-BASED CHATBOT BISNIS (REGEX & IF-ELIF-ELSE)   ")
-    print("   Bidang Usaha : Toko Sepatu Official                                             ")
+    print("   BAGIAN A: SIMULASI UJI OTOMATIS 6 KALIMAT PELANGGAN (SYARAT INSTRUKSI 6)   ")
     print("=" * 85)
 
     daftar_pertanyaan_uji = [
         "Selamat pagi admin, mau tanya-tanya dong!",
         "Apakah stok sepatu running ukuran 42 masih ready?",
         "Berapa pricelist harga sepatu dan apakah ada diskon?",
-        "Saya mau pesan 3 pasang ukuran 42 untuk tim olahraga",
+        "Saya mau pesan 3 pasang sneaker ukuran 42 bayar pake qris",
         "Tolong cek status pengiriman saya dengan Pesanan: 889214",
-        "Cek benefit untuk ID Member: 55012 dong min",
-        "Kalau sepatu yang dikirim kekecilan apakah ada garansi retur?",
-        "Toko offline di Bandung buka jam berapa dan dimana alamatnya?",
-        "Apakah besok di Bandung bakal turun hujan deras?"  # Pengujian Fallback (else)
+        "Apakah besok di Bandung bakal turun hujan deras?"  # Uji Fallback (else)
     ]
 
     for nomor, kalimat_uji in enumerate(daftar_pertanyaan_uji, start=1):
         print(f"\n[Uji #{nomor:02d}] Pelanggan : \"{kalimat_uji}\"")
-        respon = chatbot_bisnis_sepatu(kalimat_uji)
-        print(f"          {respon}")
+        print(f"          {chatbot_bisnis_sepatu(kalimat_uji)}")
 
     print("\n" + "=" * 85)
-    print(">> Pengujian selesai: Seluruh FAQ, Ekstraksi Angka Regex (\\d+), dan Fallback berjalan sukses!")
+    print("   BAGIAN B: MODE LIVE CHAT INTERAKTIF PELANGGAN (MENGGUNAKAN input())   ")
+    print("   Contoh ketik: 'harga sepatu running', 'Pesanan: 889214', 'beli 2 pasang'   ")
+    print("   (Ketik 'exit' atau 'keluar' untuk mengakhiri percakapan)   ")
     print("=" * 85)
+
+    while True:
+        try:
+            pesan_user = input("\nAnda    : ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print("\nChatbot : Sesi chat diakhiri. Terima kasih telah mengunjungi Toko Sepatu Official!")
+            break
+
+        if not pesan_user:
+            continue
+
+        if pesan_user.lower() in ["exit", "keluar", "quit", "selesai", "stop", "bye"]:
+            print("Chatbot : Terima kasih telah menghubungi Toko Sepatu Official. Sampai jumpa Kak!")
+            print("=" * 85)
+            break
+
+        balasan = chatbot_bisnis_sepatu(pesan_user)
+        print(balasan)
+
+
+if __name__ == "__main__":
+    jalankan_program()
