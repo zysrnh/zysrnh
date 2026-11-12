@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistem Pakar Beasiswa IDE LPKIA</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #f1f5f9;
+      color: #000000;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .app-container {
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+      width: 100%;
+      max-width: 980px;
+      background: #ffffff;
+      border: 4px solid #000000;
+      border-radius: 6px;
+      padding: 20px;
+      box-shadow: 6px 6px 0px #000000;
+    }
+
+    .left-panel {
+      flex: 1.05;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .right-panel {
+      flex: 0.95;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      border-left: 3px solid #000000;
+      padding-left: 20px;
+    }
+
+    .header {
+      border-bottom: 3px solid #000000;
+      padding-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .title {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: -0.4px;
+      text-transform: uppercase;
+    }
+
+    .status-pill {
+      font-size: 12px;
+      font-weight: 900;
+      padding: 6px 12px;
+      border: 3px solid #000000;
+      box-shadow: 2px 2px 0px #000000;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .pill-approved {
+      background: #22c55e;
+      color: #000000;
+    }
+
+    .pill-rejected {
+      background: #ef4444;
+      color: #ffffff;
+    }
+
+    .segmented-control {
+      display: flex;
+      background: #ffffff;
+      border: 3px solid #000000;
+      box-shadow: 3px 3px 0px #000000;
+    }
+
+    .segment-btn {
+      flex: 1;
+      background: #ffffff;
+      color: #000000;
+      border: none;
+      border-right: 3px solid #000000;
+      padding: 8px 6px;
+      font-size: 11px;
+      font-weight: 900;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: background 0.1s ease;
+    }
+
+    .segment-btn:last-child {
+      border-right: none;
+    }
+
+    .segment-btn:hover:not(.active) {
+      background: #e2e8f0;
+    }
+
+    .segment-btn.active {
+      background: #fde047;
+      color: #000000;
+    }
+
+    .segment-btn.active-mode {
+      background: #38bdf8;
+      color: #000000;
+    }
+
+    .inputs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .input-card {
+      background: #f8fafc;
+      border: 3px solid #000000;
+      padding: 10px;
+      box-shadow: 3px 3px 0px #000000;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .fact-badge {
+      font-size: 10px;
+      font-weight: 900;
+      padding: 2px 6px;
+      border: 2px solid #000000;
+    }
+
+    .badge-true {
+      background: #22c55e;
+      color: #000000;
+    }
+
+    .badge-false {
+      background: #e2e8f0;
+      color: #475569;
+    }
+
+    .num-input {
+      width: 100%;
+      padding: 6px 8px;
+      font-size: 14px;
+      font-weight: 900;
+      border: 2px solid #000000;
+      background: #ffffff;
+      color: #000000;
+      outline: none;
+    }
+
+    .toggle-row {
+      display: flex;
+      border: 2px solid #000000;
+    }
+
+    .toggle-btn {
+      flex: 1;
+      padding: 5px 0;
+      font-size: 11px;
+      font-weight: 900;
+      border: none;
+      border-right: 2px solid #000000;
+      background: #ffffff;
+      cursor: pointer;
+    }
+
+    .toggle-btn:last-child {
+      border-right: none;
+    }
+
+    .toggle-btn.on {
+      background: #22c55e;
+      color: #000000;
+    }
+
+    .toggle-btn.off {
+      background: #000000;
+      color: #ffffff;
+    }
+
+    .rules-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .rule-card {
+      border: 3px solid #000000;
+      padding: 10px 12px;
+      background: #f8fafc;
+      box-shadow: 3px 3px 0px #000000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .rule-card.fired {
+      background: #fde047;
+    }
+
+    .rule-code {
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1.35;
+    }
+
+    .rule-tag {
+      font-size: 10px;
+      font-weight: 900;
+      padding: 4px 8px;
+      border: 2px solid #000000;
+      background: #ffffff;
+      white-space: nowrap;
+      text-transform: uppercase;
+    }
+
+    .rule-card.fired .rule-tag {
+      background: #000000;
+      color: #fde047;
+    }
+
+    .box-panel {
+      background: #f8fafc;
+      border: 3px solid #000000;
+      padding: 12px;
+      box-shadow: 3px 3px 0px #000000;
+    }
+
+    .panel-head {
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+      border-bottom: 2px solid #000000;
+      padding-bottom: 6px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .facts-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .fact-chip {
+      font-size: 11px;
+      font-weight: 900;
+      padding: 4px 8px;
+      border: 2px solid #000000;
+      background: #38bdf8;
+      color: #000000;
+    }
+
+    .fact-chip.goal {
+      background: #22c55e;
+    }
+
+    .trace-box {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 11.5px;
+      font-weight: 700;
+      line-height: 1.5;
+      background: #ffffff;
+      border: 2px solid #000000;
+      padding: 10px;
+      max-height: 195px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      background: #ffffff;
+      border: 2px solid #000000;
+    }
+
+    th {
+      background: #000000;
+      color: #ffffff;
+      padding: 6px;
+      text-align: left;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    td {
+      padding: 6px;
+      border-bottom: 2px solid #000000;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    tr:hover td {
+      background: #fef9c3;
+    }
+
+    .txt-ok {
+      color: #15803d;
+      font-weight: 900;
+    }
+
+    .txt-no {
+      color: #b91c1c;
+      font-weight: 900;
+    }
+
+    @media (max-width: 820px) {
+      .app-container {
+        flex-direction: column;
+      }
+      .right-panel {
+        border-left: none;
+        border-top: 3px solid #000000;
+        padding-left: 0;
+        padding-top: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <!-- PANEL KIRI -->
+  <div class="left-panel">
+    <div class="header">
+      <div class="title">SELEKSI BEASISWA IDE LPKIA</div>
+      <div id="final-pill" class="status-pill pill-approved">BEASISWA DISETUJUI</div>
+    </div>
+
+    <!-- PILIH PROFIL MAHASISWA -->
+    <div class="segmented-control" id="profile-tabs">
+      <button class="segment-btn active" onclick="selectProfile(0)">Mhs 1: Rizky</button>
+      <button class="segment-btn" onclick="selectProfile(1)">Mhs 2: Nadia</button>
+      <button class="segment-btn" onclick="selectProfile(2)">Mhs 3: Dimas</button>
+      <button class="segment-btn" onclick="selectProfile(3)">Mhs 4: Siti</button>
+    </div>
+
+    <!-- PILIH METODE PENALARAN -->
+    <div class="segmented-control" id="mode-tabs">
+      <button class="segment-btn active-mode" id="btn-fc" onclick="setMode('forward')">Forward Chaining</button>
+      <button class="segment-btn" id="btn-bc" onclick="setMode('backward')">Backward Chaining</button>
+    </div>
+
+    <!-- INPUT FAKTA ATRIBUT -->
+    <div class="inputs-grid">
+      <div class="input-card">
+        <div class="card-top">
+          <span>IPK (>= 3.5)</span>
+          <span id="badge-ipk" class="fact-badge badge-true">VALID</span>
+        </div>
+        <input type="number" id="inp-ipk" class="num-input" step="0.01" min="0" max="4" value="3.78" oninput="onCustomInput()">
+      </div>
+
+      <div class="input-card">
+        <div class="card-top">
+          <span>Ortu (< 3.000.000)</span>
+          <span id="badge-ortu" class="fact-badge badge-true">VALID</span>
+        </div>
+        <input type="number" id="inp-ortu" class="num-input" step="100000" min="0" value="2400000" oninput="onCustomInput()">
+      </div>
+
+      <div class="input-card">
+        <div class="card-top">
+          <span>Prestasi Akademik</span>
+          <span id="badge-prestasi" class="fact-badge badge-false">TIDAK</span>
+        </div>
+        <div class="toggle-row">
+          <button type="button" id="prestasi-ya" class="toggle-btn" onclick="setToggle('prestasi', true)">YA</button>
+          <button type="button" id="prestasi-no" class="toggle-btn off" onclick="setToggle('prestasi', false)">TIDAK</button>
+        </div>
+      </div>
+
+      <div class="input-card">
+        <div class="card-top">
+          <span>Organisasi Aktif</span>
+          <span id="badge-org" class="fact-badge badge-false">TIDAK</span>
+        </div>
+        <div class="toggle-row">
+          <button type="button" id="org-ya" class="toggle-btn" onclick="setToggle('org', true)">YA</button>
+          <button type="button" id="org-no" class="toggle-btn off" onclick="setToggle('org', false)">TIDAK</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAFTAR ATURAN PRODUKSI R1 - R3 -->
+    <div class="rules-list">
+      <div class="rule-card" id="card-r1">
+        <div class="rule-code">R1: IF IPK >= 3.5 AND OrangTua_KurangMampu<br>THEN Layak_Ekonomi</div>
+        <div class="rule-tag" id="tag-r1">AKTIF</div>
+      </div>
+      <div class="rule-card" id="card-r2">
+        <div class="rule-code">R2: IF IPK >= 3.5 AND (Prestasi_Akademik OR Organisasi_Aktif)<br>THEN Layak_Prestasi</div>
+        <div class="rule-tag" id="tag-r2">LEWAT</div>
+      </div>
+      <div class="rule-card" id="card-r3">
+        <div class="rule-code">R3: IF Layak_Ekonomi OR Layak_Prestasi<br>THEN BEASISWA_DISETUJUI</div>
+        <div class="rule-tag" id="tag-r3">AKTIF</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL KANAN -->
+  <div class="right-panel">
+    <!-- WORKING MEMORY -->
+    <div class="box-panel">
+      <div class="panel-head">
+        <span>Working Memory (Fakta Aktif)</span>
+        <span id="fact-count">3 Fakta</span>
+      </div>
+      <div class="facts-wrap" id="facts-container"></div>
+    </div>
+
+    <!-- INFERENCE TRACE -->
+    <div class="box-panel">
+      <div class="panel-head">
+        <span id="trace-title">Inference Trace (Forward Chaining)</span>
+      </div>
+      <div class="trace-box" id="trace-output"></div>
+    </div>
+
+    <!-- TABEL DATASET UJI -->
+    <div class="box-panel">
+      <div class="panel-head">
+        <span>Dataset Uji Mahasiswa</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Nama</th>
+            <th>IPK</th>
+            <th>Ortu</th>
+            <th>Pres/Org</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="dataset-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const profiles = [
+    { nim: "250414001", nama: "Rizky Pratama", ipk: 3.78, ortu: 2400000, prestasi: false, org: false },
+    { nim: "250414002", nama: "Nadia Maharani", ipk: 3.65, ortu: 5500000, prestasi: true, org: true },
+    { nim: "250414003", nama: "Dimas Anggara", ipk: 3.25, ortu: 2200000, prestasi: false, org: true },
+    { nim: "250414004", nama: "Siti Nurhaliza", ipk: 3.85, ortu: 2800000, prestasi: true, org: true }
+  ];
+
+  let currentMode = "forward";
+  let currentState = { ...profiles[0] };
+
+  function extractInitialFacts(state) {
+    const facts = [];
+    if (state.ipk >= 3.5) facts.push("IPK >= 3.5");
+    if (state.ortu < 3000000) facts.push("OrangTua_KurangMampu");
+    if (state.prestasi) facts.push("Prestasi_Akademik");
+    if (state.org) facts.push("Organisasi_Aktif");
+    return facts;
+  }
+
+  function runForwardChaining(initialFacts) {
+    const known = new Set(initialFacts);
+    const trace = [];
+    const firedRules = { R1: false, R2: false, R3: false };
+
+    trace.push(`[AWAL] Fakta: ${JSON.stringify(Array.from(known))}`);
+
+    let step = 1;
+    let changed = true;
+
+    while (changed) {
+      changed = false;
+      trace.push(`\n--- ITERASI ${step} ---`);
+
+      // Evaluasi R1
+      const r1Cond = known.has("IPK >= 3.5") && known.has("OrangTua_KurangMampu");
+      if (r1Cond && !known.has("Layak_Ekonomi")) {
+        known.add("Layak_Ekonomi");
+        firedRules.R1 = true;
+        changed = true;
+        trace.push(`[R1 AKTIF] IF IPK >= 3.5 AND OrangTua_KurangMampu -> +Layak_Ekonomi`);
+        step++;
+        continue;
+      } else {
+        trace.push(`[R1 LEWAT] ${known.has("Layak_Ekonomi") ? "Sudah ada" : "Syarat belum terpenuhi"}`);
+      }
+
+      // Evaluasi R2
+      const r2Cond = known.has("IPK >= 3.5") && (known.has("Prestasi_Akademik") || known.has("Organisasi_Aktif"));
+      if (r2Cond && !known.has("Layak_Prestasi")) {
+        known.add("Layak_Prestasi");
+        firedRules.R2 = true;
+        changed = true;
+        trace.push(`[R2 AKTIF] IF IPK >= 3.5 AND (Prestasi/Organisasi) -> +Layak_Prestasi`);
+        step++;
+        continue;
+      } else {
+        trace.push(`[R2 LEWAT] ${known.has("Layak_Prestasi") ? "Sudah ada" : "Syarat belum terpenuhi"}`);
+      }
+
+      // Evaluasi R3
+      const r3Cond = known.has("Layak_Ekonomi") || known.has("Layak_Prestasi");
+      if (r3Cond && !known.has("BEASISWA_DISETUJUI")) {
+        known.add("BEASISWA_DISETUJUI");
+        firedRules.R3 = true;
+        changed = true;
+        trace.push(`[R3 AKTIF] IF Layak_Ekonomi OR Layak_Prestasi -> +BEASISWA_DISETUJUI`);
+        step++;
+        continue;
+      } else {
+        trace.push(`[R3 LEWAT] ${known.has("BEASISWA_DISETUJUI") ? "Sudah ada" : "Syarat belum terpenuhi"}`);
+      }
+    }
+
+    const approved = known.has("BEASISWA_DISETUJUI");
+    trace.push(`\n[HASIL] ${approved ? "BEASISWA_DISETUJUI (LOLOS)" : "BEASISWA_DITOLAK (TIDAK LOLOS)"}`);
+    return { known: Array.from(known), trace: trace.join("\n"), firedRules, approved };
+  }
+
+  function runBackwardChaining(initialFacts) {
+    const known = new Set(initialFacts);
+    const trace = [];
+    const firedRules = { R1: false, R2: false, R3: false };
+
+    const rules = {
+      "BEASISWA_DISETUJUI": [
+        { id: "R3 (Jalur Ekonomi)", req: ["Layak_Ekonomi"], code: "R3" },
+        { id: "R3 (Jalur Prestasi)", req: ["Layak_Prestasi"], code: "R3" }
+      ],
+      "Layak_Ekonomi": [
+        { id: "R1", req: ["IPK >= 3.5", "OrangTua_KurangMampu"], code: "R1" }
+      ],
+      "Layak_Prestasi": [
+        { id: "R2 (Prestasi)", req: ["IPK >= 3.5", "Prestasi_Akademik"], code: "R2" },
+        { id: "R2 (Organisasi)", req: ["IPK >= 3.5", "Organisasi_Aktif"], code: "R2" }
+      ]
+    };
+
+    function prove(goal, depth = 0) {
+      const indent = "  ".repeat(depth);
+      if (known.has(goal)) {
+        trace.push(`${indent}[FAKTA VALID] '${goal}' ditemukan`);
+        return true;
+      }
+      if (!rules[goal]) {
+        trace.push(`${indent}[GAGAL] '${goal}' tidak ada di fakta`);
+        return false;
+      }
+
+      for (const branch of rules[goal]) {
+        trace.push(`${indent}[CEK ${branch.id}] Buktikan '${goal}' <- ${JSON.stringify(branch.req)}`);
+        let allMet = true;
+        for (const sg of branch.req) {
+          if (!prove(sg, depth + 1)) {
+            allMet = false;
+            break;
+          }
+        }
+        if (allMet) {
+          known.add(goal);
+          firedRules[branch.code] = true;
+          trace.push(`${indent}[TERBUKTI] '${goal}' VALID via ${branch.id}`);
+          return true;
+        }
+      }
+      trace.push(`${indent}[TIDAK TERBUKTI] '${goal}' gagal dibuktikan`);
+      return false;
+    }
+
+    trace.push(`[HIPOTESIS AWAL] Membuktikan Goal: 'BEASISWA_DISETUJUI'\n`);
+    const approved = prove("BEASISWA_DISETUJUI", 0);
+    trace.push(`\n[KESIMPULAN] Hipotesis BEASISWA_DISETUJUI = ${approved ? "TERBUKTI (DISETUJUI)" : "TIDAK TERBUKTI (DITOLAK)"}`);
+
+    return { known: Array.from(known), trace: trace.join("\n"), firedRules, approved };
+  }
+
+  function updateUI() {
+    // Update input badges
+    const ipkValid = currentState.ipk >= 3.5;
+    const ortuValid = currentState.ortu < 3000000;
+
+    const bIpk = document.getElementById("badge-ipk");
+    bIpk.textContent = ipkValid ? "VALID" : "TIDAK";
+    bIpk.className = "fact-badge " + (ipkValid ? "badge-true" : "badge-false");
+
+    const bOrtu = document.getElementById("badge-ortu");
+    bOrtu.textContent = ortuValid ? "VALID" : "TIDAK";
+    bOrtu.className = "fact-badge " + (ortuValid ? "badge-true" : "badge-false");
+
+    const bPres = document.getElementById("badge-prestasi");
+    bPres.textContent = currentState.prestasi ? "YA" : "TIDAK";
+    bPres.className = "fact-badge " + (currentState.prestasi ? "badge-true" : "badge-false");
+
+    const bOrg = document.getElementById("badge-org");
+    bOrg.textContent = currentState.org ? "YA" : "TIDAK";
+    bOrg.className = "fact-badge " + (currentState.org ? "badge-true" : "badge-false");
+
+    document.getElementById("prestasi-ya").className = "toggle-btn " + (currentState.prestasi ? "on" : "");
+    document.getElementById("prestasi-no").className = "toggle-btn " + (!currentState.prestasi ? "off" : "");
+    document.getElementById("org-ya").className = "toggle-btn " + (currentState.org ? "on" : "");
+    document.getElementById("org-no").className = "toggle-btn " + (!currentState.org ? "off" : "");
+
+    const initFacts = extractInitialFacts(currentState);
+    const result = currentMode === "forward"
+      ? runForwardChaining(initFacts)
+      : runBackwardChaining(initFacts);
+
+    // Status pill
+    const pill = document.getElementById("final-pill");
+    if (result.approved) {
+      pill.textContent = "BEASISWA DISETUJUI";
+      pill.className = "status-pill pill-approved";
+    } else {
+      pill.textContent = "BEASISWA DITOLAK";
+      pill.className = "status-pill pill-rejected";
+    }
+
+    // Highlight Rules
+    ["R1", "R2", "R3"].forEach(r => {
+      const card = document.getElementById("card-" + r.toLowerCase());
+      const tag = document.getElementById("tag-" + r.toLowerCase());
+      if (result.firedRules[r]) {
+        card.classList.add("fired");
+        tag.textContent = "TERPEMICU";
+      } else {
+        card.classList.remove("fired");
+        tag.textContent = "LEWAT";
+      }
+    });
+
+    // Working memory chips
+    const factsWrap = document.getElementById("facts-container");
+    document.getElementById("fact-count").textContent = `${result.known.length} Fakta`;
+    if (result.known.length === 0) {
+      factsWrap.innerHTML = `<span class="fact-chip" style="background:#e2e8f0;">Tidak ada fakta memenuhi syarat</span>`;
+    } else {
+      factsWrap.innerHTML = result.known.map(f => {
+        const isGoal = f === "BEASISWA_DISETUJUI";
+        return `<span class="fact-chip ${isGoal ? 'goal' : ''}">${f}</span>`;
+      }).join("");
+    }
+
+    // Trace
+    document.getElementById("trace-title").textContent =
+      `Inference Trace (${currentMode === "forward" ? "Forward Chaining" : "Backward Chaining"})`;
+    document.getElementById("trace-output").textContent = result.trace;
+
+    renderTable();
+  }
+
+  function renderTable() {
+    const tbody = document.getElementById("dataset-tbody");
+    tbody.innerHTML = profiles.map((p, idx) => {
+      const f = extractInitialFacts(p);
+      const res = runForwardChaining(f);
+      const rp = "Rp " + (p.ortu / 1000000).toFixed(1) + " Jt";
+      const po = `${p.prestasi ? "Ya" : "-"}/${p.org ? "Ya" : "-"}`;
+      return `<tr onclick="selectProfile(${idx})">
+        <td>${p.nama}</td>
+        <td>${p.ipk.toFixed(2)}</td>
+        <td>${rp}</td>
+        <td>${po}</td>
+        <td class="${res.approved ? 'txt-ok' : 'txt-no'}">${res.approved ? 'DISETUJUI' : 'DITOLAK'}</td>
+      </tr>`;
+    }).join("");
+  }
+
+  window.selectProfile = function(index) {
+    currentState = { ...profiles[index] };
+    document.getElementById("inp-ipk").value = currentState.ipk;
+    document.getElementById("inp-ortu").value = currentState.ortu;
+
+    const btns = document.querySelectorAll("#profile-tabs .segment-btn");
+    btns.forEach((b, i) => b.classList.toggle("active", i === index));
+    updateUI();
+  };
+
+  window.setMode = function(mode) {
+    currentMode = mode;
+    document.getElementById("btn-fc").classList.toggle("active-mode", mode === "forward");
+    document.getElementById("btn-bc").classList.toggle("active-mode", mode === "backward");
+    updateUI();
+  };
+
+  window.setToggle = function(field, val) {
+    if (field === "prestasi") currentState.prestasi = val;
+    if (field === "org") currentState.org = val;
+    document.querySelectorAll("#profile-tabs .segment-btn").forEach(b => b.classList.remove("active"));
+    updateUI();
+  };
+
+  window.onCustomInput = function() {
+    currentState.ipk = parseFloat(document.getElementById("inp-ipk").value) || 0;
+    currentState.ortu = parseFloat(document.getElementById("inp-ortu").value) || 0;
+    document.querySelectorAll("#profile-tabs .segment-btn").forEach(b => b.classList.remove("active"));
+    updateUI();
+  };
+
+  updateUI();
+})();
+</script>
+</body>
+</html>
