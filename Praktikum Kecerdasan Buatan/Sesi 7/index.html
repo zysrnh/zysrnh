@@ -4,16 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sistem Pakar Beasiswa IDE LPKIA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       background: #f1f5f9;
       color: #000000;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
       padding: 24px;
       display: flex;
       justify-content: center;
     }
+    input, select, button { font-family: inherit; }
     .nb-wrap {
       display: flex;
       flex-direction: column;
@@ -168,11 +172,11 @@
 
     .nb-actbar {
       display: grid;
-      grid-template-columns: 1.35fr 0.8fr 0.85fr 1fr;
-      gap: 10px;
+      grid-template-columns: 1.3fr 0.85fr 0.85fr;
+      gap: 12px;
     }
     .nb-actbtn {
-      padding: 11px 8px;
+      padding: 11px 10px;
       font-size: 11px;
       font-weight: 900;
       border: 3px solid #000000;
@@ -188,7 +192,6 @@
     .btn-save { background: #fde047; color: #000000; }
     .btn-new { background: #ffffff; color: #000000; }
     .btn-csv { background: #38bdf8; color: #000000; }
-    .btn-load100 { background: #22c55e; color: #000000; }
 
     .nb-rules {
       display: flex;
@@ -318,6 +321,34 @@
       text-transform: uppercase;
     }
     .nb-freset:hover { background: #e2e8f0; }
+    .nb-fdel {
+      padding: 7px 12px;
+      font-size: 11px;
+      font-weight: 900;
+      border: 2px solid #000000;
+      background: #ef4444;
+      color: #ffffff;
+      cursor: pointer;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .nb-fdel:disabled {
+      background: #e2e8f0;
+      color: #64748b;
+      cursor: not-allowed;
+    }
+    .nb-chk-cell {
+      width: 38px;
+      text-align: center;
+      cursor: default;
+    }
+    .nb-chk {
+      width: 16px;
+      height: 16px;
+      accent-color: #ef4444;
+      cursor: pointer;
+      vertical-align: middle;
+    }
 
     .nb-table-wrap {
       overflow-x: auto;
@@ -406,21 +437,42 @@
       padding: 4px 9px;
       cursor: pointer;
     }
+    .nb-toast {
+      position: fixed;
+      top: 22px;
+      right: 22px;
+      z-index: 999;
+      padding: 12px 18px;
+      border: 3px solid #000000;
+      box-shadow: 4px 4px 0px #000000;
+      font-size: 13px;
+      font-weight: 800;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      max-width: 360px;
+      cursor: pointer;
+    }
+    .nb-toast.show { display: flex; }
+    .nb-toast.t-ok { background: #22c55e; color: #000000; }
+    .nb-toast.t-err { background: #ef4444; color: #ffffff; }
+    .nb-toast.t-info { background: #fde047; color: #000000; }
 
     @media (max-width: 860px) {
       .nb-top-split { flex-direction: column; }
-      .nb-actbar { grid-template-columns: 1fr 1fr; }
       .nb-right {
         border-left: none;
         border-top: 3px solid #000000;
         padding-left: 0;
         padding-top: 18px;
       }
+      .nb-toast { left: 16px; right: 16px; max-width: none; }
     }
   </style>
 </head>
 <body>
 
+<div id="nb-toast" class="nb-toast" role="status" aria-live="polite" onclick="this.classList.remove('show')"></div>
 <div class="nb-wrap">
   <div class="nb-header">
     <div class="nb-title">SISTEM PAKAR SELEKSI BEASISWA IDE LPKIA</div>
@@ -492,7 +544,6 @@
           Upload CSV
           <input type="file" accept=".csv" style="display:none" onchange="nbImport(event)">
         </label>
-        <button type="button" class="nb-actbtn btn-load100" onclick="nbImport100()">Import 100 Data</button>
       </div>
 
       <div class="nb-rules">
@@ -545,6 +596,7 @@
       <option value="ipk_no">IPK &lt; 3.5 / Invalid</option>
     </select>
     <span id="nb-tcount" class="nb-fcount">4 / 4 Data</span>
+    <button type="button" id="nb-bdel" class="nb-fdel" onclick="nbBulkDel()" disabled>Hapus Terpilih (0)</button>
     <button type="button" class="nb-freset" onclick="nbResetFilter()">Reset</button>
   </div>
 
@@ -552,6 +604,7 @@
     <table class="nb-tbl">
       <thead>
         <tr>
+          <th class="nb-chk-cell"><input type="checkbox" id="nb-chk-all" class="nb-chk" onclick="nbToggleAll(this.checked)"></th>
           <th>No</th>
           <th>NIM &amp; Nama</th>
           <th>IPK (&gt;=3.5)</th>
@@ -581,6 +634,17 @@
   let selIdx = 0;
   let mode = "forward";
   let st = { ...profs[0] };
+  let checkedItems = new Set();
+  let toastTimer = null;
+
+  function showNotif(msg, type = "ok") {
+    const el = document.getElementById("nb-toast");
+    if (!el) return;
+    el.textContent = msg;
+    el.className = "nb-toast show t-" + type;
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { el.classList.remove("show"); }, 2800);
+  }
 
   function parseIPK(val) {
     if (typeof val === "number") return Number.isFinite(val) ? val : NaN;
@@ -833,18 +897,34 @@
     return { r, ipkCheck };
   }
 
+  function syncBulkControls(visibleItems) {
+    const selectedCount = profs.filter(p => checkedItems.has(p)).length;
+    const btn = document.getElementById("nb-bdel");
+    btn.textContent = `Hapus Terpilih (${selectedCount})`;
+    btn.disabled = selectedCount === 0;
+
+    const chkAll = document.getElementById("nb-chk-all");
+    const visChecked = visibleItems.filter(p => checkedItems.has(p)).length;
+    chkAll.checked = visibleItems.length > 0 && visChecked === visibleItems.length;
+    chkAll.indeterminate = visChecked > 0 && visChecked < visibleItems.length;
+  }
+
   function renderTable() {
     const tbody = document.getElementById("nb-tbody");
     const rowsHtml = [];
+    const visibleItems = [];
     profs.forEach((p, i) => {
       const match = rowMatchesFilter(p);
       if (!match) return;
+      visibleItems.push(p);
       const { r, ipkCheck } = match;
       const ipkText = isNaN(ipkCheck.num) ? "-" : Number(ipkCheck.num).toFixed(2);
       const ipkCls = ipkCheck.ok ? "chk-yes" : (ipkCheck.invalid ? "st-no" : "chk-no");
       const ortuOk = p.ortu < 3000000;
       const rp = formatRupiah(p.ortu);
+      const isChecked = checkedItems.has(p);
       rowsHtml.push(`<tr class="${i === selIdx ? 'active-row' : ''}" onclick="nbSelect(${i})">
+        <td class="nb-chk-cell" onclick="event.stopPropagation()"><input type="checkbox" class="nb-chk" ${isChecked ? "checked" : ""} onchange="nbToggleCheck(${i}, this.checked)"></td>
         <td>${i + 1}</td>
         <td>${escHtml(p.nim)} - ${escHtml(p.nama)}</td>
         <td><span class="nb-cell-split"><span>${ipkText}</span><span class="${ipkCls}">${ipkCheck.tag}</span></span></td>
@@ -860,18 +940,24 @@
     document.getElementById("nb-tcount").textContent = `${rowsHtml.length} / ${profs.length} Data`;
     tbody.innerHTML = rowsHtml.length
       ? rowsHtml.join("")
-      : `<tr><td colspan="10" style="text-align:center;padding:18px;cursor:default;">Tidak ada data mahasiswa sesuai filter.</td></tr>`;
+      : `<tr><td colspan="11" style="text-align:center;padding:18px;cursor:default;">${profs.length ? "Tidak ada data mahasiswa sesuai filter." : "Belum ada data mahasiswa. Tambah manual atau Upload CSV."}</td></tr>`;
+    syncBulkControls(visibleItems);
   }
 
   window.nbFilter = function() {
     renderTable();
   };
 
-  window.nbResetFilter = function() {
+  function clearFilterInputs() {
     document.getElementById("nb-fq").value = "";
     document.getElementById("nb-fst").value = "all";
     document.getElementById("nb-frule").value = "all";
+  }
+
+  window.nbResetFilter = function() {
+    clearFilterInputs();
     renderTable();
+    showNotif("Filter tabel berhasil direset.", "info");
   };
 
   function syncInputsFromState() {
@@ -895,6 +981,7 @@
     document.getElementById("nb-fc").classList.toggle("active-mode", m === "forward");
     document.getElementById("nb-bc").classList.toggle("active-mode", m === "backward");
     render();
+    showNotif(m === "forward" ? "Mode Forward Chaining aktif." : "Mode Backward Chaining aktif.", "info");
   };
 
   window.nbTog = function(k, v) {
@@ -918,7 +1005,7 @@
     const ipkCheck = evalIPK(document.getElementById("nb-ipk").value);
     if (ipkCheck.invalid) {
       document.getElementById("nb-ipk").focus();
-      alert("IPK tidak valid. Masukkan nilai IPK antara 0.00 sampai 4.00.");
+      showNotif("IPK tidak valid! Masukkan antara 0.00 - 4.00.", "err");
       return;
     }
     const entry = {
@@ -929,8 +1016,11 @@
       prestasi: st.prestasi,
       org: st.org
     };
-    if (selIdx >= 0 && selIdx < profs.length && profs[selIdx].nim === entry.nim) {
+    const isUpdate = selIdx >= 0 && selIdx < profs.length && profs[selIdx].nim === entry.nim;
+    if (isUpdate) {
+      const oldObj = profs[selIdx];
       profs[selIdx] = entry;
+      if (checkedItems.has(oldObj)) { checkedItems.delete(oldObj); checkedItems.add(entry); }
     } else {
       profs.push(entry);
       selIdx = profs.length - 1;
@@ -938,36 +1028,75 @@
     st = { ...entry };
     syncInputsFromState();
     render();
+    showNotif(isUpdate ? `Data ${entry.nama} berhasil diperbarui.` : `Data ${entry.nama} berhasil ditambahkan.`, "ok");
   };
+
+  function emptyStateDraft() {
+    return { nim: nextNim(), nama: "", ipk: 3.60, ortu: 2500000, prestasi: false, org: false };
+  }
+
+  function syncAfterRemoval() {
+    if (profs.length === 0) {
+      selIdx = -1;
+      st = emptyStateDraft();
+    } else {
+      if (selIdx >= profs.length) selIdx = profs.length - 1;
+      if (selIdx < 0) selIdx = 0;
+      st = { ...profs[selIdx] };
+    }
+    syncInputsFromState();
+    render();
+  }
 
   window.nbNew = function() {
     selIdx = -1;
-    st = {
-      nim: nextNim(),
-      nama: "",
-      ipk: 3.60,
-      ortu: 2500000,
-      prestasi: false,
-      org: false
-    };
+    st = emptyStateDraft();
     syncInputsFromState();
     document.getElementById("nb-nama").focus();
     render();
+    showNotif("Siap tambah data mahasiswa baru.", "info");
+  };
+
+  window.nbToggleCheck = function(i, checked) {
+    if (i < 0 || i >= profs.length) return;
+    if (checked) checkedItems.add(profs[i]);
+    else checkedItems.delete(profs[i]);
+    const vis = profs.filter(p => rowMatchesFilter(p) !== null);
+    syncBulkControls(vis);
+  };
+
+  window.nbToggleAll = function(checked) {
+    profs.forEach(p => {
+      if (rowMatchesFilter(p) === null) return;
+      if (checked) checkedItems.add(p);
+      else checkedItems.delete(p);
+    });
+    renderTable();
   };
 
   window.nbDel = function(i) {
-    if (profs.length <= 1) return;
-    profs.splice(i, 1);
-    if (selIdx >= profs.length) selIdx = profs.length - 1;
-    if (selIdx < 0) selIdx = 0;
-    st = { ...profs[selIdx] };
-    syncInputsFromState();
-    render();
+    if (i < 0 || i >= profs.length) return;
+    const [removed] = profs.splice(i, 1);
+    checkedItems.delete(removed);
+    syncAfterRemoval();
+    showNotif(`Data ${removed.nama} berhasil dihapus.`, "ok");
+  };
+
+  window.nbBulkDel = function() {
+    if (checkedItems.size === 0) return;
+    const count = profs.filter(p => checkedItems.has(p)).length;
+    profs = profs.filter(p => !checkedItems.has(p));
+    checkedItems.clear();
+    syncAfterRemoval();
+    showNotif(`${count} data terpilih berhasil dihapus.`, "ok");
   };
 
   function loadCsvText(csvText) {
     const lines = String(csvText || "").split(/\r?\n/).filter(l => l.trim().length > 0);
-    if (lines.length < 2) return false;
+    if (lines.length < 2) {
+      showNotif("Gagal import CSV: file kosong atau format tidak sesuai.", "err");
+      return false;
+    }
     const arr = [];
     for (let i = 1; i < lines.length; i++) {
       const c = lines[i].split(",").map(x => x.replace(/^"|"$/g, "").trim());
@@ -986,10 +1115,13 @@
     }
     if (arr.length > 0) {
       profs = arr;
-      nbResetFilter();
+      checkedItems.clear();
+      clearFilterInputs();
       nbSelect(0);
+      showNotif(`${arr.length} data CSV berhasil diimport.`, "ok");
       return true;
     }
+    showNotif("Gagal import CSV: tidak ada baris valid ditemukan.", "err");
     return false;
   }
 
@@ -1000,20 +1132,6 @@
     r.onload = function(e) { loadCsvText(e.target.result); };
     r.readAsText(f);
     ev.target.value = "";
-  };
-
-  window.nbImport100 = async function() {
-    const rawUrl = "https://raw.githubusercontent.com/zysrnh/Mini_Csv/main/dataset_beasiswa_lpkia_100.csv";
-    const candidates = location.protocol.startsWith("http")
-      ? ["./dataset_beasiswa_lpkia_100.csv", rawUrl]
-      : [rawUrl, "./dataset_beasiswa_lpkia_100.csv"];
-    for (const url of candidates) {
-      try {
-        const resp = await fetch(url, { cache: "no-store" });
-        if (resp.ok && loadCsvText(await resp.text())) return;
-      } catch (err) {}
-    }
-    alert("Gagal mengambil CSV 100 data. Pastikan koneksi aktif atau gunakan Upload CSV.");
   };
 
   nbSelect(0);
