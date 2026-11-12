@@ -582,14 +582,6 @@
   let mode = "forward";
   let st = { ...profs[0] };
 
-  function syncToColabSheet() {
-    try {
-      if (window.google && google.colab && google.colab.kernel && typeof google.colab.kernel.invokeFunction === "function") {
-        google.colab.kernel.invokeFunction("sync_beasiswa_sheet", [profs], {});
-      }
-    } catch (e) {}
-  }
-
   function parseIPK(val) {
     if (typeof val === "number") return Number.isFinite(val) ? val : NaN;
     const raw = String(val ?? "").trim().replace(",", ".");
@@ -945,7 +937,6 @@
     }
     st = { ...entry };
     syncInputsFromState();
-    syncToColabSheet();
     render();
   };
 
@@ -971,7 +962,6 @@
     if (selIdx < 0) selIdx = 0;
     st = { ...profs[selIdx] };
     syncInputsFromState();
-    syncToColabSheet();
     render();
   };
 
@@ -997,7 +987,6 @@
     if (arr.length > 0) {
       profs = arr;
       nbResetFilter();
-      syncToColabSheet();
       nbSelect(0);
       return true;
     }
@@ -1015,8 +1004,9 @@
 
   window.nbImport100 = async function() {
     const rawUrl = "https://raw.githubusercontent.com/zysrnh/Mini_Csv/main/dataset_beasiswa_lpkia_100.csv";
-    const isLocalHttp = location.protocol.startsWith("http") && !location.hostname.includes("colab") && !location.hostname.includes("googleusercontent");
-    const candidates = isLocalHttp ? ["./dataset_beasiswa_lpkia_100.csv", rawUrl] : [rawUrl, "./dataset_beasiswa_lpkia_100.csv"];
+    const candidates = location.protocol.startsWith("http")
+      ? ["./dataset_beasiswa_lpkia_100.csv", rawUrl]
+      : [rawUrl, "./dataset_beasiswa_lpkia_100.csv"];
     for (const url of candidates) {
       try {
         const resp = await fetch(url, { cache: "no-store" });
