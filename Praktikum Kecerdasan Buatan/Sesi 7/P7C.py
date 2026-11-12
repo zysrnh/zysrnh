@@ -6,6 +6,7 @@
 # ==============================================================================
 
 import csv
+import json
 import os
 import sys
 
@@ -207,20 +208,20 @@ def backward_chaining_beasiswa(goal, known_facts, depth=0, cetak_log=True):
 # ==============================================================================
 def cetak_tabel_pengecekan(daftar_mhs):
     print("\nTABEL MATRIKS PENGECEKAN KELAYAKAN BEASISWA:")
-    print("=" * 102)
+    print("=" * 106)
     header = (
-        f"{'No':<3} | {'NIM & Nama':<24} | {'IPK (>=3.5)':<12} | {'Ortu (<3Jt)':<11} | "
+        f"{'No':<3} | {'NIM & Nama':<24} | {'IPK (>=3.5)':<12} | {'Ortu (<3Jt)':<15} | "
         f"{'Pres':<5} | {'Org':<5} | {'R1':<5} | {'R2':<5} | {'Keputusan Akhir'}"
     )
     print(header)
-    print("-" * 102)
+    print("-" * 106)
 
     for i, m in enumerate(daftar_mhs, 1):
         fakta = ekstrak_fakta_awal(m)
         lolos, facts_akhir, _ = forward_chaining_beasiswa(fakta, cetak_log=False)
 
         cek_ipk = f"{m['ipk']:.2f} [{'YA' if m['ipk'] >= 3.5 else 'TDK'}]"
-        cek_ortu = f"{m['penghasilan_ortu'] // 1000000:.1f}Jt [{'YA' if m['penghasilan_ortu'] < 3000000 else 'TDK'}]"
+        cek_ortu = f"Rp{m['penghasilan_ortu'] / 1000000:.2f}Jt [{'YA' if m['penghasilan_ortu'] < 3000000 else 'TDK'}]"
         cek_pres = "YA" if m["prestasi_akademik"] else "TDK"
         cek_org = "YA" if m["organisasi_aktif"] else "TDK"
         cek_r1 = "AKTIF" if "Layak_Ekonomi" in facts_akhir else "-"
@@ -229,19 +230,19 @@ def cetak_tabel_pengecekan(daftar_mhs):
         identitas = f"{m['nim']} {m['nama']}"[:24]
 
         print(
-            f"{i:<3} | {identitas:<24} | {cek_ipk:<12} | {cek_ortu:<11} | "
+            f"{i:<3} | {identitas:<24} | {cek_ipk:<12} | {cek_ortu:<15} | "
             f"{cek_pres:<5} | {cek_org:<5} | {cek_r1:<5} | {cek_r2:<5} | {keputusan}"
         )
-    print("=" * 102)
+    print("=" * 106)
 
 
 def jalankan_pengujian_3_profil():
     semua_profil = siapkan_dataset_csv()
     tiga_profil_uji = semua_profil[:3]
 
-    print("=" * 102)
-    print("         SISTEM PAKAR SELEKSI BEASISWA KELAYAKAN MAHASISWA IDE LPKIA (SESI 7 - CHALLENGE)         ")
-    print("=" * 102)
+    print("=" * 105)
+    print("           SISTEM PAKAR SELEKSI BEASISWA KELAYAKAN MAHASISWA IDE LPKIA (SESI 7 - CHALLENGE)           ")
+    print("=" * 105)
 
     for idx, mhs in enumerate(tiga_profil_uji, 1):
         fakta_awal = ekstrak_fakta_awal(mhs)
@@ -253,7 +254,7 @@ def jalankan_pengujian_3_profil():
             f"Prestasi = {'Ya' if mhs['prestasi_akademik'] else 'Tidak'} | "
             f"Organisasi = {'Ya' if mhs['organisasi_aktif'] else 'Tidak'}"
         )
-        print("-" * 102)
+        print("-" * 105)
 
         print("  [A] EVALUASI FORWARD CHAINING:")
         forward_chaining_beasiswa(fakta_awal, cetak_log=True)
@@ -264,7 +265,7 @@ def jalankan_pengujian_3_profil():
             f"  [KEPUTUSAN BC]     : Hipotesis BEASISWA_DISETUJUI -> "
             f"{'TERBUKTI (DISETUJUI)' if lolos_bc else 'TIDAK TERBUKTI (DITOLAK)'}"
         )
-        print("=" * 102)
+        print("=" * 105)
 
     cetak_tabel_pengecekan(semua_profil)
 
@@ -272,22 +273,22 @@ def jalankan_pengujian_3_profil():
 # ==============================================================================
 # 5. VISUALISASI INTERAKTIF NEUBRUTALISM (OTOMATIS MUNCUL DI GOOGLE COLAB)
 # ==============================================================================
-HTML_NEUBRUTALISM = """<!DOCTYPE html>
+HTML_NEUBRUTALISM = r"""<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     .nb-wrap {
-      display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 1000px;
+      display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 980px;
       background: #ffffff; border: 4px solid #000000; border-radius: 6px;
-      padding: 18px; box-shadow: 6px 6px 0px #000000; color: #000000;
+      padding: 16px; box-shadow: 6px 6px 0px #000000; color: #000000;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
       margin: 12px 0;
     }
-    .nb-top-split { display: flex; flex-direction: row; gap: 18px; }
-    .nb-left { flex: 1.05; display: flex; flex-direction: column; gap: 11px; }
-    .nb-right { flex: 0.95; display: flex; flex-direction: column; gap: 11px; border-left: 3px solid #000000; padding-left: 18px; }
+    .nb-top-split { display: flex; flex-direction: row; gap: 16px; }
+    .nb-left { flex: 1.05; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+    .nb-right { flex: 0.95; display: flex; flex-direction: column; gap: 10px; border-left: 3px solid #000000; padding-left: 16px; min-width: 0; }
     .nb-header { border-bottom: 3px solid #000000; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
     .nb-title { font-size: 18px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.4px; }
     .nb-pill { font-size: 12px; font-weight: 900; padding: 6px 12px; border: 3px solid #000000; box-shadow: 2px 2px 0px #000000; text-transform: uppercase; white-space: nowrap; }
@@ -300,8 +301,8 @@ HTML_NEUBRUTALISM = """<!DOCTYPE html>
     .nb-id-grid { display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 10px; }
     .nb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .nb-card { background: #f8fafc; border: 3px solid #000000; padding: 8px 10px; box-shadow: 3px 3px 0px #000000; display: flex; flex-direction: column; gap: 5px; }
-    .nb-ctop { display: flex; justify-content: space-between; align-items: center; font-size: 11px; font-weight: 900; text-transform: uppercase; }
-    .nb-badge { font-size: 10px; font-weight: 900; padding: 2px 6px; border: 2px solid #000000; }
+    .nb-ctop { display: flex; justify-content: space-between; align-items: center; font-size: 11px; font-weight: 900; text-transform: uppercase; gap: 4px; }
+    .nb-badge { font-size: 10px; font-weight: 900; padding: 2px 6px; border: 2px solid #000000; white-space: nowrap; }
     .nb-b-on { background: #22c55e; color: #000000; }
     .nb-b-off { background: #e2e8f0; color: #475569; }
     .nb-input { width: 100%; padding: 6px 8px; font-size: 13px; font-weight: 900; border: 2px solid #000000; background: #ffffff; color: #000000; outline: none; }
@@ -329,15 +330,15 @@ HTML_NEUBRUTALISM = """<!DOCTYPE html>
     .nb-chip.goal { background: #22c55e; }
     .nb-trace { font-family: Consolas, monospace; font-size: 11.5px; font-weight: 700; line-height: 1.48; background: #ffffff; border: 2px solid #000000; padding: 10px; height: 245px; overflow-y: auto; white-space: pre-wrap; }
     .nb-table-wrap { overflow-x: auto; border: 3px solid #000000; box-shadow: 3px 3px 0px #000000; background: #ffffff; }
-    table.nb-tbl { width: 100%; border-collapse: collapse; font-size: 11.5px; }
-    .nb-tbl th { background: #000000; color: #ffffff; padding: 8px 7px; text-align: left; font-weight: 900; text-transform: uppercase; border-right: 2px solid #334155; }
-    .nb-tbl td { padding: 7px; border-bottom: 2px solid #000000; border-right: 2px solid #000000; font-weight: 800; cursor: pointer; color: #000000; }
+    table.nb-tbl { width: 100%; border-collapse: collapse; font-size: 11px; }
+    .nb-tbl th { background: #000000; color: #ffffff; padding: 7px 6px; text-align: left; font-weight: 900; text-transform: uppercase; border-right: 2px solid #334155; white-space: nowrap; }
+    .nb-tbl td { padding: 6px; border-bottom: 2px solid #000000; border-right: 2px solid #000000; font-weight: 800; cursor: pointer; color: #000000; white-space: nowrap; }
     .nb-tbl tr.active-row td { background: #fef08a; }
     .nb-tbl tr:hover td { background: #fef9c3; }
-    .chk-yes { background: #dcfce7; color: #14532d; padding: 2px 6px; border: 2px solid #000000; font-size: 10px; font-weight: 900; display: inline-block; }
-    .chk-no { background: #f1f5f9; color: #64748b; padding: 2px 6px; border: 2px solid #000000; font-size: 10px; font-weight: 900; display: inline-block; }
-    .st-ok { background: #22c55e; color: #000000; padding: 3px 8px; border: 2px solid #000000; font-size: 10.5px; font-weight: 900; display: inline-block; }
-    .st-no { background: #ef4444; color: #ffffff; padding: 3px 8px; border: 2px solid #000000; font-size: 10.5px; font-weight: 900; display: inline-block; }
+    .chk-yes { background: #dcfce7; color: #14532d; padding: 2px 5px; border: 2px solid #000000; font-size: 9.5px; font-weight: 900; display: inline-block; }
+    .chk-no { background: #f1f5f9; color: #64748b; padding: 2px 5px; border: 2px solid #000000; font-size: 9.5px; font-weight: 900; display: inline-block; }
+    .st-ok { background: #22c55e; color: #000000; padding: 3px 7px; border: 2px solid #000000; font-size: 10px; font-weight: 900; display: inline-block; }
+    .st-no { background: #ef4444; color: #ffffff; padding: 3px 7px; border: 2px solid #000000; font-size: 10px; font-weight: 900; display: inline-block; }
     .del-btn { background: #ef4444; color: #ffffff; border: 2px solid #000000; font-size: 10px; font-weight: 900; padding: 2px 6px; cursor: pointer; }
   </style>
 </head>
@@ -370,7 +371,7 @@ HTML_NEUBRUTALISM = """<!DOCTYPE html>
         </div>
         <div class="nb-card">
           <div class="nb-ctop"><span>Ortu (< 3.000.000)</span><span id="nb-bortu" class="nb-badge nb-b-on">MEMENUHI</span></div>
-          <input type="number" id="nb-ortu" class="nb-input" step="100000" min="0" value="2400000" oninput="nbCustom()">
+          <input type="text" inputmode="numeric" id="nb-ortu" class="nb-input" value="Rp 2.400.000" placeholder="Rp 0" onkeydown="nbOrtuKeyDown(event)" oninput="nbOrtuInput(this)">
         </div>
         <div class="nb-card">
           <div class="nb-ctop"><span>Prestasi Akademik</span><span id="nb-bpres" class="nb-badge nb-b-off">TIDAK</span></div>
@@ -429,11 +430,11 @@ HTML_NEUBRUTALISM = """<!DOCTYPE html>
           <th>NIM & Nama</th>
           <th>IPK (>=3.5)</th>
           <th>Ortu (<3 Jt)</th>
-          <th>Prestasi</th>
-          <th>Organisasi</th>
-          <th>R1 (Ekonomi)</th>
-          <th>R2 (Prestasi)</th>
-          <th>R3 (Keputusan)</th>
+          <th>Pres</th>
+          <th>Org</th>
+          <th>R1</th>
+          <th>R2</th>
+          <th>Keputusan</th>
           <th>Hapus</th>
         </tr>
       </thead>
@@ -443,15 +444,76 @@ HTML_NEUBRUTALISM = """<!DOCTYPE html>
 </div>
 <script>
 (function() {
-  let profs = [
-    { nim: "250414001", nama: "Rizky Pratama", ipk: 3.78, ortu: 2400000, prestasi: false, org: false },
-    { nim: "250414002", nama: "Nadia Maharani", ipk: 3.65, ortu: 5500000, prestasi: true, org: true },
-    { nim: "250414003", nama: "Dimas Anggara", ipk: 3.25, ortu: 2200000, prestasi: false, org: true },
-    { nim: "250414004", nama: "Siti Nurhaliza", ipk: 3.85, ortu: 2800000, prestasi: true, org: true }
-  ];
+  let profs = __PROFILES_JSON__;
   let selIdx = 0;
   let mode = "forward";
   let st = { ...profs[0] };
+
+  function formatRupiah(num) {
+    const n = Math.max(0, Math.round(Number(num) || 0));
+    return "Rp " + n.toLocaleString("id-ID");
+  }
+
+  function parseRupiah(val) {
+    const d = String(val || "").replace(/\D/g, "");
+    return d ? parseInt(d, 10) : 0;
+  }
+
+  function applyFormattedOrtu(el, digits, targetDigits) {
+    if (!digits) {
+      el.value = "";
+      st.ortu = 0;
+      render();
+      return;
+    }
+    const num = parseInt(digits, 10) || 0;
+    const formatted = formatRupiah(num);
+    el.value = formatted;
+
+    let newPos = formatted.length;
+    if (targetDigits === 0) {
+      newPos = 3;
+    } else {
+      let count = 0;
+      for (let i = 0; i < formatted.length; i++) {
+        if (/\d/.test(formatted[i])) {
+          count++;
+          if (count === targetDigits) {
+            newPos = i + 1;
+            break;
+          }
+        }
+      }
+    }
+    try { el.setSelectionRange(newPos, newPos); } catch (err) {}
+    st.ortu = num;
+    render();
+  }
+
+  window.nbOrtuKeyDown = function(e) {
+    const el = e.target;
+    if (e.key === "Backspace" && el.selectionStart === el.selectionEnd) {
+      if (el.selectionStart <= 3 && el.value.startsWith("Rp ")) {
+        e.preventDefault();
+        return;
+      }
+      if (el.value[el.selectionStart - 1] === ".") {
+        e.preventDefault();
+        const rawBefore = el.value.slice(0, el.selectionStart - 1).replace(/\D/g, "");
+        const rawAfter = el.value.slice(el.selectionStart).replace(/\D/g, "");
+        const newDigits = rawBefore.slice(0, -1) + rawAfter;
+        const targetDigits = Math.max(0, rawBefore.length - 1);
+        applyFormattedOrtu(el, newDigits, targetDigits);
+      }
+    }
+  };
+
+  window.nbOrtuInput = function(el) {
+    const sel = el.selectionStart ?? el.value.length;
+    const targetDigits = el.value.slice(0, sel).replace(/\D/g, "").length;
+    const digits = el.value.replace(/\D/g, "");
+    applyFormattedOrtu(el, digits, targetDigits);
+  };
 
   function getFacts(s) {
     const f = [];
@@ -469,7 +531,7 @@ HTML_NEUBRUTALISM = """<!DOCTYPE html>
     let step = 1, chg = true;
     while (chg) {
       chg = false;
-      tr.push(`\\n--- ITERASI ${step} ---`);
+      tr.push(`\n--- ITERASI ${step} ---`);
       if (k.has("IPK >= 3.5") && k.has("OrangTua_KurangMampu") && !k.has("Layak_Ekonomi")) {
         k.add("Layak_Ekonomi"); fired.R1 = true; chg = true;
         tr.push("[R1 AKTIF] IF IPK >= 3.5 AND OrangTua_KurangMampu -> +Layak_Ekonomi");
@@ -489,13 +551,13 @@ HTML_NEUBRUTALISM = """<!DOCTYPE html>
       } else tr.push(`[R3 LEWAT] ${k.has("BEASISWA_DISETUJUI") ? "Sudah diketahui" : "Syarat belum terpenuhi"}`);
     }
     const ok = k.has("BEASISWA_DISETUJUI");
-    tr.push(`\\n[KEPUTUSAN] ${ok ? "BEASISWA_DISETUJUI (LOLOS)" : "BEASISWA_DITOLAK (TIDAK LOLOS)"}`);
-    return { known: Array.from(k), trace: tr.join("\\n"), fired, ok };
+    tr.push(`\n[KEPUTUSAN] ${ok ? "BEASISWA_DISETUJUI (LOLOS)" : "BEASISWA_DITOLAK (TIDAK LOLOS)"}`);
+    return { known: Array.from(k), trace: tr.join("\n"), fired, ok };
   }
 
   function evalBC(init, label) {
     const k = new Set(init);
-    const tr = [`[MAHASISWA] ${label}`, `[HIPOTESIS] Membuktikan Goal: 'BEASISWA_DISETUJUI'\\n`];
+    const tr = [`[MAHASISWA] ${label}`, `[HIPOTESIS] Membuktikan Goal: 'BEASISWA_DISETUJUI'\n`];
     const fired = { R1: false, R2: false, R3: false };
     const rmap = {
       "BEASISWA_DISETUJUI": [
@@ -522,8 +584,8 @@ HTML_NEUBRUTALISM = """<!DOCTYPE html>
       return false;
     }
     const ok = prove("BEASISWA_DISETUJUI", 0);
-    tr.push(`\\n[KESIMPULAN] Hipotesis BEASISWA_DISETUJUI = ${ok ? "TERBUKTI (DISETUJUI)" : "TIDAK TERBUKTI (DITOLAK)"}`);
-    return { known: Array.from(k), trace: tr.join("\\n"), fired, ok };
+    tr.push(`\n[KESIMPULAN] Hipotesis BEASISWA_DISETUJUI = ${ok ? "TERBUKTI (DISETUJUI)" : "TIDAK TERBUKTI (DITOLAK)"}`);
+    return { known: Array.from(k), trace: tr.join("\n"), fired, ok };
   }
 
   function render() {
@@ -565,14 +627,14 @@ HTML_NEUBRUTALISM = """<!DOCTYPE html>
       const r = evalFC(getFacts(p), p.nama);
       const ipkOk = p.ipk >= 3.5;
       const ortuOk = p.ortu < 3000000;
-      const rp = "Rp " + Number(p.ortu).toLocaleString("id-ID");
+      const rp = formatRupiah(p.ortu);
       return `<tr class="${i === selIdx ? 'active-row' : ''}" onclick="nbSelect(${i})">
         <td>${i + 1}</td>
         <td>${p.nim} - ${p.nama}</td>
-        <td>${Number(p.ipk).toFixed(2)} <span class="${ipkOk ? 'chk-yes' : 'chk-no'}">${ipkOk ? 'YA' : 'TIDAK'}</span></td>
-        <td>${rp} <span class="${ortuOk ? 'chk-yes' : 'chk-no'}">${ortuOk ? 'YA' : 'TIDAK'}</span></td>
-        <td><span class="${p.prestasi ? 'chk-yes' : 'chk-no'}">${p.prestasi ? 'YA' : 'TIDAK'}</span></td>
-        <td><span class="${p.org ? 'chk-yes' : 'chk-no'}">${p.org ? 'YA' : 'TIDAK'}</span></td>
+        <td>${Number(p.ipk).toFixed(2)} <span class="${ipkOk ? 'chk-yes' : 'chk-no'}">${ipkOk ? 'YA' : 'TDK'}</span></td>
+        <td>${rp} <span class="${ortuOk ? 'chk-yes' : 'chk-no'}">${ortuOk ? 'YA' : 'TDK'}</span></td>
+        <td><span class="${p.prestasi ? 'chk-yes' : 'chk-no'}">${p.prestasi ? 'YA' : 'TDK'}</span></td>
+        <td><span class="${p.org ? 'chk-yes' : 'chk-no'}">${p.org ? 'YA' : 'TDK'}</span></td>
         <td><span class="${r.fired.R1 ? 'chk-yes' : 'chk-no'}">${r.fired.R1 ? 'AKTIF' : '-'}</span></td>
         <td><span class="${r.fired.R2 ? 'chk-yes' : 'chk-no'}">${r.fired.R2 ? 'AKTIF' : '-'}</span></td>
         <td><span class="${r.ok ? 'st-ok' : 'st-no'}">${r.ok ? 'DISETUJUI' : 'DITOLAK'}</span></td>
@@ -581,14 +643,18 @@ HTML_NEUBRUTALISM = """<!DOCTYPE html>
     }).join("");
   }
 
+  function syncInputsFromState() {
+    document.getElementById("nb-nama").value = st.nama;
+    document.getElementById("nb-nim").value = st.nim;
+    document.getElementById("nb-ipk").value = st.ipk;
+    document.getElementById("nb-ortu").value = formatRupiah(st.ortu);
+  }
+
   window.nbSelect = function(i) {
     if (i < 0 || i >= profs.length) return;
     selIdx = i;
     st = { ...profs[i] };
-    document.getElementById("nb-nama").value = st.nama;
-    document.getElementById("nb-nim").value = st.nim;
-    document.getElementById("nb-ipk").value = st.ipk;
-    document.getElementById("nb-ortu").value = st.ortu;
+    syncInputsFromState();
     render();
   };
   window.nbMode = function(m) {
@@ -601,16 +667,21 @@ HTML_NEUBRUTALISM = """<!DOCTYPE html>
   window.nbCustom = function() {
     st.nama = document.getElementById("nb-nama").value.trim() || "Mahasiswa Baru";
     st.nim = document.getElementById("nb-nim").value.trim() || "-";
-    st.ipk = parseFloat(document.getElementById("nb-ipk").value) || 0;
-    st.ortu = parseFloat(document.getElementById("nb-ortu").value) || 0;
+    const ipkEl = document.getElementById("nb-ipk");
+    let ipkVal = parseFloat(ipkEl.value);
+    if (isNaN(ipkVal)) ipkVal = 0;
+    if (ipkVal > 4) { ipkVal = 4; ipkEl.value = "4.00"; }
+    if (ipkVal < 0) { ipkVal = 0; ipkEl.value = "0"; }
+    st.ipk = ipkVal;
+    st.ortu = parseRupiah(document.getElementById("nb-ortu").value);
     render();
   };
   window.nbSave = function() {
     const entry = {
       nim: document.getElementById("nb-nim").value.trim() || `25041400${profs.length + 1}`,
       nama: document.getElementById("nb-nama").value.trim() || `Mahasiswa ${profs.length + 1}`,
-      ipk: parseFloat(document.getElementById("nb-ipk").value) || 0,
-      ortu: parseFloat(document.getElementById("nb-ortu").value) || 0,
+      ipk: Math.min(4, Math.max(0, parseFloat(document.getElementById("nb-ipk").value) || 0)),
+      ortu: parseRupiah(document.getElementById("nb-ortu").value),
       prestasi: st.prestasi,
       org: st.org
     };
@@ -621,15 +692,13 @@ HTML_NEUBRUTALISM = """<!DOCTYPE html>
       selIdx = profs.length - 1;
     }
     st = { ...entry };
+    syncInputsFromState();
     render();
   };
   window.nbNew = function() {
     selIdx = -1;
     st = { nim: `25041400${profs.length + 1}`, nama: "", ipk: 3.60, ortu: 2500000, prestasi: false, org: false };
-    document.getElementById("nb-nama").value = "";
-    document.getElementById("nb-nim").value = st.nim;
-    document.getElementById("nb-ipk").value = st.ipk;
-    document.getElementById("nb-ortu").value = st.ortu;
+    syncInputsFromState();
     document.getElementById("nb-nama").focus();
     render();
   };
@@ -637,7 +706,9 @@ HTML_NEUBRUTALISM = """<!DOCTYPE html>
     if (profs.length <= 1) return;
     profs.splice(i, 1);
     if (selIdx >= profs.length) selIdx = profs.length - 1;
-    st = { ...profs[Math.max(0, selIdx)] };
+    if (selIdx < 0) selIdx = 0;
+    st = { ...profs[selIdx] };
+    syncInputsFromState();
     render();
   };
   window.nbImport = function(ev) {
@@ -645,7 +716,7 @@ HTML_NEUBRUTALISM = """<!DOCTYPE html>
     if (!f) return;
     const r = new FileReader();
     r.onload = function(e) {
-      const lines = e.target.result.split(/\\r?\\n/).filter(l => l.trim().length > 0);
+      const lines = e.target.result.split(/\r?\n/).filter(l => l.trim().length > 0);
       if (lines.length < 2) return;
       const arr = [];
       for (let i = 1; i < lines.length; i++) {
@@ -655,8 +726,8 @@ HTML_NEUBRUTALISM = """<!DOCTYPE html>
           arr.push({
             nim: c[0].trim(),
             nama: c[1].trim(),
-            ipk: parseFloat(c[hp ? 3 : 2]) || 0,
-            ortu: parseFloat(c[hp ? 4 : 3]) || 0,
+            ipk: Math.min(4, Math.max(0, parseFloat(c[hp ? 3 : 2]) || 0)),
+            ortu: parseRupiah(c[hp ? 4 : 3]),
             prestasi: ["ya", "true", "1", "yes"].includes(c[hp ? 5 : 4].trim().toLowerCase()),
             org: ["ya", "true", "1", "yes"].includes(c[hp ? 6 : 5].trim().toLowerCase())
           });
@@ -666,7 +737,7 @@ HTML_NEUBRUTALISM = """<!DOCTYPE html>
     };
     r.readAsText(f);
   };
-  render();
+  nbSelect(0);
 })();
 </script>
 </body>
@@ -679,7 +750,22 @@ def tampilkan_visualisasi_colab():
         from IPython.display import HTML, display
         if "google.colab" not in sys.modules and "ipykernel" not in sys.modules:
             return
-        display(HTML(HTML_NEUBRUTALISM))
+        profil_csv = siapkan_dataset_csv()
+        js_profiles = [
+            {
+                "nim": m["nim"],
+                "nama": m["nama"],
+                "ipk": m["ipk"],
+                "ortu": m["penghasilan_ortu"],
+                "prestasi": m["prestasi_akademik"],
+                "org": m["organisasi_aktif"],
+            }
+            for m in profil_csv
+        ]
+        html_render = HTML_NEUBRUTALISM.replace(
+            "__PROFILES_JSON__", json.dumps(js_profiles, ensure_ascii=False)
+        )
+        display(HTML(html_render))
     except Exception:
         pass
 

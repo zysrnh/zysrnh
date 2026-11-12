@@ -17,33 +17,35 @@
     .nb-wrap {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 15px;
       width: 100%;
-      max-width: 1020px;
+      max-width: 980px;
       background: #ffffff;
       border: 4px solid #000000;
       border-radius: 6px;
-      padding: 18px;
+      padding: 16px;
       box-shadow: 6px 6px 0px #000000;
     }
     .nb-top-split {
       display: flex;
       flex-direction: row;
-      gap: 18px;
+      gap: 16px;
     }
     .nb-left {
       flex: 1.05;
       display: flex;
       flex-direction: column;
-      gap: 11px;
+      gap: 10px;
+      min-width: 0;
     }
     .nb-right {
       flex: 0.95;
       display: flex;
       flex-direction: column;
-      gap: 11px;
+      gap: 10px;
       border-left: 3px solid #000000;
-      padding-left: 18px;
+      padding-left: 16px;
+      min-width: 0;
     }
     .nb-header {
       border-bottom: 3px solid #000000;
@@ -119,12 +121,14 @@
       font-size: 11px;
       font-weight: 900;
       text-transform: uppercase;
+      gap: 4px;
     }
     .nb-badge {
       font-size: 10px;
       font-weight: 900;
       padding: 2px 6px;
       border: 2px solid #000000;
+      white-space: nowrap;
     }
     .nb-b-on { background: #22c55e; color: #000000; }
     .nb-b-off { background: #e2e8f0; color: #475569; }
@@ -265,60 +269,62 @@
     table.nb-tbl {
       width: 100%;
       border-collapse: collapse;
-      font-size: 11.5px;
+      font-size: 11px;
     }
     .nb-tbl th {
       background: #000000;
       color: #ffffff;
-      padding: 8px 7px;
+      padding: 7px 6px;
       text-align: left;
       font-weight: 900;
       text-transform: uppercase;
       border-right: 2px solid #334155;
+      white-space: nowrap;
     }
     .nb-tbl td {
-      padding: 7px;
+      padding: 6px;
       border-bottom: 2px solid #000000;
       border-right: 2px solid #000000;
       font-weight: 800;
       cursor: pointer;
       color: #000000;
+      white-space: nowrap;
     }
     .nb-tbl tr.active-row td { background: #fef08a; }
     .nb-tbl tr:hover td { background: #fef9c3; }
     .chk-yes {
       background: #dcfce7;
       color: #14532d;
-      padding: 2px 6px;
+      padding: 2px 5px;
       border: 2px solid #000000;
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 900;
       display: inline-block;
     }
     .chk-no {
       background: #f1f5f9;
       color: #64748b;
-      padding: 2px 6px;
+      padding: 2px 5px;
       border: 2px solid #000000;
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 900;
       display: inline-block;
     }
     .st-ok {
       background: #22c55e;
       color: #000000;
-      padding: 3px 8px;
+      padding: 3px 7px;
       border: 2px solid #000000;
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 900;
       display: inline-block;
     }
     .st-no {
       background: #ef4444;
       color: #ffffff;
-      padding: 3px 8px;
+      padding: 3px 7px;
       border: 2px solid #000000;
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 900;
       display: inline-block;
     }
@@ -346,15 +352,12 @@
 <body>
 
 <div class="nb-wrap">
-  <!-- HEADER -->
   <div class="nb-header">
     <div class="nb-title">SISTEM PAKAR SELEKSI BEASISWA IDE LPKIA</div>
     <div id="nb-pill" class="nb-pill nb-ok">BEASISWA DISETUJUI</div>
   </div>
 
-  <!-- BAGIAN ATAS: INPUT DINAMIS & INFERENCE TRACE -->
   <div class="nb-top-split">
-    <!-- KIRI: FORM PENGECEKAN DINAMIS & RULES -->
     <div class="nb-left">
       <div class="nb-seg">
         <button class="nb-btn active-mode" id="nb-fc" onclick="nbMode('forward')">Forward Chaining</button>
@@ -386,7 +389,7 @@
             <span>Ortu (< 3.000.000)</span>
             <span id="nb-bortu" class="nb-badge nb-b-on">MEMENUHI</span>
           </div>
-          <input type="number" id="nb-ortu" class="nb-input" step="100000" min="0" value="2400000" oninput="nbCustom()">
+          <input type="text" inputmode="numeric" id="nb-ortu" class="nb-input" value="Rp 2.400.000" placeholder="Rp 0" onkeydown="nbOrtuKeyDown(event)" oninput="nbOrtuInput(this)">
         </div>
 
         <div class="nb-card">
@@ -437,7 +440,6 @@
       </div>
     </div>
 
-    <!-- KANAN: WORKING MEMORY & INFERENCE TRACE -->
     <div class="nb-right">
       <div class="nb-box">
         <div class="nb-phead">
@@ -456,7 +458,6 @@
     </div>
   </div>
 
-  <!-- BAGIAN BAWAH: TABEL PENGECEKAN KELAYAKAN BEASISWA (KLIK BARIS UNTUK CEK) -->
   <div class="nb-table-wrap">
     <table class="nb-tbl">
       <thead>
@@ -465,11 +466,11 @@
           <th>NIM & Nama</th>
           <th>IPK (>=3.5)</th>
           <th>Ortu (<3 Jt)</th>
-          <th>Prestasi</th>
-          <th>Organisasi</th>
-          <th>R1 (Ekonomi)</th>
-          <th>R2 (Prestasi)</th>
-          <th>R3 (Keputusan)</th>
+          <th>Pres</th>
+          <th>Org</th>
+          <th>R1</th>
+          <th>R2</th>
+          <th>Keputusan</th>
           <th>Hapus</th>
         </tr>
       </thead>
@@ -490,6 +491,72 @@
   let selIdx = 0;
   let mode = "forward";
   let st = { ...profs[0] };
+
+  function formatRupiah(num) {
+    const n = Math.max(0, Math.round(Number(num) || 0));
+    return "Rp " + n.toLocaleString("id-ID");
+  }
+
+  function parseRupiah(val) {
+    const d = String(val || "").replace(/\D/g, "");
+    return d ? parseInt(d, 10) : 0;
+  }
+
+  function applyFormattedOrtu(el, digits, targetDigits) {
+    if (!digits) {
+      el.value = "";
+      st.ortu = 0;
+      render();
+      return;
+    }
+    const num = parseInt(digits, 10) || 0;
+    const formatted = formatRupiah(num);
+    el.value = formatted;
+
+    let newPos = formatted.length;
+    if (targetDigits === 0) {
+      newPos = 3;
+    } else {
+      let count = 0;
+      for (let i = 0; i < formatted.length; i++) {
+        if (/\d/.test(formatted[i])) {
+          count++;
+          if (count === targetDigits) {
+            newPos = i + 1;
+            break;
+          }
+        }
+      }
+    }
+    try { el.setSelectionRange(newPos, newPos); } catch (err) {}
+    st.ortu = num;
+    render();
+  }
+
+  window.nbOrtuKeyDown = function(e) {
+    const el = e.target;
+    if (e.key === "Backspace" && el.selectionStart === el.selectionEnd) {
+      if (el.selectionStart <= 3 && el.value.startsWith("Rp ")) {
+        e.preventDefault();
+        return;
+      }
+      if (el.value[el.selectionStart - 1] === ".") {
+        e.preventDefault();
+        const rawBefore = el.value.slice(0, el.selectionStart - 1).replace(/\D/g, "");
+        const rawAfter = el.value.slice(el.selectionStart).replace(/\D/g, "");
+        const newDigits = rawBefore.slice(0, -1) + rawAfter;
+        const targetDigits = Math.max(0, rawBefore.length - 1);
+        applyFormattedOrtu(el, newDigits, targetDigits);
+      }
+    }
+  };
+
+  window.nbOrtuInput = function(el) {
+    const sel = el.selectionStart ?? el.value.length;
+    const targetDigits = el.value.slice(0, sel).replace(/\D/g, "").length;
+    const digits = el.value.replace(/\D/g, "");
+    applyFormattedOrtu(el, digits, targetDigits);
+  };
 
   function getFacts(s) {
     const f = [];
@@ -631,14 +698,14 @@
       const r = evalFC(getFacts(p), p.nama);
       const ipkOk = p.ipk >= 3.5;
       const ortuOk = p.ortu < 3000000;
-      const rp = "Rp " + Number(p.ortu).toLocaleString("id-ID");
+      const rp = formatRupiah(p.ortu);
       return `<tr class="${i === selIdx ? 'active-row' : ''}" onclick="nbSelect(${i})">
         <td>${i + 1}</td>
         <td>${p.nim} - ${p.nama}</td>
-        <td>${Number(p.ipk).toFixed(2)} <span class="${ipkOk ? 'chk-yes' : 'chk-no'}">${ipkOk ? 'YA' : 'TIDAK'}</span></td>
-        <td>${rp} <span class="${ortuOk ? 'chk-yes' : 'chk-no'}">${ortuOk ? 'YA' : 'TIDAK'}</span></td>
-        <td><span class="${p.prestasi ? 'chk-yes' : 'chk-no'}">${p.prestasi ? 'YA' : 'TIDAK'}</span></td>
-        <td><span class="${p.org ? 'chk-yes' : 'chk-no'}">${p.org ? 'YA' : 'TIDAK'}</span></td>
+        <td>${Number(p.ipk).toFixed(2)} <span class="${ipkOk ? 'chk-yes' : 'chk-no'}">${ipkOk ? 'YA' : 'TDK'}</span></td>
+        <td>${rp} <span class="${ortuOk ? 'chk-yes' : 'chk-no'}">${ortuOk ? 'YA' : 'TDK'}</span></td>
+        <td><span class="${p.prestasi ? 'chk-yes' : 'chk-no'}">${p.prestasi ? 'YA' : 'TDK'}</span></td>
+        <td><span class="${p.org ? 'chk-yes' : 'chk-no'}">${p.org ? 'YA' : 'TDK'}</span></td>
         <td><span class="${r.fired.R1 ? 'chk-yes' : 'chk-no'}">${r.fired.R1 ? 'AKTIF' : '-'}</span></td>
         <td><span class="${r.fired.R2 ? 'chk-yes' : 'chk-no'}">${r.fired.R2 ? 'AKTIF' : '-'}</span></td>
         <td><span class="${r.ok ? 'st-ok' : 'st-no'}">${r.ok ? 'DISETUJUI' : 'DITOLAK'}</span></td>
@@ -647,14 +714,18 @@
     }).join("");
   }
 
+  function syncInputsFromState() {
+    document.getElementById("nb-nama").value = st.nama;
+    document.getElementById("nb-nim").value = st.nim;
+    document.getElementById("nb-ipk").value = st.ipk;
+    document.getElementById("nb-ortu").value = formatRupiah(st.ortu);
+  }
+
   window.nbSelect = function(i) {
     if (i < 0 || i >= profs.length) return;
     selIdx = i;
     st = { ...profs[i] };
-    document.getElementById("nb-nama").value = st.nama;
-    document.getElementById("nb-nim").value = st.nim;
-    document.getElementById("nb-ipk").value = st.ipk;
-    document.getElementById("nb-ortu").value = st.ortu;
+    syncInputsFromState();
     render();
   };
 
@@ -673,8 +744,13 @@
   window.nbCustom = function() {
     st.nama = document.getElementById("nb-nama").value.trim() || "Mahasiswa Baru";
     st.nim = document.getElementById("nb-nim").value.trim() || "-";
-    st.ipk = parseFloat(document.getElementById("nb-ipk").value) || 0;
-    st.ortu = parseFloat(document.getElementById("nb-ortu").value) || 0;
+    const ipkEl = document.getElementById("nb-ipk");
+    let ipkVal = parseFloat(ipkEl.value);
+    if (isNaN(ipkVal)) ipkVal = 0;
+    if (ipkVal > 4) { ipkVal = 4; ipkEl.value = "4.00"; }
+    if (ipkVal < 0) { ipkVal = 0; ipkEl.value = "0"; }
+    st.ipk = ipkVal;
+    st.ortu = parseRupiah(document.getElementById("nb-ortu").value);
     render();
   };
 
@@ -682,8 +758,8 @@
     const entry = {
       nim: document.getElementById("nb-nim").value.trim() || `25041400${profs.length + 1}`,
       nama: document.getElementById("nb-nama").value.trim() || `Mahasiswa ${profs.length + 1}`,
-      ipk: parseFloat(document.getElementById("nb-ipk").value) || 0,
-      ortu: parseFloat(document.getElementById("nb-ortu").value) || 0,
+      ipk: Math.min(4, Math.max(0, parseFloat(document.getElementById("nb-ipk").value) || 0)),
+      ortu: parseRupiah(document.getElementById("nb-ortu").value),
       prestasi: st.prestasi,
       org: st.org
     };
@@ -694,6 +770,7 @@
       selIdx = profs.length - 1;
     }
     st = { ...entry };
+    syncInputsFromState();
     render();
   };
 
@@ -707,10 +784,7 @@
       prestasi: false,
       org: false
     };
-    document.getElementById("nb-nama").value = "";
-    document.getElementById("nb-nim").value = st.nim;
-    document.getElementById("nb-ipk").value = st.ipk;
-    document.getElementById("nb-ortu").value = st.ortu;
+    syncInputsFromState();
     document.getElementById("nb-nama").focus();
     render();
   };
@@ -719,7 +793,9 @@
     if (profs.length <= 1) return;
     profs.splice(i, 1);
     if (selIdx >= profs.length) selIdx = profs.length - 1;
-    st = { ...profs[Math.max(0, selIdx)] };
+    if (selIdx < 0) selIdx = 0;
+    st = { ...profs[selIdx] };
+    syncInputsFromState();
     render();
   };
 
@@ -738,8 +814,8 @@
           arr.push({
             nim: c[0].trim(),
             nama: c[1].trim(),
-            ipk: parseFloat(c[hp ? 3 : 2]) || 0,
-            ortu: parseFloat(c[hp ? 4 : 3]) || 0,
+            ipk: Math.min(4, Math.max(0, parseFloat(c[hp ? 3 : 2]) || 0)),
+            ortu: parseRupiah(c[hp ? 4 : 3]),
             prestasi: ["ya", "true", "1", "yes"].includes(c[hp ? 5 : 4].trim().toLowerCase()),
             org: ["ya", "true", "1", "yes"].includes(c[hp ? 6 : 5].trim().toLowerCase())
           });
@@ -750,7 +826,7 @@
     r.readAsText(f);
   };
 
-  render();
+  nbSelect(0);
 })();
 </script>
 </body>
