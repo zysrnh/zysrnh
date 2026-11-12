@@ -59,6 +59,19 @@
       align-items: start;
     }
 
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes chipPop {
+      from { opacity: 0; transform: scale(0.88); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes toastDrop {
+      from { opacity: 0; transform: translateY(-10px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
     /* Sidebar */
     .sidebar {
       background: var(--bg-surface);
@@ -72,6 +85,7 @@
       position: sticky;
       top: 20px;
       min-height: calc(100vh - 40px);
+      animation: fadeSlideUp 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
     }
     .brand {
       display: flex;
@@ -121,9 +135,10 @@
       cursor: pointer;
       text-align: left;
       white-space: nowrap;
-      transition: background 0.15s ease, color 0.15s ease;
+      transition: background 0.18s ease, color 0.18s ease, transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    .nav-btn:hover { background: var(--bg-subtle); color: var(--text-primary); }
+    .nav-btn:hover { background: var(--bg-subtle); color: var(--text-primary); transform: translateX(3px); }
+    .nav-btn:active { transform: scale(0.98); }
     .nav-btn.active {
       background: var(--accent-dark);
       color: var(--accent-dark-fg);
@@ -138,10 +153,12 @@
       flex-shrink: 0;
       background: var(--bg-subtle);
       color: var(--text-secondary);
+      transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
     }
     .nav-btn.active .nav-ico {
       background: var(--bg-surface);
       color: var(--accent-dark);
+      transform: scale(1.06);
     }
 
     .sidebar-foot {
@@ -214,6 +231,17 @@
       text-align: center;
       gap: 10px;
       min-width: 0;
+      animation: fadeSlideUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+      transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.22s ease;
+    }
+    .stat-card:nth-child(2) { animation-delay: 0.04s; }
+    .stat-card:nth-child(3) { animation-delay: 0.08s; }
+    .stat-card:nth-child(4) { animation-delay: 0.12s; }
+    .stat-card:nth-child(5) { animation-delay: 0.16s; }
+    .stat-card:nth-child(6) { animation-delay: 0.20s; }
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(17, 17, 19, 0.07);
     }
     .stat-ico {
       width: 40px;
@@ -293,8 +321,10 @@
       font-weight: 700;
       cursor: pointer;
       white-space: nowrap;
-      transition: all 0.15s ease;
+      transition: background 0.2s cubic-bezier(0.22, 1, 0.36, 1), color 0.18s ease, transform 0.15s ease;
     }
+    .seg-btn:hover:not(.active-mode) { color: var(--text-primary); }
+    .seg-btn:active { transform: scale(0.96); }
     .seg-btn.active-mode {
       background: var(--accent-dark);
       color: var(--accent-dark-fg);
@@ -306,6 +336,7 @@
       font-weight: 800;
       letter-spacing: 0.2px;
       white-space: nowrap;
+      transition: background 0.22s ease, color 0.22s ease, transform 0.2s ease;
     }
     .decision-pill.nb-ok { background: var(--ok-bg); color: var(--ok-fg); }
     .decision-pill.nb-no { background: var(--err-bg); color: var(--err-fg); }
@@ -356,9 +387,9 @@
       border: 1px solid var(--border-hair);
       border-radius: 10px;
       outline: none;
-      transition: border-color 0.15s ease;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
     }
-    .soft-input:focus { border-color: var(--accent-dark); }
+    .soft-input:focus { border-color: var(--accent-dark); box-shadow: 0 0 0 3px rgba(17, 17, 19, 0.08); }
     .soft-input.invalid { border-color: var(--err-fg); background: var(--err-bg); }
 
     .tog-group {
@@ -380,7 +411,9 @@
       font-weight: 700;
       cursor: pointer;
       white-space: nowrap;
+      transition: background 0.18s cubic-bezier(0.22, 1, 0.36, 1), color 0.18s ease, transform 0.14s ease;
     }
+    .tog-btn:active { transform: scale(0.96); }
     .tog-btn.on { background: var(--accent-dark); color: var(--accent-dark-fg); }
     .tog-btn.off { background: var(--neu-bg); color: var(--text-primary); }
 
@@ -402,12 +435,13 @@
       justify-content: center;
       gap: 8px;
       white-space: nowrap;
-      transition: opacity 0.15s ease, background 0.15s ease;
+      transition: opacity 0.16s ease, background 0.16s ease, transform 0.16s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.16s ease;
     }
+    .btn-pill:active:not(:disabled) { transform: scale(0.96); }
     .btn-dark { background: var(--accent-dark); color: var(--accent-dark-fg); }
-    .btn-dark:hover { opacity: 0.88; }
+    .btn-dark:hover { opacity: 0.9; transform: translateY(-1px); }
     .btn-outline { background: var(--bg-surface); color: var(--text-primary); border-color: var(--border-hair); }
-    .btn-outline:hover { background: var(--bg-subtle); }
+    .btn-outline:hover { background: var(--bg-subtle); transform: translateY(-1px); }
     .btn-danger-pill { background: var(--err-bg); color: var(--err-fg); border-color: transparent; }
     .btn-danger-pill:disabled { background: var(--neu-bg); color: var(--text-muted); cursor: not-allowed; }
 
@@ -465,14 +499,19 @@
       width: 10px;
       border-radius: var(--radius-pill);
       min-height: 6px;
-      transition: height 0.25s ease;
+      transition: height 0.55s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
     }
+    .bar-col:hover .bar-stick { opacity: 0.82; }
     .bar-stick.dark { background: var(--accent-dark); }
     .bar-stick.muted { background: var(--bg-bar-muted); }
     .bar-val { font-size: 10.5px; font-weight: 700; color: var(--text-primary); }
     .bar-lbl { font-size: 11px; font-weight: 600; color: var(--text-secondary); white-space: nowrap; }
 
     /* Inference / Rules Panel */
+    .panel {
+      animation: fadeSlideUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+      animation-delay: 0.14s;
+    }
     .rule-list {
       display: flex;
       flex-direction: column;
@@ -487,10 +526,13 @@
       border-radius: var(--radius-item);
       background: var(--bg-subtle);
       border: 1px solid var(--border-soft);
+      transition: background 0.22s ease, border-color 0.22s ease, transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.22s ease;
     }
+    .rule-row:hover { transform: translateX(2px); }
     .rule-row.fired {
       background: var(--bg-surface);
       border-color: var(--accent-dark);
+      box-shadow: 0 3px 12px rgba(17, 17, 19, 0.06);
     }
     .rule-left {
       display: flex;
@@ -510,11 +552,13 @@
       display: grid;
       place-items: center;
       flex-shrink: 0;
+      transition: background 0.22s ease, color 0.22s ease, border-color 0.22s ease, transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .rule-row.fired .rule-id {
       background: var(--accent-dark);
       color: var(--accent-dark-fg);
       border-color: var(--accent-dark);
+      transform: scale(1.05);
     }
     .rule-text {
       font-size: 12px;
@@ -533,6 +577,7 @@
       color: var(--text-secondary);
       white-space: nowrap;
       flex-shrink: 0;
+      transition: background 0.22s ease, color 0.22s ease, border-color 0.22s ease;
     }
     .rule-row.fired .rule-pill {
       background: var(--accent-dark);
@@ -565,6 +610,8 @@
       background: var(--bg-surface);
       border: 1px solid var(--border-hair);
       color: var(--text-primary);
+      animation: chipPop 0.26s cubic-bezier(0.22, 1, 0.36, 1) both;
+      transition: transform 0.18s ease, border-color 0.18s ease;
     }
     .chip.goal { background: var(--ok-bg); color: var(--ok-fg); border-color: transparent; }
 
@@ -650,7 +697,7 @@
     }
     .clean-tbl tbody tr {
       background: var(--bg-subtle);
-      transition: background 0.12s ease;
+      transition: background 0.18s ease, box-shadow 0.18s ease, transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .clean-tbl tbody tr:hover { background: var(--border-soft); }
     .clean-tbl tbody tr.active-row {
@@ -689,8 +736,10 @@
       font-weight: 700;
       padding: 4px 10px;
       cursor: pointer;
+      transition: background 0.16s ease, border-color 0.16s ease, transform 0.14s ease;
     }
     .row-del:hover { background: var(--err-bg); border-color: transparent; }
+    .row-del:active { transform: scale(0.95); }
 
     /* Toast */
     .nb-toast {
@@ -710,7 +759,10 @@
       cursor: pointer;
       border: 1px solid var(--border-hair);
     }
-    .nb-toast.show { display: flex; }
+    .nb-toast.show {
+      display: flex;
+      animation: toastDrop 0.26s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
     .nb-toast.t-ok { background: var(--accent-dark); color: var(--accent-dark-fg); border-color: var(--accent-dark); }
     .nb-toast.t-err { background: var(--err-fg); color: var(--accent-dark-fg); border-color: var(--err-fg); }
     .nb-toast.t-info { background: var(--bg-surface); color: var(--text-primary); }
@@ -733,6 +785,14 @@
       .stats-bar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .bars-grid { gap: 8px; }
       .nb-toast { left: 12px; right: 12px; max-width: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
     }
   </style>
 </head>
@@ -1256,22 +1316,64 @@
       { lbl: "Organisasi", ok: orgCount },
       { lbl: "Disetujui", ok: okCount }
     ];
+    const barData = series.map(s => {
+      const pctOk = total ? Math.round((s.ok / total) * 100) : 0;
+      const pctNo = total ? 100 - pctOk : 0;
+      return {
+        lbl: s.lbl,
+        pctOk,
+        hOk: total ? Math.max(8, Math.round((pctOk / 100) * 68)) : 6,
+        hNo: total ? Math.max(8, Math.round((pctNo / 100) * 68)) : 6
+      };
+    });
     const barsEl = document.getElementById("nb-bars");
     if (barsEl) {
-      barsEl.innerHTML = series.map(s => {
-        const pctOk = total ? Math.round((s.ok / total) * 100) : 0;
-        const pctNo = total ? 100 - pctOk : 0;
-        const hOk = total ? Math.max(8, Math.round((pctOk / 100) * 68)) : 6;
-        const hNo = total ? Math.max(8, Math.round((pctNo / 100) * 68)) : 6;
-        return `<div class="bar-col">
-          <div class="bar-val">${pctOk}%</div>
+      const applyBars = (cols, items) => {
+        items.forEach((b, idx) => {
+          const col = cols[idx];
+          if (!col) return;
+          const valEl = col.querySelector(".bar-val");
+          const darkEl = col.querySelector(".bar-stick.dark");
+          const mutedEl = col.querySelector(".bar-stick.muted");
+          const lblEl = col.querySelector(".bar-lbl");
+          if (valEl) valEl.textContent = `${b.pctOk}%`;
+          if (darkEl) darkEl.style.height = `${b.hOk}px`;
+          if (mutedEl) mutedEl.style.height = `${b.hNo}px`;
+          if (lblEl) lblEl.textContent = b.lbl;
+        });
+      };
+      if (typeof barsEl.querySelectorAll === "function") {
+        const existingCols = barsEl.querySelectorAll(".bar-col");
+        barsEl._pendingBars = barData;
+        if (existingCols.length === barData.length) {
+          applyBars(existingCols, barData);
+        } else {
+          barsEl.innerHTML = barData.map(b => `<div class="bar-col">
+          <div class="bar-val">0%</div>
           <div class="bar-pair">
-            <div class="bar-stick dark" style="height:${hOk}px"></div>
-            <div class="bar-stick muted" style="height:${hNo}px"></div>
+            <div class="bar-stick dark" style="height:6px"></div>
+            <div class="bar-stick muted" style="height:6px"></div>
           </div>
-          <div class="bar-lbl">${s.lbl}</div>
-        </div>`;
-      }).join("");
+          <div class="bar-lbl">${b.lbl}</div>
+        </div>`).join("");
+          if (typeof requestAnimationFrame === "function") {
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+              applyBars(barsEl.querySelectorAll(".bar-col"), barsEl._pendingBars || barData);
+            }));
+          } else {
+            applyBars(barsEl.querySelectorAll(".bar-col"), barData);
+          }
+        }
+      } else {
+        barsEl.innerHTML = barData.map(b => `<div class="bar-col">
+          <div class="bar-val">${b.pctOk}%</div>
+          <div class="bar-pair">
+            <div class="bar-stick dark" style="height:${b.hOk}px"></div>
+            <div class="bar-stick muted" style="height:${b.hNo}px"></div>
+          </div>
+          <div class="bar-lbl">${b.lbl}</div>
+        </div>`).join("");
+      }
     }
   }
 
