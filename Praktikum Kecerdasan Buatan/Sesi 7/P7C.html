@@ -5,94 +5,79 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sistem Pakar Beasiswa IDE LPKIA</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       background: #f1f5f9;
       color: #000000;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      padding: 16px;
+      padding: 14px;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
     }
-
-    .app-container {
+    .nb-wrap {
       display: flex;
-      flex-direction: row;
-      gap: 20px;
+      flex-direction: column;
+      gap: 16px;
       width: 100%;
-      max-width: 980px;
+      max-width: 1020px;
       background: #ffffff;
       border: 4px solid #000000;
       border-radius: 6px;
-      padding: 20px;
+      padding: 18px;
       box-shadow: 6px 6px 0px #000000;
     }
-
-    .left-panel {
+    .nb-top-split {
+      display: flex;
+      flex-direction: row;
+      gap: 18px;
+    }
+    .nb-left {
       flex: 1.05;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 11px;
     }
-
-    .right-panel {
+    .nb-right {
       flex: 0.95;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 11px;
       border-left: 3px solid #000000;
-      padding-left: 20px;
+      padding-left: 18px;
     }
-
-    .header {
+    .nb-header {
       border-bottom: 3px solid #000000;
       padding-bottom: 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 10px;
     }
-
-    .title {
+    .nb-title {
       font-size: 18px;
       font-weight: 900;
-      letter-spacing: -0.4px;
       text-transform: uppercase;
+      letter-spacing: -0.4px;
     }
-
-    .status-pill {
+    .nb-pill {
       font-size: 12px;
       font-weight: 900;
       padding: 6px 12px;
       border: 3px solid #000000;
       box-shadow: 2px 2px 0px #000000;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      white-space: nowrap;
     }
+    .nb-ok { background: #22c55e; color: #000000; }
+    .nb-no { background: #ef4444; color: #ffffff; }
 
-    .pill-approved {
-      background: #22c55e;
-      color: #000000;
-    }
-
-    .pill-rejected {
-      background: #ef4444;
-      color: #ffffff;
-    }
-
-    .segmented-control {
+    .nb-seg {
       display: flex;
       background: #ffffff;
       border: 3px solid #000000;
       box-shadow: 3px 3px 0px #000000;
     }
-
-    .segment-btn {
+    .nb-btn {
       flex: 1;
       background: #ffffff;
       color: #000000;
@@ -103,44 +88,31 @@
       font-weight: 900;
       cursor: pointer;
       text-transform: uppercase;
-      transition: background 0.1s ease;
     }
+    .nb-btn:last-child { border-right: none; }
+    .nb-btn:hover:not(.active-mode) { background: #e2e8f0; }
+    .nb-btn.active-mode { background: #38bdf8; color: #000000; }
 
-    .segment-btn:last-child {
-      border-right: none;
+    .nb-id-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr;
+      gap: 10px;
     }
-
-    .segment-btn:hover:not(.active) {
-      background: #e2e8f0;
-    }
-
-    .segment-btn.active {
-      background: #fde047;
-      color: #000000;
-    }
-
-    .segment-btn.active-mode {
-      background: #38bdf8;
-      color: #000000;
-    }
-
-    .inputs-grid {
+    .nb-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
-
-    .input-card {
+    .nb-card {
       background: #f8fafc;
       border: 3px solid #000000;
-      padding: 10px;
+      padding: 8px 10px;
       box-shadow: 3px 3px 0px #000000;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
     }
-
-    .card-top {
+    .nb-ctop {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -148,41 +120,32 @@
       font-weight: 900;
       text-transform: uppercase;
     }
-
-    .fact-badge {
+    .nb-badge {
       font-size: 10px;
       font-weight: 900;
       padding: 2px 6px;
       border: 2px solid #000000;
     }
+    .nb-b-on { background: #22c55e; color: #000000; }
+    .nb-b-off { background: #e2e8f0; color: #475569; }
 
-    .badge-true {
-      background: #22c55e;
-      color: #000000;
-    }
-
-    .badge-false {
-      background: #e2e8f0;
-      color: #475569;
-    }
-
-    .num-input {
+    .nb-input {
       width: 100%;
       padding: 6px 8px;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 900;
       border: 2px solid #000000;
       background: #ffffff;
       color: #000000;
       outline: none;
     }
+    .nb-input:focus { background: #fefce8; }
 
-    .toggle-row {
+    .nb-trow {
       display: flex;
       border: 2px solid #000000;
     }
-
-    .toggle-btn {
+    .nb-tbtn {
       flex: 1;
       padding: 5px 0;
       font-size: 11px;
@@ -190,90 +153,87 @@
       border: none;
       border-right: 2px solid #000000;
       background: #ffffff;
+      color: #000000;
       cursor: pointer;
     }
+    .nb-tbtn:last-child { border-right: none; }
+    .nb-tbtn.on { background: #22c55e; color: #000000; }
+    .nb-tbtn.off { background: #000000; color: #ffffff; }
 
-    .toggle-btn:last-child {
-      border-right: none;
-    }
-
-    .toggle-btn.on {
-      background: #22c55e;
-      color: #000000;
-    }
-
-    .toggle-btn.off {
-      background: #000000;
-      color: #ffffff;
-    }
-
-    .rules-list {
-      display: flex;
-      flex-direction: column;
+    .nb-actbar {
+      display: grid;
+      grid-template-columns: 1.3fr 0.85fr 0.85fr;
       gap: 8px;
     }
-
-    .rule-card {
+    .nb-actbtn {
+      padding: 8px 6px;
+      font-size: 11px;
+      font-weight: 900;
       border: 3px solid #000000;
-      padding: 10px 12px;
+      box-shadow: 2px 2px 0px #000000;
+      cursor: pointer;
+      text-transform: uppercase;
+      text-align: center;
+    }
+    .nb-actbtn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 0px 0px 0px #000000;
+    }
+    .btn-save { background: #fde047; color: #000000; }
+    .btn-new { background: #ffffff; color: #000000; }
+    .btn-csv { background: #38bdf8; color: #000000; }
+
+    .nb-rules {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .nb-rule {
+      border: 3px solid #000000;
+      padding: 8px 10px;
       background: #f8fafc;
       box-shadow: 3px 3px 0px #000000;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
-
-    .rule-card.fired {
-      background: #fde047;
-    }
-
-    .rule-code {
-      font-size: 12px;
-      font-weight: 900;
-      line-height: 1.35;
-    }
-
-    .rule-tag {
+    .nb-rule.fired { background: #fde047; }
+    .nb-rcode { font-size: 11.5px; font-weight: 900; line-height: 1.35; }
+    .nb-rtag {
       font-size: 10px;
       font-weight: 900;
-      padding: 4px 8px;
+      padding: 3px 8px;
       border: 2px solid #000000;
       background: #ffffff;
-      white-space: nowrap;
       text-transform: uppercase;
+      white-space: nowrap;
     }
+    .nb-rule.fired .nb-rtag { background: #000000; color: #fde047; }
 
-    .rule-card.fired .rule-tag {
-      background: #000000;
-      color: #fde047;
-    }
-
-    .box-panel {
+    .nb-box {
       background: #f8fafc;
       border: 3px solid #000000;
-      padding: 12px;
+      padding: 11px;
       box-shadow: 3px 3px 0px #000000;
     }
-
-    .panel-head {
+    .nb-phead {
       font-size: 11px;
       font-weight: 900;
       text-transform: uppercase;
       border-bottom: 2px solid #000000;
-      padding-bottom: 6px;
+      padding-bottom: 5px;
       margin-bottom: 8px;
       display: flex;
       justify-content: space-between;
+      align-items: center;
     }
-
-    .facts-wrap {
+    .nb-fwrap {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
     }
-
-    .fact-chip {
+    .nb-chip {
       font-size: 11px;
       font-weight: 900;
       padding: 4px 8px;
@@ -281,457 +241,516 @@
       background: #38bdf8;
       color: #000000;
     }
+    .nb-chip.goal { background: #22c55e; }
 
-    .fact-chip.goal {
-      background: #22c55e;
-    }
-
-    .trace-box {
+    .nb-trace {
       font-family: Consolas, "Courier New", monospace;
       font-size: 11.5px;
       font-weight: 700;
-      line-height: 1.5;
+      line-height: 1.48;
       background: #ffffff;
       border: 2px solid #000000;
       padding: 10px;
-      max-height: 195px;
+      height: 245px;
       overflow-y: auto;
       white-space: pre-wrap;
     }
 
-    table {
+    .nb-table-wrap {
+      overflow-x: auto;
+      border: 3px solid #000000;
+      box-shadow: 3px 3px 0px #000000;
+      background: #ffffff;
+    }
+    table.nb-tbl {
       width: 100%;
       border-collapse: collapse;
-      font-size: 11px;
-      background: #ffffff;
-      border: 2px solid #000000;
+      font-size: 11.5px;
     }
-
-    th {
+    .nb-tbl th {
       background: #000000;
       color: #ffffff;
-      padding: 6px;
+      padding: 8px 7px;
       text-align: left;
       font-weight: 900;
       text-transform: uppercase;
+      border-right: 2px solid #334155;
     }
-
-    td {
-      padding: 6px;
+    .nb-tbl td {
+      padding: 7px;
       border-bottom: 2px solid #000000;
+      border-right: 2px solid #000000;
       font-weight: 800;
+      cursor: pointer;
+      color: #000000;
+    }
+    .nb-tbl tr.active-row td { background: #fef08a; }
+    .nb-tbl tr:hover td { background: #fef9c3; }
+    .chk-yes {
+      background: #dcfce7;
+      color: #14532d;
+      padding: 2px 6px;
+      border: 2px solid #000000;
+      font-size: 10px;
+      font-weight: 900;
+      display: inline-block;
+    }
+    .chk-no {
+      background: #f1f5f9;
+      color: #64748b;
+      padding: 2px 6px;
+      border: 2px solid #000000;
+      font-size: 10px;
+      font-weight: 900;
+      display: inline-block;
+    }
+    .st-ok {
+      background: #22c55e;
+      color: #000000;
+      padding: 3px 8px;
+      border: 2px solid #000000;
+      font-size: 10.5px;
+      font-weight: 900;
+      display: inline-block;
+    }
+    .st-no {
+      background: #ef4444;
+      color: #ffffff;
+      padding: 3px 8px;
+      border: 2px solid #000000;
+      font-size: 10.5px;
+      font-weight: 900;
+      display: inline-block;
+    }
+    .del-btn {
+      background: #ef4444;
+      color: #ffffff;
+      border: 2px solid #000000;
+      font-size: 10px;
+      font-weight: 900;
+      padding: 2px 6px;
       cursor: pointer;
     }
 
-    tr:hover td {
-      background: #fef9c3;
-    }
-
-    .txt-ok {
-      color: #15803d;
-      font-weight: 900;
-    }
-
-    .txt-no {
-      color: #b91c1c;
-      font-weight: 900;
-    }
-
     @media (max-width: 820px) {
-      .app-container {
-        flex-direction: column;
-      }
-      .right-panel {
+      .nb-top-split { flex-direction: column; }
+      .nb-right {
         border-left: none;
         border-top: 3px solid #000000;
         padding-left: 0;
-        padding-top: 16px;
+        padding-top: 14px;
       }
     }
   </style>
 </head>
 <body>
 
-<div class="app-container">
-  <!-- PANEL KIRI -->
-  <div class="left-panel">
-    <div class="header">
-      <div class="title">SELEKSI BEASISWA IDE LPKIA</div>
-      <div id="final-pill" class="status-pill pill-approved">BEASISWA DISETUJUI</div>
+<div class="nb-wrap">
+  <!-- HEADER -->
+  <div class="nb-header">
+    <div class="nb-title">SISTEM PAKAR SELEKSI BEASISWA IDE LPKIA</div>
+    <div id="nb-pill" class="nb-pill nb-ok">BEASISWA DISETUJUI</div>
+  </div>
+
+  <!-- BAGIAN ATAS: INPUT DINAMIS & INFERENCE TRACE -->
+  <div class="nb-top-split">
+    <!-- KIRI: FORM PENGECEKAN DINAMIS & RULES -->
+    <div class="nb-left">
+      <div class="nb-seg">
+        <button class="nb-btn active-mode" id="nb-fc" onclick="nbMode('forward')">Forward Chaining</button>
+        <button class="nb-btn" id="nb-bc" onclick="nbMode('backward')">Backward Chaining</button>
+      </div>
+
+      <div class="nb-id-grid">
+        <div class="nb-card">
+          <div class="nb-ctop"><span>Nama Mahasiswa</span></div>
+          <input type="text" id="nb-nama" class="nb-input" value="Rizky Pratama" oninput="nbCustom()">
+        </div>
+        <div class="nb-card">
+          <div class="nb-ctop"><span>NIM</span></div>
+          <input type="text" id="nb-nim" class="nb-input" value="250414001" oninput="nbCustom()">
+        </div>
+      </div>
+
+      <div class="nb-grid">
+        <div class="nb-card">
+          <div class="nb-ctop">
+            <span>IPK (>= 3.5)</span>
+            <span id="nb-bipk" class="nb-badge nb-b-on">MEMENUHI</span>
+          </div>
+          <input type="number" id="nb-ipk" class="nb-input" step="0.01" min="0" max="4" value="3.78" oninput="nbCustom()">
+        </div>
+
+        <div class="nb-card">
+          <div class="nb-ctop">
+            <span>Ortu (< 3.000.000)</span>
+            <span id="nb-bortu" class="nb-badge nb-b-on">MEMENUHI</span>
+          </div>
+          <input type="number" id="nb-ortu" class="nb-input" step="100000" min="0" value="2400000" oninput="nbCustom()">
+        </div>
+
+        <div class="nb-card">
+          <div class="nb-ctop">
+            <span>Prestasi Akademik</span>
+            <span id="nb-bpres" class="nb-badge nb-b-off">TIDAK</span>
+          </div>
+          <div class="nb-trow">
+            <button type="button" id="nb-pya" class="nb-tbtn" onclick="nbTog('prestasi', true)">YA</button>
+            <button type="button" id="nb-pno" class="nb-tbtn off" onclick="nbTog('prestasi', false)">TIDAK</button>
+          </div>
+        </div>
+
+        <div class="nb-card">
+          <div class="nb-ctop">
+            <span>Organisasi Aktif</span>
+            <span id="nb-borg" class="nb-badge nb-b-off">TIDAK</span>
+          </div>
+          <div class="nb-trow">
+            <button type="button" id="nb-oya" class="nb-tbtn" onclick="nbTog('org', true)">YA</button>
+            <button type="button" id="nb-ono" class="nb-tbtn off" onclick="nbTog('org', false)">TIDAK</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="nb-actbar">
+        <button type="button" class="nb-actbtn btn-save" onclick="nbSave()">+ Simpan / Update ke Tabel</button>
+        <button type="button" class="nb-actbtn btn-new" onclick="nbNew()">Input Baru</button>
+        <label class="nb-actbtn btn-csv">
+          Upload CSV
+          <input type="file" accept=".csv" style="display:none" onchange="nbImport(event)">
+        </label>
+      </div>
+
+      <div class="nb-rules">
+        <div class="nb-rule" id="nb-cr1">
+          <div class="nb-rcode">R1: IF IPK >= 3.5 AND OrangTua_KurangMampu THEN Layak_Ekonomi</div>
+          <div class="nb-rtag" id="nb-tr1">AKTIF</div>
+        </div>
+        <div class="nb-rule" id="nb-cr2">
+          <div class="nb-rcode">R2: IF IPK >= 3.5 AND (Prestasi_Akademik OR Organisasi_Aktif) THEN Layak_Prestasi</div>
+          <div class="nb-rtag" id="nb-tr2">LEWAT</div>
+        </div>
+        <div class="nb-rule" id="nb-cr3">
+          <div class="nb-rcode">R3: IF Layak_Ekonomi OR Layak_Prestasi THEN BEASISWA_DISETUJUI</div>
+          <div class="nb-rtag" id="nb-tr3">AKTIF</div>
+        </div>
+      </div>
     </div>
 
-    <!-- PILIH PROFIL MAHASISWA -->
-    <div class="segmented-control" id="profile-tabs">
-      <button class="segment-btn active" onclick="selectProfile(0)">Mhs 1: Rizky</button>
-      <button class="segment-btn" onclick="selectProfile(1)">Mhs 2: Nadia</button>
-      <button class="segment-btn" onclick="selectProfile(2)">Mhs 3: Dimas</button>
-      <button class="segment-btn" onclick="selectProfile(3)">Mhs 4: Siti</button>
-    </div>
-
-    <!-- PILIH METODE PENALARAN -->
-    <div class="segmented-control" id="mode-tabs">
-      <button class="segment-btn active-mode" id="btn-fc" onclick="setMode('forward')">Forward Chaining</button>
-      <button class="segment-btn" id="btn-bc" onclick="setMode('backward')">Backward Chaining</button>
-    </div>
-
-    <!-- INPUT FAKTA ATRIBUT -->
-    <div class="inputs-grid">
-      <div class="input-card">
-        <div class="card-top">
-          <span>IPK (>= 3.5)</span>
-          <span id="badge-ipk" class="fact-badge badge-true">VALID</span>
+    <!-- KANAN: WORKING MEMORY & INFERENCE TRACE -->
+    <div class="nb-right">
+      <div class="nb-box">
+        <div class="nb-phead">
+          <span>Working Memory (Fakta Terbentuk)</span>
+          <span id="nb-fcount">4 Fakta</span>
         </div>
-        <input type="number" id="inp-ipk" class="num-input" step="0.01" min="0" max="4" value="3.78" oninput="onCustomInput()">
+        <div class="nb-fwrap" id="nb-fwrap"></div>
       </div>
 
-      <div class="input-card">
-        <div class="card-top">
-          <span>Ortu (< 3.000.000)</span>
-          <span id="badge-ortu" class="fact-badge badge-true">VALID</span>
+      <div class="nb-box" style="flex:1;">
+        <div class="nb-phead">
+          <span id="nb-ttitle">Jejak Inferensi (Forward Chaining)</span>
         </div>
-        <input type="number" id="inp-ortu" class="num-input" step="100000" min="0" value="2400000" oninput="onCustomInput()">
-      </div>
-
-      <div class="input-card">
-        <div class="card-top">
-          <span>Prestasi Akademik</span>
-          <span id="badge-prestasi" class="fact-badge badge-false">TIDAK</span>
-        </div>
-        <div class="toggle-row">
-          <button type="button" id="prestasi-ya" class="toggle-btn" onclick="setToggle('prestasi', true)">YA</button>
-          <button type="button" id="prestasi-no" class="toggle-btn off" onclick="setToggle('prestasi', false)">TIDAK</button>
-        </div>
-      </div>
-
-      <div class="input-card">
-        <div class="card-top">
-          <span>Organisasi Aktif</span>
-          <span id="badge-org" class="fact-badge badge-false">TIDAK</span>
-        </div>
-        <div class="toggle-row">
-          <button type="button" id="org-ya" class="toggle-btn" onclick="setToggle('org', true)">YA</button>
-          <button type="button" id="org-no" class="toggle-btn off" onclick="setToggle('org', false)">TIDAK</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- DAFTAR ATURAN PRODUKSI R1 - R3 -->
-    <div class="rules-list">
-      <div class="rule-card" id="card-r1">
-        <div class="rule-code">R1: IF IPK >= 3.5 AND OrangTua_KurangMampu<br>THEN Layak_Ekonomi</div>
-        <div class="rule-tag" id="tag-r1">AKTIF</div>
-      </div>
-      <div class="rule-card" id="card-r2">
-        <div class="rule-code">R2: IF IPK >= 3.5 AND (Prestasi_Akademik OR Organisasi_Aktif)<br>THEN Layak_Prestasi</div>
-        <div class="rule-tag" id="tag-r2">LEWAT</div>
-      </div>
-      <div class="rule-card" id="card-r3">
-        <div class="rule-code">R3: IF Layak_Ekonomi OR Layak_Prestasi<br>THEN BEASISWA_DISETUJUI</div>
-        <div class="rule-tag" id="tag-r3">AKTIF</div>
+        <div class="nb-trace" id="nb-trace"></div>
       </div>
     </div>
   </div>
 
-  <!-- PANEL KANAN -->
-  <div class="right-panel">
-    <!-- WORKING MEMORY -->
-    <div class="box-panel">
-      <div class="panel-head">
-        <span>Working Memory (Fakta Aktif)</span>
-        <span id="fact-count">3 Fakta</span>
-      </div>
-      <div class="facts-wrap" id="facts-container"></div>
-    </div>
-
-    <!-- INFERENCE TRACE -->
-    <div class="box-panel">
-      <div class="panel-head">
-        <span id="trace-title">Inference Trace (Forward Chaining)</span>
-      </div>
-      <div class="trace-box" id="trace-output"></div>
-    </div>
-
-    <!-- TABEL DATASET UJI -->
-    <div class="box-panel">
-      <div class="panel-head">
-        <span>Dataset Uji Mahasiswa</span>
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Nama</th>
-            <th>IPK</th>
-            <th>Ortu</th>
-            <th>Pres/Org</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody id="dataset-tbody"></tbody>
-      </table>
-    </div>
+  <!-- BAGIAN BAWAH: TABEL PENGECEKAN KELAYAKAN BEASISWA (KLIK BARIS UNTUK CEK) -->
+  <div class="nb-table-wrap">
+    <table class="nb-tbl">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>NIM & Nama</th>
+          <th>IPK (>=3.5)</th>
+          <th>Ortu (<3 Jt)</th>
+          <th>Prestasi</th>
+          <th>Organisasi</th>
+          <th>R1 (Ekonomi)</th>
+          <th>R2 (Prestasi)</th>
+          <th>R3 (Keputusan)</th>
+          <th>Hapus</th>
+        </tr>
+      </thead>
+      <tbody id="nb-tbody"></tbody>
+    </table>
   </div>
 </div>
 
 <script>
 (function() {
-  const profiles = [
+  let profs = [
     { nim: "250414001", nama: "Rizky Pratama", ipk: 3.78, ortu: 2400000, prestasi: false, org: false },
     { nim: "250414002", nama: "Nadia Maharani", ipk: 3.65, ortu: 5500000, prestasi: true, org: true },
     { nim: "250414003", nama: "Dimas Anggara", ipk: 3.25, ortu: 2200000, prestasi: false, org: true },
     { nim: "250414004", nama: "Siti Nurhaliza", ipk: 3.85, ortu: 2800000, prestasi: true, org: true }
   ];
 
-  let currentMode = "forward";
-  let currentState = { ...profiles[0] };
+  let selIdx = 0;
+  let mode = "forward";
+  let st = { ...profs[0] };
 
-  function extractInitialFacts(state) {
-    const facts = [];
-    if (state.ipk >= 3.5) facts.push("IPK >= 3.5");
-    if (state.ortu < 3000000) facts.push("OrangTua_KurangMampu");
-    if (state.prestasi) facts.push("Prestasi_Akademik");
-    if (state.org) facts.push("Organisasi_Aktif");
-    return facts;
+  function getFacts(s) {
+    const f = [];
+    if (s.ipk >= 3.5) f.push("IPK >= 3.5");
+    if (s.ortu < 3000000) f.push("OrangTua_KurangMampu");
+    if (s.prestasi) f.push("Prestasi_Akademik");
+    if (s.org) f.push("Organisasi_Aktif");
+    return f;
   }
 
-  function runForwardChaining(initialFacts) {
-    const known = new Set(initialFacts);
-    const trace = [];
-    const firedRules = { R1: false, R2: false, R3: false };
+  function evalFC(init, label) {
+    const k = new Set(init);
+    const tr = [`[MAHASISWA] ${label}`, `[FAKTA AWAL] ${JSON.stringify(Array.from(k))}`];
+    const fired = { R1: false, R2: false, R3: false };
+    let step = 1, chg = true;
 
-    trace.push(`[AWAL] Fakta: ${JSON.stringify(Array.from(known))}`);
+    while (chg) {
+      chg = false;
+      tr.push(`\n--- ITERASI ${step} ---`);
 
-    let step = 1;
-    let changed = true;
-
-    while (changed) {
-      changed = false;
-      trace.push(`\n--- ITERASI ${step} ---`);
-
-      // Evaluasi R1
-      const r1Cond = known.has("IPK >= 3.5") && known.has("OrangTua_KurangMampu");
-      if (r1Cond && !known.has("Layak_Ekonomi")) {
-        known.add("Layak_Ekonomi");
-        firedRules.R1 = true;
-        changed = true;
-        trace.push(`[R1 AKTIF] IF IPK >= 3.5 AND OrangTua_KurangMampu -> +Layak_Ekonomi`);
-        step++;
-        continue;
+      if (k.has("IPK >= 3.5") && k.has("OrangTua_KurangMampu") && !k.has("Layak_Ekonomi")) {
+        k.add("Layak_Ekonomi"); fired.R1 = true; chg = true;
+        tr.push("[R1 AKTIF] IF IPK >= 3.5 AND OrangTua_KurangMampu -> +Layak_Ekonomi");
+        step++; continue;
       } else {
-        trace.push(`[R1 LEWAT] ${known.has("Layak_Ekonomi") ? "Sudah ada" : "Syarat belum terpenuhi"}`);
+        tr.push(`[R1 LEWAT] ${k.has("Layak_Ekonomi") ? "Sudah diketahui" : "Syarat belum terpenuhi"}`);
       }
 
-      // Evaluasi R2
-      const r2Cond = known.has("IPK >= 3.5") && (known.has("Prestasi_Akademik") || known.has("Organisasi_Aktif"));
-      if (r2Cond && !known.has("Layak_Prestasi")) {
-        known.add("Layak_Prestasi");
-        firedRules.R2 = true;
-        changed = true;
-        trace.push(`[R2 AKTIF] IF IPK >= 3.5 AND (Prestasi/Organisasi) -> +Layak_Prestasi`);
-        step++;
-        continue;
+      if (k.has("IPK >= 3.5") && (k.has("Prestasi_Akademik") || k.has("Organisasi_Aktif")) && !k.has("Layak_Prestasi")) {
+        k.add("Layak_Prestasi"); fired.R2 = true; chg = true;
+        tr.push("[R2 AKTIF] IF IPK >= 3.5 AND (Prestasi/Organisasi) -> +Layak_Prestasi");
+        step++; continue;
       } else {
-        trace.push(`[R2 LEWAT] ${known.has("Layak_Prestasi") ? "Sudah ada" : "Syarat belum terpenuhi"}`);
+        tr.push(`[R2 LEWAT] ${k.has("Layak_Prestasi") ? "Sudah diketahui" : "Syarat belum terpenuhi"}`);
       }
 
-      // Evaluasi R3
-      const r3Cond = known.has("Layak_Ekonomi") || known.has("Layak_Prestasi");
-      if (r3Cond && !known.has("BEASISWA_DISETUJUI")) {
-        known.add("BEASISWA_DISETUJUI");
-        firedRules.R3 = true;
-        changed = true;
-        trace.push(`[R3 AKTIF] IF Layak_Ekonomi OR Layak_Prestasi -> +BEASISWA_DISETUJUI`);
-        step++;
-        continue;
+      if ((k.has("Layak_Ekonomi") || k.has("Layak_Prestasi")) && !k.has("BEASISWA_DISETUJUI")) {
+        k.add("BEASISWA_DISETUJUI"); fired.R3 = true; chg = true;
+        tr.push("[R3 AKTIF] IF Layak_Ekonomi OR Layak_Prestasi -> +BEASISWA_DISETUJUI");
+        step++; continue;
       } else {
-        trace.push(`[R3 LEWAT] ${known.has("BEASISWA_DISETUJUI") ? "Sudah ada" : "Syarat belum terpenuhi"}`);
+        tr.push(`[R3 LEWAT] ${k.has("BEASISWA_DISETUJUI") ? "Sudah diketahui" : "Syarat belum terpenuhi"}`);
       }
     }
 
-    const approved = known.has("BEASISWA_DISETUJUI");
-    trace.push(`\n[HASIL] ${approved ? "BEASISWA_DISETUJUI (LOLOS)" : "BEASISWA_DITOLAK (TIDAK LOLOS)"}`);
-    return { known: Array.from(known), trace: trace.join("\n"), firedRules, approved };
+    const ok = k.has("BEASISWA_DISETUJUI");
+    tr.push(`\n[KEPUTUSAN] ${ok ? "BEASISWA_DISETUJUI (LOLOS)" : "BEASISWA_DITOLAK (TIDAK LOLOS)"}`);
+    return { known: Array.from(k), trace: tr.join("\n"), fired, ok };
   }
 
-  function runBackwardChaining(initialFacts) {
-    const known = new Set(initialFacts);
-    const trace = [];
-    const firedRules = { R1: false, R2: false, R3: false };
-
-    const rules = {
+  function evalBC(init, label) {
+    const k = new Set(init);
+    const tr = [`[MAHASISWA] ${label}`, `[HIPOTESIS] Membuktikan Goal: 'BEASISWA_DISETUJUI'\n`];
+    const fired = { R1: false, R2: false, R3: false };
+    const rmap = {
       "BEASISWA_DISETUJUI": [
-        { id: "R3 (Jalur Ekonomi)", req: ["Layak_Ekonomi"], code: "R3" },
-        { id: "R3 (Jalur Prestasi)", req: ["Layak_Prestasi"], code: "R3" }
+        { id: "R3 (Jalur Ekonomi)", req: ["Layak_Ekonomi"], c: "R3" },
+        { id: "R3 (Jalur Prestasi)", req: ["Layak_Prestasi"], c: "R3" }
       ],
-      "Layak_Ekonomi": [
-        { id: "R1", req: ["IPK >= 3.5", "OrangTua_KurangMampu"], code: "R1" }
-      ],
+      "Layak_Ekonomi": [{ id: "R1", req: ["IPK >= 3.5", "OrangTua_KurangMampu"], c: "R1" }],
       "Layak_Prestasi": [
-        { id: "R2 (Prestasi)", req: ["IPK >= 3.5", "Prestasi_Akademik"], code: "R2" },
-        { id: "R2 (Organisasi)", req: ["IPK >= 3.5", "Organisasi_Aktif"], code: "R2" }
+        { id: "R2 (Prestasi)", req: ["IPK >= 3.5", "Prestasi_Akademik"], c: "R2" },
+        { id: "R2 (Organisasi)", req: ["IPK >= 3.5", "Organisasi_Aktif"], c: "R2" }
       ]
     };
 
-    function prove(goal, depth = 0) {
-      const indent = "  ".repeat(depth);
-      if (known.has(goal)) {
-        trace.push(`${indent}[FAKTA VALID] '${goal}' ditemukan`);
-        return true;
+    function prove(g, d) {
+      const pad = "  ".repeat(d);
+      if (k.has(g)) { tr.push(`${pad}[FAKTA VALID] '${g}' ditemukan`); return true; }
+      if (!rmap[g]) { tr.push(`${pad}[GAGAL] '${g}' tidak ditemukan`); return false; }
+      for (const b of rmap[g]) {
+        tr.push(`${pad}[CEK ${b.id}] Buktikan '${g}' <- ${JSON.stringify(b.req)}`);
+        let m = true;
+        for (const s of b.req) { if (!prove(s, d + 1)) { m = false; break; } }
+        if (m) { k.add(g); fired[b.c] = true; tr.push(`${pad}[TERBUKTI] '${g}' VALID via ${b.id}`); return true; }
       }
-      if (!rules[goal]) {
-        trace.push(`${indent}[GAGAL] '${goal}' tidak ada di fakta`);
-        return false;
-      }
-
-      for (const branch of rules[goal]) {
-        trace.push(`${indent}[CEK ${branch.id}] Buktikan '${goal}' <- ${JSON.stringify(branch.req)}`);
-        let allMet = true;
-        for (const sg of branch.req) {
-          if (!prove(sg, depth + 1)) {
-            allMet = false;
-            break;
-          }
-        }
-        if (allMet) {
-          known.add(goal);
-          firedRules[branch.code] = true;
-          trace.push(`${indent}[TERBUKTI] '${goal}' VALID via ${branch.id}`);
-          return true;
-        }
-      }
-      trace.push(`${indent}[TIDAK TERBUKTI] '${goal}' gagal dibuktikan`);
+      tr.push(`${pad}[TIDAK TERBUKTI] '${g}' gagal dibuktikan`);
       return false;
     }
 
-    trace.push(`[HIPOTESIS AWAL] Membuktikan Goal: 'BEASISWA_DISETUJUI'\n`);
-    const approved = prove("BEASISWA_DISETUJUI", 0);
-    trace.push(`\n[KESIMPULAN] Hipotesis BEASISWA_DISETUJUI = ${approved ? "TERBUKTI (DISETUJUI)" : "TIDAK TERBUKTI (DITOLAK)"}`);
-
-    return { known: Array.from(known), trace: trace.join("\n"), firedRules, approved };
+    const ok = prove("BEASISWA_DISETUJUI", 0);
+    tr.push(`\n[KESIMPULAN] Hipotesis BEASISWA_DISETUJUI = ${ok ? "TERBUKTI (DISETUJUI)" : "TIDAK TERBUKTI (DITOLAK)"}`);
+    return { known: Array.from(k), trace: tr.join("\n"), fired, ok };
   }
 
-  function updateUI() {
-    // Update input badges
-    const ipkValid = currentState.ipk >= 3.5;
-    const ortuValid = currentState.ortu < 3000000;
+  function render() {
+    const iv = st.ipk >= 3.5, ov = st.ortu < 3000000;
+    const bi = document.getElementById("nb-bipk");
+    bi.textContent = iv ? "MEMENUHI" : "GAGAL";
+    bi.className = "nb-badge " + (iv ? "nb-b-on" : "nb-b-off");
 
-    const bIpk = document.getElementById("badge-ipk");
-    bIpk.textContent = ipkValid ? "VALID" : "TIDAK";
-    bIpk.className = "fact-badge " + (ipkValid ? "badge-true" : "badge-false");
+    const bo = document.getElementById("nb-bortu");
+    bo.textContent = ov ? "MEMENUHI" : "GAGAL";
+    bo.className = "nb-badge " + (ov ? "nb-b-on" : "nb-b-off");
 
-    const bOrtu = document.getElementById("badge-ortu");
-    bOrtu.textContent = ortuValid ? "VALID" : "TIDAK";
-    bOrtu.className = "fact-badge " + (ortuValid ? "badge-true" : "badge-false");
+    const bp = document.getElementById("nb-bpres");
+    bp.textContent = st.prestasi ? "YA" : "TIDAK";
+    bp.className = "nb-badge " + (st.prestasi ? "nb-b-on" : "nb-b-off");
 
-    const bPres = document.getElementById("badge-prestasi");
-    bPres.textContent = currentState.prestasi ? "YA" : "TIDAK";
-    bPres.className = "fact-badge " + (currentState.prestasi ? "badge-true" : "badge-false");
+    const bg = document.getElementById("nb-borg");
+    bg.textContent = st.org ? "YA" : "TIDAK";
+    bg.className = "nb-badge " + (st.org ? "nb-b-on" : "nb-b-off");
 
-    const bOrg = document.getElementById("badge-org");
-    bOrg.textContent = currentState.org ? "YA" : "TIDAK";
-    bOrg.className = "fact-badge " + (currentState.org ? "badge-true" : "badge-false");
+    document.getElementById("nb-pya").className = "nb-tbtn " + (st.prestasi ? "on" : "");
+    document.getElementById("nb-pno").className = "nb-tbtn " + (!st.prestasi ? "off" : "");
+    document.getElementById("nb-oya").className = "nb-tbtn " + (st.org ? "on" : "");
+    document.getElementById("nb-ono").className = "nb-tbtn " + (!st.org ? "off" : "");
 
-    document.getElementById("prestasi-ya").className = "toggle-btn " + (currentState.prestasi ? "on" : "");
-    document.getElementById("prestasi-no").className = "toggle-btn " + (!currentState.prestasi ? "off" : "");
-    document.getElementById("org-ya").className = "toggle-btn " + (currentState.org ? "on" : "");
-    document.getElementById("org-no").className = "toggle-btn " + (!currentState.org ? "off" : "");
+    const label = `${st.nama || "Mahasiswa"} (${st.nim || "-"})`;
+    const f = getFacts(st);
+    const res = mode === "forward" ? evalFC(f, label) : evalBC(f, label);
 
-    const initFacts = extractInitialFacts(currentState);
-    const result = currentMode === "forward"
-      ? runForwardChaining(initFacts)
-      : runBackwardChaining(initFacts);
+    const pill = document.getElementById("nb-pill");
+    pill.textContent = res.ok ? "BEASISWA DISETUJUI" : "BEASISWA DITOLAK";
+    pill.className = "nb-pill " + (res.ok ? "nb-ok" : "nb-no");
 
-    // Status pill
-    const pill = document.getElementById("final-pill");
-    if (result.approved) {
-      pill.textContent = "BEASISWA DISETUJUI";
-      pill.className = "status-pill pill-approved";
-    } else {
-      pill.textContent = "BEASISWA DITOLAK";
-      pill.className = "status-pill pill-rejected";
-    }
-
-    // Highlight Rules
     ["R1", "R2", "R3"].forEach(r => {
-      const card = document.getElementById("card-" + r.toLowerCase());
-      const tag = document.getElementById("tag-" + r.toLowerCase());
-      if (result.firedRules[r]) {
-        card.classList.add("fired");
-        tag.textContent = "TERPEMICU";
-      } else {
-        card.classList.remove("fired");
-        tag.textContent = "LEWAT";
-      }
+      const c = document.getElementById("nb-c" + r.toLowerCase());
+      const t = document.getElementById("nb-t" + r.toLowerCase());
+      if (res.fired[r]) { c.classList.add("fired"); t.textContent = "TERPEMICU"; }
+      else { c.classList.remove("fired"); t.textContent = "LEWAT"; }
     });
 
-    // Working memory chips
-    const factsWrap = document.getElementById("facts-container");
-    document.getElementById("fact-count").textContent = `${result.known.length} Fakta`;
-    if (result.known.length === 0) {
-      factsWrap.innerHTML = `<span class="fact-chip" style="background:#e2e8f0;">Tidak ada fakta memenuhi syarat</span>`;
-    } else {
-      factsWrap.innerHTML = result.known.map(f => {
-        const isGoal = f === "BEASISWA_DISETUJUI";
-        return `<span class="fact-chip ${isGoal ? 'goal' : ''}">${f}</span>`;
-      }).join("");
-    }
+    document.getElementById("nb-fcount").textContent = `${res.known.length} Fakta`;
+    document.getElementById("nb-fwrap").innerHTML = res.known.length
+      ? res.known.map(x => `<span class="nb-chip ${x === 'BEASISWA_DISETUJUI' ? 'goal' : ''}">${x}</span>`).join("")
+      : `<span class="nb-chip" style="background:#e2e8f0;">Tidak ada fakta memenuhi syarat</span>`;
 
-    // Trace
-    document.getElementById("trace-title").textContent =
-      `Inference Trace (${currentMode === "forward" ? "Forward Chaining" : "Backward Chaining"})`;
-    document.getElementById("trace-output").textContent = result.trace;
+    document.getElementById("nb-ttitle").textContent =
+      `Jejak Inferensi (${mode === "forward" ? "Forward Chaining" : "Backward Chaining"})`;
+    document.getElementById("nb-trace").textContent = res.trace;
 
     renderTable();
   }
 
   function renderTable() {
-    const tbody = document.getElementById("dataset-tbody");
-    tbody.innerHTML = profiles.map((p, idx) => {
-      const f = extractInitialFacts(p);
-      const res = runForwardChaining(f);
-      const rp = "Rp " + (p.ortu / 1000000).toFixed(1) + " Jt";
-      const po = `${p.prestasi ? "Ya" : "-"}/${p.org ? "Ya" : "-"}`;
-      return `<tr onclick="selectProfile(${idx})">
-        <td>${p.nama}</td>
-        <td>${p.ipk.toFixed(2)}</td>
-        <td>${rp}</td>
-        <td>${po}</td>
-        <td class="${res.approved ? 'txt-ok' : 'txt-no'}">${res.approved ? 'DISETUJUI' : 'DITOLAK'}</td>
+    const tbody = document.getElementById("nb-tbody");
+    tbody.innerHTML = profs.map((p, i) => {
+      const r = evalFC(getFacts(p), p.nama);
+      const ipkOk = p.ipk >= 3.5;
+      const ortuOk = p.ortu < 3000000;
+      const rp = "Rp " + Number(p.ortu).toLocaleString("id-ID");
+      return `<tr class="${i === selIdx ? 'active-row' : ''}" onclick="nbSelect(${i})">
+        <td>${i + 1}</td>
+        <td>${p.nim} - ${p.nama}</td>
+        <td>${Number(p.ipk).toFixed(2)} <span class="${ipkOk ? 'chk-yes' : 'chk-no'}">${ipkOk ? 'YA' : 'TIDAK'}</span></td>
+        <td>${rp} <span class="${ortuOk ? 'chk-yes' : 'chk-no'}">${ortuOk ? 'YA' : 'TIDAK'}</span></td>
+        <td><span class="${p.prestasi ? 'chk-yes' : 'chk-no'}">${p.prestasi ? 'YA' : 'TIDAK'}</span></td>
+        <td><span class="${p.org ? 'chk-yes' : 'chk-no'}">${p.org ? 'YA' : 'TIDAK'}</span></td>
+        <td><span class="${r.fired.R1 ? 'chk-yes' : 'chk-no'}">${r.fired.R1 ? 'AKTIF' : '-'}</span></td>
+        <td><span class="${r.fired.R2 ? 'chk-yes' : 'chk-no'}">${r.fired.R2 ? 'AKTIF' : '-'}</span></td>
+        <td><span class="${r.ok ? 'st-ok' : 'st-no'}">${r.ok ? 'DISETUJUI' : 'DITOLAK'}</span></td>
+        <td onclick="event.stopPropagation(); nbDel(${i})"><button class="del-btn">X</button></td>
       </tr>`;
     }).join("");
   }
 
-  window.selectProfile = function(index) {
-    currentState = { ...profiles[index] };
-    document.getElementById("inp-ipk").value = currentState.ipk;
-    document.getElementById("inp-ortu").value = currentState.ortu;
-
-    const btns = document.querySelectorAll("#profile-tabs .segment-btn");
-    btns.forEach((b, i) => b.classList.toggle("active", i === index));
-    updateUI();
+  window.nbSelect = function(i) {
+    if (i < 0 || i >= profs.length) return;
+    selIdx = i;
+    st = { ...profs[i] };
+    document.getElementById("nb-nama").value = st.nama;
+    document.getElementById("nb-nim").value = st.nim;
+    document.getElementById("nb-ipk").value = st.ipk;
+    document.getElementById("nb-ortu").value = st.ortu;
+    render();
   };
 
-  window.setMode = function(mode) {
-    currentMode = mode;
-    document.getElementById("btn-fc").classList.toggle("active-mode", mode === "forward");
-    document.getElementById("btn-bc").classList.toggle("active-mode", mode === "backward");
-    updateUI();
+  window.nbMode = function(m) {
+    mode = m;
+    document.getElementById("nb-fc").classList.toggle("active-mode", m === "forward");
+    document.getElementById("nb-bc").classList.toggle("active-mode", m === "backward");
+    render();
   };
 
-  window.setToggle = function(field, val) {
-    if (field === "prestasi") currentState.prestasi = val;
-    if (field === "org") currentState.org = val;
-    document.querySelectorAll("#profile-tabs .segment-btn").forEach(b => b.classList.remove("active"));
-    updateUI();
+  window.nbTog = function(k, v) {
+    st[k] = v;
+    render();
   };
 
-  window.onCustomInput = function() {
-    currentState.ipk = parseFloat(document.getElementById("inp-ipk").value) || 0;
-    currentState.ortu = parseFloat(document.getElementById("inp-ortu").value) || 0;
-    document.querySelectorAll("#profile-tabs .segment-btn").forEach(b => b.classList.remove("active"));
-    updateUI();
+  window.nbCustom = function() {
+    st.nama = document.getElementById("nb-nama").value.trim() || "Mahasiswa Baru";
+    st.nim = document.getElementById("nb-nim").value.trim() || "-";
+    st.ipk = parseFloat(document.getElementById("nb-ipk").value) || 0;
+    st.ortu = parseFloat(document.getElementById("nb-ortu").value) || 0;
+    render();
   };
 
-  updateUI();
+  window.nbSave = function() {
+    const entry = {
+      nim: document.getElementById("nb-nim").value.trim() || `25041400${profs.length + 1}`,
+      nama: document.getElementById("nb-nama").value.trim() || `Mahasiswa ${profs.length + 1}`,
+      ipk: parseFloat(document.getElementById("nb-ipk").value) || 0,
+      ortu: parseFloat(document.getElementById("nb-ortu").value) || 0,
+      prestasi: st.prestasi,
+      org: st.org
+    };
+    if (selIdx >= 0 && selIdx < profs.length && profs[selIdx].nim === entry.nim) {
+      profs[selIdx] = entry;
+    } else {
+      profs.push(entry);
+      selIdx = profs.length - 1;
+    }
+    st = { ...entry };
+    render();
+  };
+
+  window.nbNew = function() {
+    selIdx = -1;
+    st = {
+      nim: `25041400${profs.length + 1}`,
+      nama: "",
+      ipk: 3.60,
+      ortu: 2500000,
+      prestasi: false,
+      org: false
+    };
+    document.getElementById("nb-nama").value = "";
+    document.getElementById("nb-nim").value = st.nim;
+    document.getElementById("nb-ipk").value = st.ipk;
+    document.getElementById("nb-ortu").value = st.ortu;
+    document.getElementById("nb-nama").focus();
+    render();
+  };
+
+  window.nbDel = function(i) {
+    if (profs.length <= 1) return;
+    profs.splice(i, 1);
+    if (selIdx >= profs.length) selIdx = profs.length - 1;
+    st = { ...profs[Math.max(0, selIdx)] };
+    render();
+  };
+
+  window.nbImport = function(ev) {
+    const f = ev.target.files[0];
+    if (!f) return;
+    const r = new FileReader();
+    r.onload = function(e) {
+      const lines = e.target.result.split(/\r?\n/).filter(l => l.trim().length > 0);
+      if (lines.length < 2) return;
+      const arr = [];
+      for (let i = 1; i < lines.length; i++) {
+        const c = lines[i].split(",");
+        if (c.length >= 6) {
+          const hp = c.length >= 7;
+          arr.push({
+            nim: c[0].trim(),
+            nama: c[1].trim(),
+            ipk: parseFloat(c[hp ? 3 : 2]) || 0,
+            ortu: parseFloat(c[hp ? 4 : 3]) || 0,
+            prestasi: ["ya", "true", "1", "yes"].includes(c[hp ? 5 : 4].trim().toLowerCase()),
+            org: ["ya", "true", "1", "yes"].includes(c[hp ? 6 : 5].trim().toLowerCase())
+          });
+        }
+      }
+      if (arr.length > 0) { profs = arr; nbSelect(0); }
+    };
+    r.readAsText(f);
+  };
+
+  render();
 })();
 </script>
 </body>
