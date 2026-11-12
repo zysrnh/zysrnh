@@ -10,53 +10,53 @@
       background: #f1f5f9;
       color: #000000;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      padding: 14px;
+      padding: 24px;
       display: flex;
       justify-content: center;
     }
     .nb-wrap {
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      gap: 22px;
       width: 100%;
-      max-width: 980px;
+      max-width: 1080px;
       background: #ffffff;
       border: 4px solid #000000;
       border-radius: 6px;
-      padding: 16px;
+      padding: 24px;
       box-shadow: 6px 6px 0px #000000;
     }
     .nb-top-split {
       display: flex;
       flex-direction: row;
-      gap: 16px;
+      gap: 24px;
     }
     .nb-left {
       flex: 1.05;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 16px;
       min-width: 0;
     }
     .nb-right {
       flex: 0.95;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 16px;
       border-left: 3px solid #000000;
-      padding-left: 16px;
+      padding-left: 24px;
       min-width: 0;
     }
     .nb-header {
       border-bottom: 3px solid #000000;
-      padding-bottom: 10px;
+      padding-bottom: 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 10px;
+      gap: 16px;
     }
     .nb-title {
-      font-size: 18px;
+      font-size: 19px;
       font-weight: 900;
       text-transform: uppercase;
       letter-spacing: -0.4px;
@@ -64,9 +64,9 @@
     .nb-pill {
       font-size: 12px;
       font-weight: 900;
-      padding: 6px 12px;
+      padding: 8px 14px;
       border: 3px solid #000000;
-      box-shadow: 2px 2px 0px #000000;
+      box-shadow: 3px 3px 0px #000000;
       text-transform: uppercase;
       white-space: nowrap;
     }
@@ -85,7 +85,7 @@
       color: #000000;
       border: none;
       border-right: 3px solid #000000;
-      padding: 8px 6px;
+      padding: 10px 8px;
       font-size: 11px;
       font-weight: 900;
       cursor: pointer;
@@ -98,21 +98,21 @@
     .nb-id-grid {
       display: grid;
       grid-template-columns: 1.3fr 0.7fr;
-      gap: 10px;
+      gap: 14px;
     }
     .nb-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 14px;
     }
     .nb-card {
       background: #f8fafc;
       border: 3px solid #000000;
-      padding: 8px 10px;
+      padding: 12px 14px;
       box-shadow: 3px 3px 0px #000000;
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 8px;
     }
     .nb-ctop {
       display: flex;
@@ -121,21 +121,22 @@
       font-size: 11px;
       font-weight: 900;
       text-transform: uppercase;
-      gap: 4px;
+      gap: 8px;
     }
     .nb-badge {
       font-size: 10px;
       font-weight: 900;
-      padding: 2px 6px;
+      padding: 3px 8px;
       border: 2px solid #000000;
       white-space: nowrap;
     }
     .nb-b-on { background: #22c55e; color: #000000; }
     .nb-b-off { background: #e2e8f0; color: #475569; }
+    .nb-b-err { background: #ef4444; color: #ffffff; }
 
     .nb-input {
       width: 100%;
-      padding: 6px 8px;
+      padding: 8px 10px;
       font-size: 13px;
       font-weight: 900;
       border: 2px solid #000000;
@@ -144,6 +145,7 @@
       outline: none;
     }
     .nb-input:focus { background: #fefce8; }
+    .nb-input.invalid { border-color: #ef4444; background: #fef2f2; }
 
     .nb-trow {
       display: flex;
@@ -151,7 +153,7 @@
     }
     .nb-tbtn {
       flex: 1;
-      padding: 5px 0;
+      padding: 7px 0;
       font-size: 11px;
       font-weight: 900;
       border: none;
@@ -166,15 +168,15 @@
 
     .nb-actbar {
       display: grid;
-      grid-template-columns: 1.3fr 0.85fr 0.85fr;
-      gap: 8px;
+      grid-template-columns: 1.35fr 0.8fr 0.85fr 1fr;
+      gap: 10px;
     }
     .nb-actbtn {
-      padding: 8px 6px;
+      padding: 11px 8px;
       font-size: 11px;
       font-weight: 900;
       border: 3px solid #000000;
-      box-shadow: 2px 2px 0px #000000;
+      box-shadow: 3px 3px 0px #000000;
       cursor: pointer;
       text-transform: uppercase;
       text-align: center;
@@ -186,28 +188,29 @@
     .btn-save { background: #fde047; color: #000000; }
     .btn-new { background: #ffffff; color: #000000; }
     .btn-csv { background: #38bdf8; color: #000000; }
+    .btn-load100 { background: #22c55e; color: #000000; }
 
     .nb-rules {
       display: flex;
       flex-direction: column;
-      gap: 7px;
+      gap: 12px;
     }
     .nb-rule {
       border: 3px solid #000000;
-      padding: 8px 10px;
+      padding: 12px 14px;
       background: #f8fafc;
       box-shadow: 3px 3px 0px #000000;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 8px;
+      gap: 14px;
     }
     .nb-rule.fired { background: #fde047; }
-    .nb-rcode { font-size: 11.5px; font-weight: 900; line-height: 1.35; }
+    .nb-rcode { font-size: 11.5px; font-weight: 900; line-height: 1.45; }
     .nb-rtag {
       font-size: 10px;
       font-weight: 900;
-      padding: 3px 8px;
+      padding: 4px 10px;
       border: 2px solid #000000;
       background: #ffffff;
       text-transform: uppercase;
@@ -218,7 +221,7 @@
     .nb-box {
       background: #f8fafc;
       border: 3px solid #000000;
-      padding: 11px;
+      padding: 14px 16px;
       box-shadow: 3px 3px 0px #000000;
     }
     .nb-phead {
@@ -226,21 +229,22 @@
       font-weight: 900;
       text-transform: uppercase;
       border-bottom: 2px solid #000000;
-      padding-bottom: 5px;
-      margin-bottom: 8px;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 8px;
     }
     .nb-fwrap {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
+      gap: 8px;
     }
     .nb-chip {
       font-size: 11px;
       font-weight: 900;
-      padding: 4px 8px;
+      padding: 5px 10px;
       border: 2px solid #000000;
       background: #38bdf8;
       color: #000000;
@@ -251,30 +255,90 @@
       font-family: Consolas, "Courier New", monospace;
       font-size: 11.5px;
       font-weight: 700;
-      line-height: 1.48;
+      line-height: 1.55;
       background: #ffffff;
       border: 2px solid #000000;
-      padding: 10px;
-      height: 245px;
+      padding: 12px 14px;
+      height: 270px;
       overflow-y: auto;
       white-space: pre-wrap;
     }
 
+    .nb-filterbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      background: #f8fafc;
+      border: 3px solid #000000;
+      padding: 12px 14px;
+      box-shadow: 3px 3px 0px #000000;
+    }
+    .nb-finput {
+      flex: 1.5;
+      min-width: 190px;
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      border: 2px solid #000000;
+      background: #ffffff;
+      color: #000000;
+      outline: none;
+    }
+    .nb-finput:focus { background: #fefce8; }
+    .nb-fsel {
+      flex: 1;
+      min-width: 150px;
+      padding: 8px 10px;
+      font-size: 11.5px;
+      font-weight: 900;
+      border: 2px solid #000000;
+      background: #ffffff;
+      color: #000000;
+      cursor: pointer;
+      outline: none;
+    }
+    .nb-fcount {
+      font-size: 11px;
+      font-weight: 900;
+      padding: 7px 11px;
+      border: 2px solid #000000;
+      background: #fde047;
+      color: #000000;
+      white-space: nowrap;
+    }
+    .nb-freset {
+      padding: 7px 12px;
+      font-size: 11px;
+      font-weight: 900;
+      border: 2px solid #000000;
+      background: #ffffff;
+      color: #000000;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+    .nb-freset:hover { background: #e2e8f0; }
+
     .nb-table-wrap {
       overflow-x: auto;
+      overflow-y: auto;
+      max-height: 430px;
       border: 3px solid #000000;
-      box-shadow: 3px 3px 0px #000000;
+      box-shadow: 4px 4px 0px #000000;
       background: #ffffff;
     }
     table.nb-tbl {
       width: 100%;
       border-collapse: collapse;
-      font-size: 11px;
+      font-size: 11.5px;
     }
     .nb-tbl th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
       background: #000000;
       color: #ffffff;
-      padding: 7px 6px;
+      padding: 11px 12px;
       text-align: left;
       font-weight: 900;
       text-transform: uppercase;
@@ -282,7 +346,7 @@
       white-space: nowrap;
     }
     .nb-tbl td {
-      padding: 6px;
+      padding: 10px 12px;
       border-bottom: 2px solid #000000;
       border-right: 2px solid #000000;
       font-weight: 800;
@@ -292,28 +356,33 @@
     }
     .nb-tbl tr.active-row td { background: #fef08a; }
     .nb-tbl tr:hover td { background: #fef9c3; }
+    .nb-cell-split {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
     .chk-yes {
       background: #dcfce7;
       color: #14532d;
-      padding: 2px 5px;
+      padding: 3px 7px;
       border: 2px solid #000000;
-      font-size: 9.5px;
+      font-size: 10px;
       font-weight: 900;
       display: inline-block;
     }
     .chk-no {
       background: #f1f5f9;
       color: #64748b;
-      padding: 2px 5px;
+      padding: 3px 7px;
       border: 2px solid #000000;
-      font-size: 9.5px;
+      font-size: 10px;
       font-weight: 900;
       display: inline-block;
     }
     .st-ok {
       background: #22c55e;
       color: #000000;
-      padding: 3px 7px;
+      padding: 4px 9px;
       border: 2px solid #000000;
       font-size: 10px;
       font-weight: 900;
@@ -322,7 +391,7 @@
     .st-no {
       background: #ef4444;
       color: #ffffff;
-      padding: 3px 7px;
+      padding: 4px 9px;
       border: 2px solid #000000;
       font-size: 10px;
       font-weight: 900;
@@ -334,17 +403,18 @@
       border: 2px solid #000000;
       font-size: 10px;
       font-weight: 900;
-      padding: 2px 6px;
+      padding: 4px 9px;
       cursor: pointer;
     }
 
-    @media (max-width: 820px) {
+    @media (max-width: 860px) {
       .nb-top-split { flex-direction: column; }
+      .nb-actbar { grid-template-columns: 1fr 1fr; }
       .nb-right {
         border-left: none;
         border-top: 3px solid #000000;
         padding-left: 0;
-        padding-top: 14px;
+        padding-top: 18px;
       }
     }
   </style>
@@ -381,12 +451,12 @@
             <span>IPK (>= 3.5)</span>
             <span id="nb-bipk" class="nb-badge nb-b-on">MEMENUHI</span>
           </div>
-          <input type="number" id="nb-ipk" class="nb-input" step="0.01" min="0" max="4" value="3.78" oninput="nbCustom()">
+          <input type="text" inputmode="decimal" id="nb-ipk" class="nb-input" value="3.78" placeholder="0.00 - 4.00" oninput="nbCustom()">
         </div>
 
         <div class="nb-card">
           <div class="nb-ctop">
-            <span>Ortu (< 3.000.000)</span>
+            <span>Ortu (&lt; 3.000.000)</span>
             <span id="nb-bortu" class="nb-badge nb-b-on">MEMENUHI</span>
           </div>
           <input type="text" inputmode="numeric" id="nb-ortu" class="nb-input" value="Rp 2.400.000" placeholder="Rp 0" onkeydown="nbOrtuKeyDown(event)" oninput="nbOrtuInput(this)">
@@ -416,12 +486,13 @@
       </div>
 
       <div class="nb-actbar">
-        <button type="button" class="nb-actbtn btn-save" onclick="nbSave()">+ Simpan / Update ke Tabel</button>
+        <button type="button" class="nb-actbtn btn-save" onclick="nbSave()">+ Simpan / Update</button>
         <button type="button" class="nb-actbtn btn-new" onclick="nbNew()">Input Baru</button>
         <label class="nb-actbtn btn-csv">
           Upload CSV
           <input type="file" accept=".csv" style="display:none" onchange="nbImport(event)">
         </label>
+        <button type="button" class="nb-actbtn btn-load100" onclick="nbImport100()">Import 100 Data</button>
       </div>
 
       <div class="nb-rules">
@@ -458,14 +529,33 @@
     </div>
   </div>
 
+  <div class="nb-filterbar">
+    <input type="text" id="nb-fq" class="nb-finput" placeholder="Cari NIM / Nama..." oninput="nbFilter()">
+    <select id="nb-fst" class="nb-fsel" onchange="nbFilter()">
+      <option value="all">Semua Status</option>
+      <option value="disetujui">DISETUJUI</option>
+      <option value="ditolak">DITOLAK</option>
+    </select>
+    <select id="nb-frule" class="nb-fsel" onchange="nbFilter()">
+      <option value="all">Semua Rule / Syarat</option>
+      <option value="r1">R1 (Layak Ekonomi)</option>
+      <option value="r2">R2 (Layak Prestasi)</option>
+      <option value="r1r2">R1 &amp; R2 Aktif</option>
+      <option value="ipk_ok">IPK &gt;= 3.5</option>
+      <option value="ipk_no">IPK &lt; 3.5 / Invalid</option>
+    </select>
+    <span id="nb-tcount" class="nb-fcount">4 / 4 Data</span>
+    <button type="button" class="nb-freset" onclick="nbResetFilter()">Reset</button>
+  </div>
+
   <div class="nb-table-wrap">
     <table class="nb-tbl">
       <thead>
         <tr>
           <th>No</th>
-          <th>NIM & Nama</th>
-          <th>IPK (>=3.5)</th>
-          <th>Ortu (<3 Jt)</th>
+          <th>NIM &amp; Nama</th>
+          <th>IPK (&gt;=3.5)</th>
+          <th>Ortu (&lt;3 Jt)</th>
           <th>Pres</th>
           <th>Org</th>
           <th>R1</th>
@@ -491,6 +581,32 @@
   let selIdx = 0;
   let mode = "forward";
   let st = { ...profs[0] };
+
+  function syncToColabSheet() {
+    try {
+      if (window.google && google.colab && google.colab.kernel && typeof google.colab.kernel.invokeFunction === "function") {
+        google.colab.kernel.invokeFunction("sync_beasiswa_sheet", [profs], {});
+      }
+    } catch (e) {}
+  }
+
+  function parseIPK(val) {
+    if (typeof val === "number") return Number.isFinite(val) ? val : NaN;
+    const raw = String(val ?? "").trim().replace(",", ".");
+    if (!raw || !/^-?(\d+(\.\d*)?|\.\d+)$/.test(raw)) return NaN;
+    return Number(raw);
+  }
+
+  function evalIPK(val) {
+    const num = parseIPK(val);
+    if (isNaN(num) || num < 0 || num > 4) {
+      return { num: num, ok: false, invalid: true, badge: "TIDAK VALID", cls: "nb-b-err", tag: "INV" };
+    } else if (num >= 3.5) {
+      return { num: num, ok: true, invalid: false, badge: "MEMENUHI", cls: "nb-b-on", tag: "YA" };
+    } else {
+      return { num: num, ok: false, invalid: false, badge: "GAGAL", cls: "nb-b-off", tag: "TDK" };
+    }
+  }
 
   function formatRupiah(num) {
     const n = Math.max(0, Math.round(Number(num) || 0));
@@ -560,7 +676,8 @@
 
   function getFacts(s) {
     const f = [];
-    if (s.ipk >= 3.5) f.push("IPK >= 3.5");
+    const ipkRes = evalIPK(s.ipk);
+    if (ipkRes.ok) f.push("IPK >= 3.5");
     if (s.ortu < 3000000) f.push("OrangTua_KurangMampu");
     if (s.prestasi) f.push("Prestasi_Akademik");
     if (s.org) f.push("Organisasi_Aktif");
@@ -643,10 +760,14 @@
   }
 
   function render() {
-    const iv = st.ipk >= 3.5, ov = st.ortu < 3000000;
+    const ipkRes = evalIPK(st.ipk);
+    const ov = st.ortu < 3000000;
+
+    const ipkEl = document.getElementById("nb-ipk");
+    ipkEl.classList.toggle("invalid", ipkRes.invalid);
     const bi = document.getElementById("nb-bipk");
-    bi.textContent = iv ? "MEMENUHI" : "GAGAL";
-    bi.className = "nb-badge " + (iv ? "nb-b-on" : "nb-b-off");
+    bi.textContent = ipkRes.badge;
+    bi.className = "nb-badge " + ipkRes.cls;
 
     const bo = document.getElementById("nb-bortu");
     bo.textContent = ov ? "MEMENUHI" : "GAGAL";
@@ -692,32 +813,80 @@
     renderTable();
   }
 
+  function escHtml(s) {
+    return String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function rowMatchesFilter(p) {
+    const q = (document.getElementById("nb-fq").value || "").trim().toLowerCase();
+    const fst = document.getElementById("nb-fst").value;
+    const frule = document.getElementById("nb-frule").value;
+    const r = evalFC(getFacts(p), p.nama);
+    const ipkCheck = evalIPK(p.ipk);
+
+    if (q) {
+      const hay = `${p.nim} ${p.nama}`.toLowerCase();
+      if (!hay.includes(q)) return null;
+    }
+
+    if (fst === "disetujui" && !r.ok) return null;
+    else if (fst === "ditolak" && r.ok) return null;
+
+    if (frule === "r1" && !r.fired.R1) return null;
+    else if (frule === "r2" && !r.fired.R2) return null;
+    else if (frule === "r1r2" && !(r.fired.R1 && r.fired.R2)) return null;
+    else if (frule === "ipk_ok" && !ipkCheck.ok) return null;
+    else if (frule === "ipk_no" && ipkCheck.ok) return null;
+
+    return { r, ipkCheck };
+  }
+
   function renderTable() {
     const tbody = document.getElementById("nb-tbody");
-    tbody.innerHTML = profs.map((p, i) => {
-      const r = evalFC(getFacts(p), p.nama);
-      const ipkOk = p.ipk >= 3.5;
+    const rowsHtml = [];
+    profs.forEach((p, i) => {
+      const match = rowMatchesFilter(p);
+      if (!match) return;
+      const { r, ipkCheck } = match;
+      const ipkText = isNaN(ipkCheck.num) ? "-" : Number(ipkCheck.num).toFixed(2);
+      const ipkCls = ipkCheck.ok ? "chk-yes" : (ipkCheck.invalid ? "st-no" : "chk-no");
       const ortuOk = p.ortu < 3000000;
       const rp = formatRupiah(p.ortu);
-      return `<tr class="${i === selIdx ? 'active-row' : ''}" onclick="nbSelect(${i})">
+      rowsHtml.push(`<tr class="${i === selIdx ? 'active-row' : ''}" onclick="nbSelect(${i})">
         <td>${i + 1}</td>
-        <td>${p.nim} - ${p.nama}</td>
-        <td>${Number(p.ipk).toFixed(2)} <span class="${ipkOk ? 'chk-yes' : 'chk-no'}">${ipkOk ? 'YA' : 'TDK'}</span></td>
-        <td>${rp} <span class="${ortuOk ? 'chk-yes' : 'chk-no'}">${ortuOk ? 'YA' : 'TDK'}</span></td>
+        <td>${escHtml(p.nim)} - ${escHtml(p.nama)}</td>
+        <td><span class="nb-cell-split"><span>${ipkText}</span><span class="${ipkCls}">${ipkCheck.tag}</span></span></td>
+        <td><span class="nb-cell-split"><span>${rp}</span><span class="${ortuOk ? 'chk-yes' : 'chk-no'}">${ortuOk ? 'YA' : 'TDK'}</span></span></td>
         <td><span class="${p.prestasi ? 'chk-yes' : 'chk-no'}">${p.prestasi ? 'YA' : 'TDK'}</span></td>
         <td><span class="${p.org ? 'chk-yes' : 'chk-no'}">${p.org ? 'YA' : 'TDK'}</span></td>
         <td><span class="${r.fired.R1 ? 'chk-yes' : 'chk-no'}">${r.fired.R1 ? 'AKTIF' : '-'}</span></td>
         <td><span class="${r.fired.R2 ? 'chk-yes' : 'chk-no'}">${r.fired.R2 ? 'AKTIF' : '-'}</span></td>
         <td><span class="${r.ok ? 'st-ok' : 'st-no'}">${r.ok ? 'DISETUJUI' : 'DITOLAK'}</span></td>
         <td onclick="event.stopPropagation(); nbDel(${i})"><button class="del-btn">X</button></td>
-      </tr>`;
-    }).join("");
+      </tr>`);
+    });
+    document.getElementById("nb-tcount").textContent = `${rowsHtml.length} / ${profs.length} Data`;
+    tbody.innerHTML = rowsHtml.length
+      ? rowsHtml.join("")
+      : `<tr><td colspan="10" style="text-align:center;padding:18px;cursor:default;">Tidak ada data mahasiswa sesuai filter.</td></tr>`;
   }
+
+  window.nbFilter = function() {
+    renderTable();
+  };
+
+  window.nbResetFilter = function() {
+    document.getElementById("nb-fq").value = "";
+    document.getElementById("nb-fst").value = "all";
+    document.getElementById("nb-frule").value = "all";
+    renderTable();
+  };
 
   function syncInputsFromState() {
     document.getElementById("nb-nama").value = st.nama;
     document.getElementById("nb-nim").value = st.nim;
-    document.getElementById("nb-ipk").value = st.ipk;
+    const ipkNum = parseIPK(st.ipk);
+    document.getElementById("nb-ipk").value = isNaN(ipkNum) ? "" : ipkNum.toFixed(2);
     document.getElementById("nb-ortu").value = formatRupiah(st.ortu);
   }
 
@@ -744,21 +913,26 @@
   window.nbCustom = function() {
     st.nama = document.getElementById("nb-nama").value.trim() || "Mahasiswa Baru";
     st.nim = document.getElementById("nb-nim").value.trim() || "-";
-    const ipkEl = document.getElementById("nb-ipk");
-    let ipkVal = parseFloat(ipkEl.value);
-    if (isNaN(ipkVal)) ipkVal = 0;
-    if (ipkVal > 4) { ipkVal = 4; ipkEl.value = "4.00"; }
-    if (ipkVal < 0) { ipkVal = 0; ipkEl.value = "0"; }
-    st.ipk = ipkVal;
+    st.ipk = parseIPK(document.getElementById("nb-ipk").value);
     st.ortu = parseRupiah(document.getElementById("nb-ortu").value);
     render();
   };
 
+  function nextNim() {
+    return "250414" + String(profs.length + 1).padStart(3, "0");
+  }
+
   window.nbSave = function() {
+    const ipkCheck = evalIPK(document.getElementById("nb-ipk").value);
+    if (ipkCheck.invalid) {
+      document.getElementById("nb-ipk").focus();
+      alert("IPK tidak valid. Masukkan nilai IPK antara 0.00 sampai 4.00.");
+      return;
+    }
     const entry = {
-      nim: document.getElementById("nb-nim").value.trim() || `25041400${profs.length + 1}`,
+      nim: document.getElementById("nb-nim").value.trim() || nextNim(),
       nama: document.getElementById("nb-nama").value.trim() || `Mahasiswa ${profs.length + 1}`,
-      ipk: Math.min(4, Math.max(0, parseFloat(document.getElementById("nb-ipk").value) || 0)),
+      ipk: Number(ipkCheck.num.toFixed(2)),
       ortu: parseRupiah(document.getElementById("nb-ortu").value),
       prestasi: st.prestasi,
       org: st.org
@@ -771,13 +945,14 @@
     }
     st = { ...entry };
     syncInputsFromState();
+    syncToColabSheet();
     render();
   };
 
   window.nbNew = function() {
     selIdx = -1;
     st = {
-      nim: `25041400${profs.length + 1}`,
+      nim: nextNim(),
       nama: "",
       ipk: 3.60,
       ortu: 2500000,
@@ -796,34 +971,59 @@
     if (selIdx < 0) selIdx = 0;
     st = { ...profs[selIdx] };
     syncInputsFromState();
+    syncToColabSheet();
     render();
   };
+
+  function loadCsvText(csvText) {
+    const lines = String(csvText || "").split(/\r?\n/).filter(l => l.trim().length > 0);
+    if (lines.length < 2) return false;
+    const arr = [];
+    for (let i = 1; i < lines.length; i++) {
+      const c = lines[i].split(",").map(x => x.replace(/^"|"$/g, "").trim());
+      if (c.length >= 6) {
+        const hp = c.length >= 7;
+        const ipkParsed = parseIPK(c[hp ? 3 : 2]);
+        arr.push({
+          nim: c[0],
+          nama: c[1],
+          ipk: isNaN(ipkParsed) ? 0 : ipkParsed,
+          ortu: parseRupiah(c[hp ? 4 : 3]),
+          prestasi: ["ya", "true", "1", "yes"].includes(c[hp ? 5 : 4].toLowerCase()),
+          org: ["ya", "true", "1", "yes"].includes(c[hp ? 6 : 5].toLowerCase())
+        });
+      }
+    }
+    if (arr.length > 0) {
+      profs = arr;
+      nbResetFilter();
+      syncToColabSheet();
+      nbSelect(0);
+      return true;
+    }
+    return false;
+  }
 
   window.nbImport = function(ev) {
     const f = ev.target.files[0];
     if (!f) return;
     const r = new FileReader();
-    r.onload = function(e) {
-      const lines = e.target.result.split(/\r?\n/).filter(l => l.trim().length > 0);
-      if (lines.length < 2) return;
-      const arr = [];
-      for (let i = 1; i < lines.length; i++) {
-        const c = lines[i].split(",");
-        if (c.length >= 6) {
-          const hp = c.length >= 7;
-          arr.push({
-            nim: c[0].trim(),
-            nama: c[1].trim(),
-            ipk: Math.min(4, Math.max(0, parseFloat(c[hp ? 3 : 2]) || 0)),
-            ortu: parseRupiah(c[hp ? 4 : 3]),
-            prestasi: ["ya", "true", "1", "yes"].includes(c[hp ? 5 : 4].trim().toLowerCase()),
-            org: ["ya", "true", "1", "yes"].includes(c[hp ? 6 : 5].trim().toLowerCase())
-          });
-        }
-      }
-      if (arr.length > 0) { profs = arr; nbSelect(0); }
-    };
+    r.onload = function(e) { loadCsvText(e.target.result); };
     r.readAsText(f);
+    ev.target.value = "";
+  };
+
+  window.nbImport100 = async function() {
+    const rawUrl = "https://raw.githubusercontent.com/zysrnh/Mini_Csv/main/dataset_beasiswa_lpkia_100.csv";
+    const isLocalHttp = location.protocol.startsWith("http") && !location.hostname.includes("colab") && !location.hostname.includes("googleusercontent");
+    const candidates = isLocalHttp ? ["./dataset_beasiswa_lpkia_100.csv", rawUrl] : [rawUrl, "./dataset_beasiswa_lpkia_100.csv"];
+    for (const url of candidates) {
+      try {
+        const resp = await fetch(url, { cache: "no-store" });
+        if (resp.ok && loadCsvText(await resp.text())) return;
+      } catch (err) {}
+    }
+    alert("Gagal mengambil CSV 100 data. Pastikan koneksi aktif atau gunakan Upload CSV.");
   };
 
   nbSelect(0);

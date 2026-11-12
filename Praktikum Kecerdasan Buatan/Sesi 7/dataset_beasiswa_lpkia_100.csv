@@ -1,0 +1,101 @@
+nim,nama,prodi,ipk,penghasilan_ortu,prestasi_akademik,organisasi_aktif
+250414001,Rizky Pratama,Teknik Informatika,3.78,2400000,Tidak,Tidak
+250414002,Nadia Maharani,Sistem Informasi,3.65,5500000,Ya,Ya
+250414003,Dimas Anggara,Teknik Informatika,3.25,2200000,Tidak,Ya
+250414004,Siti Nurhaliza,Sistem Informasi,3.85,2800000,Ya,Ya
+250414005,Budi Santoso,Komputerisasi Akuntansi,3.52,4800000,Tidak,Ya
+250414006,Fajar Nugraha,Teknik Informatika,3.40,6000000,Tidak,Tidak
+250414007,Putri Wulandari,Sistem Informasi,3.91,3800000,Ya,Tidak
+250414008,Andi Saputra,Administrasi Bisnis,3.60,2950000,Tidak,Tidak
+250414009,Rina Nugraha,Administrasi Bisnis,3.50,2850000,Ya,Tidak
+250414010,Hendra Lestari,Manajemen Informatika,3.55,2990000,Tidak,Ya
+250414011,Fitri Santoso,Teknik Informatika,3.08,2600000,Tidak,Tidak
+250414012,Arif Wijaya,Sistem Informasi,3.88,3000000,Ya,Tidak
+250414013,Rizky Nurhaliza,Komputerisasi Akuntansi,3.50,5100000,Tidak,Tidak
+250414014,Siti Kusuma,Administrasi Bisnis,3.55,3400000,Ya,Ya
+250414015,Putri Anggara,Manajemen Informatika,3.08,1800000,Ya,Ya
+250414016,Agus Hidayat,Teknik Informatika,3.88,1500000,Tidak,Tidak
+250414017,Maya Maharani,Sistem Informasi,3.50,2100000,Tidak,Tidak
+250414018,Bayu Permata,Komputerisasi Akuntansi,3.55,1950000,Ya,Ya
+250414019,Sari Pratama,Administrasi Bisnis,3.08,4200000,Tidak,Tidak
+250414020,Nadia Saputra,Manajemen Informatika,3.88,6200000,Tidak,Ya
+250414021,Budi Aulia,Teknik Informatika,3.50,7500000,Ya,Tidak
+250414022,Andi Wulandari,Sistem Informasi,3.55,4700000,Tidak,Ya
+250414023,Dewi Ramadhan,Komputerisasi Akuntansi,3.08,2500000,Tidak,Tidak
+250414024,Ilham Nugraha,Administrasi Bisnis,3.88,2850000,Ya,Tidak
+250414025,Tania Lestari,Manajemen Informatika,3.50,2990000,Tidak,Ya
+250414026,Reza Santoso,Teknik Informatika,3.55,2600000,Tidak,Ya
+250414027,Dimas Wijaya,Sistem Informasi,3.08,3000000,Ya,Tidak
+250414028,Fajar Nurhaliza,Komputerisasi Akuntansi,3.88,5100000,Ya,Tidak
+250414029,Rina Kusuma,Administrasi Bisnis,3.50,3400000,Tidak,Tidak
+250414030,Hendra Anggara,Manajemen Informatika,3.55,1800000,Ya,Ya
+250414031,Fitri Hidayat,Teknik Informatika,3.08,1500000,Tidak,Tidak
+250414032,Arif Maharani,Sistem Informasi,3.88,2100000,Tidak,Tidak
+250414033,Rizky Permata,Komputerisasi Akuntansi,3.50,1950000,Ya,Tidak
+250414034,Siti Pratama,Administrasi Bisnis,3.55,4200000,Tidak,Ya
+250414035,Putri Saputra,Manajemen Informatika,3.08,6200000,Ya,Ya
+250414036,Agus Aulia,Teknik Informatika,3.88,7500000,Ya,Tidak
+250414037,Maya Wulandari,Sistem Informasi,3.50,4700000,Tidak,Tidak
+250414038,Bayu Ramadhan,Komputerisasi Akuntansi,3.55,2500000,Tidak,Ya
+250414039,Sari Nugraha,Administrasi Bisnis,3.08,2850000,Ya,Tidak
+250414040,Nadia Lestari,Manajemen Informatika,3.88,2990000,Tidak,Ya
+250414041,Budi Santoso 6,Teknik Informatika,3.50,2600000,Tidak,Tidak
+250414042,Andi Wijaya,Sistem Informasi,3.55,3000000,Ya,Ya
+250414043,Dewi Nurhaliza,Komputerisasi Akuntansi,3.08,5100000,Tidak,Tidak
+250414044,Ilham Kusuma,Administrasi Bisnis,3.88,3400000,Tidak,Tidak
+250414045,Tania Anggara,Manajemen Informatika,3.50,1800000,Ya,Ya
+250414046,Reza Hidayat,Teknik Informatika,3.55,1500000,Tidak,Ya
+250414047,Dimas Maharani,Sistem Informasi,3.08,2100000,Tidak,Tidak
+250414048,Fajar Permata,Komputerisasi Akuntansi,3.88,1950000,Ya,Tidak
+250414049,Rina Pratama,Administrasi Bisnis,3.50,4200000,Ya,Tidak
+250414050,Hendra Saputra,Manajemen Informatika,3.55,6200000,Tidak,Ya
+250414051,Fitri Aulia,Teknik Informatika,3.08,7500000,Ya,Tidak
+250414052,Arif Wulandari,Sistem Informasi,3.88,4700000,Tidak,Tidak
+250414053,Rizky Ramadhan,Komputerisasi Akuntansi,3.50,2500000,Tidak,Tidak
+250414054,Siti Nugraha,Administrasi Bisnis,3.55,2850000,Ya,Ya
+250414055,Putri Lestari,Manajemen Informatika,3.08,2990000,Tidak,Ya
+250414056,Agus Santoso,Teknik Informatika,3.88,2600000,Ya,Tidak
+250414057,Maya Wijaya,Sistem Informasi,3.50,3000000,Ya,Tidak
+250414058,Bayu Nurhaliza,Komputerisasi Akuntansi,3.55,5100000,Tidak,Ya
+250414059,Sari Kusuma,Administrasi Bisnis,3.08,3400000,Tidak,Tidak
+250414060,Nadia Anggara,Manajemen Informatika,3.88,1800000,Ya,Ya
+250414061,Budi Hidayat,Teknik Informatika,3.50,1500000,Tidak,Tidak
+250414062,Andi Maharani,Sistem Informasi,3.55,2100000,Tidak,Ya
+250414063,Dewi Permata,Komputerisasi Akuntansi,3.08,1950000,Ya,Tidak
+250414064,Ilham Pratama,Administrasi Bisnis,3.88,4200000,Tidak,Tidak
+250414065,Tania Saputra,Manajemen Informatika,3.50,6200000,Tidak,Ya
+250414066,Reza Aulia,Teknik Informatika,3.55,7500000,Ya,Ya
+250414067,Dimas Wulandari,Sistem Informasi,3.08,4700000,Tidak,Tidak
+250414068,Fajar Ramadhan,Komputerisasi Akuntansi,3.88,2500000,Tidak,Tidak
+250414069,Rina Nugraha 7,Administrasi Bisnis,3.50,2850000,Ya,Tidak
+250414070,Hendra Lestari 8,Manajemen Informatika,3.55,2990000,Ya,Ya
+250414071,Fitri Santoso 9,Teknik Informatika,3.08,2600000,Tidak,Tidak
+250414072,Arif Wijaya 1,Sistem Informasi,3.88,3000000,Ya,Tidak
+250414073,Rizky Nurhaliza 2,Komputerisasi Akuntansi,3.50,5100000,Tidak,Tidak
+250414074,Siti Kusuma 3,Administrasi Bisnis,3.55,3400000,Tidak,Ya
+250414075,Putri Anggara 4,Manajemen Informatika,3.08,1800000,Ya,Ya
+250414076,Agus Hidayat 5,Teknik Informatika,3.88,1500000,Tidak,Tidak
+250414077,Maya Maharani 6,Sistem Informasi,3.50,2100000,Ya,Tidak
+250414078,Bayu Permata 7,Komputerisasi Akuntansi,3.55,1950000,Ya,Ya
+250414079,Sari Pratama 8,Administrasi Bisnis,3.08,4200000,Tidak,Tidak
+250414080,Nadia Saputra 9,Manajemen Informatika,3.88,6200000,Tidak,Ya
+250414081,Budi Aulia 1,Teknik Informatika,3.50,7500000,Ya,Tidak
+250414082,Andi Wulandari 2,Sistem Informasi,3.55,4700000,Tidak,Ya
+250414083,Dewi Ramadhan 3,Komputerisasi Akuntansi,3.08,2500000,Tidak,Tidak
+250414084,Ilham Nugraha 4,Administrasi Bisnis,3.88,2850000,Ya,Tidak
+250414085,Tania Lestari 5,Manajemen Informatika,3.50,2990000,Tidak,Ya
+250414086,Reza Santoso 6,Teknik Informatika,3.55,2600000,Tidak,Ya
+250414087,Dimas Wijaya 7,Sistem Informasi,3.08,3000000,Ya,Tidak
+250414088,Fajar Nurhaliza 8,Komputerisasi Akuntansi,3.88,5100000,Tidak,Tidak
+250414089,Rina Kusuma 9,Administrasi Bisnis,3.50,3400000,Tidak,Tidak
+250414090,Hendra Anggara 1,Manajemen Informatika,3.55,1800000,Ya,Ya
+250414091,Fitri Hidayat 2,Teknik Informatika,3.08,1500000,Ya,Tidak
+250414092,Arif Maharani 3,Sistem Informasi,3.88,2100000,Tidak,Tidak
+250414093,Rizky Permata 4,Komputerisasi Akuntansi,3.50,1950000,Ya,Tidak
+250414094,Siti Pratama 5,Administrasi Bisnis,3.55,4200000,Tidak,Ya
+250414095,Putri Saputra 6,Manajemen Informatika,3.08,6200000,Tidak,Ya
+250414096,Agus Aulia 7,Teknik Informatika,3.88,7500000,Ya,Tidak
+250414097,Maya Wulandari 8,Sistem Informasi,3.50,4700000,Tidak,Tidak
+250414098,Bayu Ramadhan 9,Komputerisasi Akuntansi,3.55,2500000,Ya,Ya
+250414099,Sari Nugraha 1,Administrasi Bisnis,3.08,2850000,Ya,Tidak
+250414100,Nadia Lestari 2,Manajemen Informatika,3.88,2990000,Tidak,Ya
